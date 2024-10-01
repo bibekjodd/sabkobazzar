@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import { Button } from '@/ui/button';
 import {
   Drawer,
@@ -9,10 +8,11 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/ui/drawer';
-import { dashboardLinks } from '../layouts/dashboard-sidebar';
-import ProgressLink from '../utils/progress-link';
 import { usePathname } from 'next/navigation';
+import React, { useRef } from 'react';
+import { dashboardLinks } from '../layouts/dashboard-sidebar';
 import { logo } from '../utils/logo';
+import ProgressLink from '../utils/progress-link';
 
 export default function DashboardMenuDrawer({ children }: { children: React.ReactNode }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -34,7 +34,7 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
               onClick={() => {
                 closeButtonRef.current?.click();
               }}
-              className={`flex items-center space-x-2 p-4 font-semibold ${link.href === pathname ? 'bg-green-600/10 text-green-600' : ''}`}
+              className={`flex items-center space-x-2 p-4 font-semibold ${link.href === pathname ? 'bg-sky-500/15 text-sky-500' : ''}`}
             >
               <link.icon className="size-5" />
               <span>{link.title}</span>
@@ -44,7 +44,7 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
 
         <DrawerFooter>
           <DrawerClose asChild ref={closeButtonRef}>
-            <Button variant="outline">Close</Button>
+            <Button>Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

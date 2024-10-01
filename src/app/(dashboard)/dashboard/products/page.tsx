@@ -18,7 +18,7 @@ export default function Page() {
   } = useProducts(`?owner=${profile?.id}`);
   return (
     <main>
-      <div className="sticky top-16 z-10 flex w-full items-center justify-between bg-white/80 p-4 filter backdrop-blur-2xl lg:left-64">
+      <div className="flex w-full items-center justify-between p-4 filter backdrop-blur-2xl">
         <span className="text-xl font-semibold">Your products</span>
         <AddProductDialog>
           <Button Icon={Plus}>Add product</Button>

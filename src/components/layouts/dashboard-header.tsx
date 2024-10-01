@@ -18,7 +18,7 @@ export default function DashboardHeader() {
   if (!profile) return null;
   return (
     <header
-      className={`${poppins.className} sticky left-0 top-0 z-30 flex h-16 w-full items-center border-b bg-white/80 px-4 text-sm filter backdrop-blur-2xl lg:left-64 lg:w-[calc(100%-256px)]`}
+      className={`${poppins.className} sticky left-0 top-0 z-30 flex h-16 w-full items-center border-b px-4 text-sm lg:left-64 lg:w-[calc(100%-256px)]`}
     >
       <h3 className="hidden text-lg font-semibold lg:block">{currentPage?.title || 'Dashboard'}</h3>
 
@@ -39,7 +39,7 @@ export default function DashboardHeader() {
 
       <DashboardMenuDrawer>
         <button className="ml-3 lg:hidden">
-          <Menu className="size-6 text-gray-900" />
+          <Menu className="size-6 text-primary/90" />
         </button>
       </DashboardMenuDrawer>
     </header>

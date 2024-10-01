@@ -21,8 +21,14 @@ export default function ProductCard({ product, view, queryKey }: Props) {
   const productLink = `/products/${product.id}`;
 
   return (
-    <div className="m-4 flex flex-col overflow-hidden rounded-lg border shadow-xl shadow-gray-300/30">
-      <ProgressLink href={productLink} onClick={updateProductCache} className="w-full">
+    <div className="relative m-4 flex flex-col overflow-hidden rounded-lg p-0.5 shadow-2xl">
+      <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/[0.07] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+      <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/15 [mask-image:linear-gradient(to_top,black,transparent)]" />
+      <ProgressLink
+        href={productLink}
+        onClick={updateProductCache}
+        className="w-full overflow-hidden rounded-sm bg-background"
+      >
         <img
           src={product.image || dummyProductImage}
           alt="product image"
@@ -52,10 +58,10 @@ export default function ProductCard({ product, view, queryKey }: Props) {
 }
 
 export const productSkeleton = (
-  <div className="w-full space-y-3 rounded-lg border p-4 shadow-xl shadow-gray-300/30">
+  <div className="w-full space-y-3 rounded-lg border p-4 shadow-2xl shadow-white/5">
     <Skeleton className="aspect-video w-full" />
-    <Skeleton className="h-10" />
-    <Skeleton className="h-10" />
+    <Skeleton className="h-8" />
+    <Skeleton className="h-8" />
     <Skeleton className="h-10" />
   </div>
 );

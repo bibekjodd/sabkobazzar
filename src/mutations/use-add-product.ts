@@ -17,7 +17,7 @@ export const useAddProduct = () => {
     },
     onSuccess(product) {
       toast.dismiss();
-      toast.loading('Added new product successfully');
+      toast.success('Added new product successfully');
       queryClient.setQueryData<Product>(['product', product.id], { ...product });
     },
     onError(err) {

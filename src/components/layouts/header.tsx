@@ -28,7 +28,7 @@ export default function Header() {
   };
 
   return (
-    <div className="sticky left-0 top-0 z-10 flex h-16 w-full items-center border-b bg-white/80 text-sm font-medium filter backdrop-blur-2xl">
+    <div className="sticky left-0 top-0 z-10 flex h-16 w-full items-center border-b bg-background/70 text-sm font-medium filter backdrop-blur-2xl">
       <header className="cont flex items-center justify-between">
         <ProgressLink href="/" className="text-3xl">
           {logo}
@@ -39,15 +39,15 @@ export default function Header() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search products..."
-            className={`${poppins.className} h-11 w-full pr-8 text-base placeholder:font-normal focus:ring-4`}
+            className={`${poppins.className} h-11 w-full border-primary/20 pr-8 text-base placeholder:font-normal focus:ring-4`}
           />
           {searchInput ? (
             <X
               onClick={() => setSearchInput('')}
-              className="absolute right-3 top-1/2 size-4 -translate-y-1/2 cursor-pointer text-gray-600"
+              className="absolute right-3 top-1/2 size-4 -translate-y-1/2 cursor-pointer text-gray-500"
             />
           ) : (
-            <Search className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-gray-600" />
+            <Search className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-gray-500" />
           )}
         </form>
 

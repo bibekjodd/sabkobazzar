@@ -86,7 +86,11 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
   };
 
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={() => {
+        setImageUri(product?.image || null);
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="flex max-h-full flex-col">
         <DialogHeader>
@@ -125,7 +129,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
               {imageUri && (
                 <button
                   onClick={unpickImage}
-                  className="absolute right-1 top-1 rounded-full bg-white p-1"
+                  className="absolute right-1 top-1 rounded-full bg-primary/90 p-1 text-black"
                 >
                   <X className="size-4" />
                 </button>
@@ -139,7 +143,14 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
                 ref={imagePickerRef}
                 onChange={pickImage}
               />
-              {!imageUri && <ImageIcon className="size-6" />}
+              {!imageUri && (
+                <div className="flex flex-col items-center space-y-3">
+                  <ImageIcon className="size-8" />
+                  <p className="text-sm">
+                    Provide 16:9 aspect ratio image for better compatibility
+                  </p>
+                </div>
+              )}
               {imageUri && (
                 <img
                   src={imageUri}
