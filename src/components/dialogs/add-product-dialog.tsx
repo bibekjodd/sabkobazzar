@@ -96,7 +96,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex h-full flex-grow flex-col space-y-5 overflow-y-auto px-2 pb-2 scrollbar-thin"
+          className="flex h-full flex-grow flex-col space-y-7 overflow-y-auto px-2 pb-2 scrollbar-thin"
         >
           <FormInput
             error={errors.title?.message}
@@ -134,6 +134,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
                 type="file"
                 hidden
                 id="image"
+                accept="image/*"
                 className="hidden"
                 ref={imagePickerRef}
                 onChange={pickImage}
@@ -186,6 +187,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
               id="description"
               placeholder="Product description..."
               rows={6}
+              className="scrollbar-thin"
             />
             {errors.description && (
               <p className="text-sm text-rose-500">{errors.description.message}</p>

@@ -13,7 +13,7 @@ export const dashboardLinks: { title: string; href: string; icon: LucideIcon }[]
     icon: LayoutGrid
   },
   {
-    title: 'Auctions',
+    title: 'Manage Auctions',
     href: '/dashboard/auctions',
     icon: Route
   },

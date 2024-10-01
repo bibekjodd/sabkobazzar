@@ -28,7 +28,7 @@ export default function DashboardHeader() {
 
       <div className="ml-auto flex items-center space-x-2">
         <span className="hidden sm:inline">Welcome, </span>
-        <span className="hidden font-bold sm:inline">{profile.name.split(' ')[0]}</span>
+        <span className="hidden font-semibold sm:inline">{profile.name.split(' ')[0]}</span>
 
         <ProfileDropdown>
           <button>
