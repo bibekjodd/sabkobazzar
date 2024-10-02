@@ -1,3 +1,4 @@
+import SelectAuctionProductDialog from '@/components/dialogs/select-auction-product-dialog';
 import { poppins } from '@/lib/fonts';
 import { ChevronRight } from 'lucide-react';
 
@@ -14,21 +15,23 @@ export default function page() {
         <p
           className={`${poppins.className} mb-7 flex flex-col items-center space-y-5 text-center text-3xl font-medium xs:text-5xl`}
         >
-          <p>Drop your product</p>
-          <p className="bg-gradient-to-r from-sky-700 to-purple-500 bg-clip-text text-transparent">
+          <span>Drop your product</span>
+          <span className="bg-gradient-to-r from-sky-700 to-purple-500 bg-clip-text text-transparent">
             To the Auction now
-          </p>
+          </span>
         </p>
 
-        <button className="relative flex items-center rounded-lg bg-gradient-to-b from-sky-950/20 to-sky-900/80 px-6 py-2 shadow-[0_0_8px_#075985] transition-all duration-500 hover:shadow-[0_0_12px_#075985]">
-          <span className="mr-2">Register for an auction</span>
-          <ChevronRight className="size-5" />
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 rounded-lg border border-white/20 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-            <div className="absolute inset-0 rounded-lg border border-white/40 [mask-image:linear-gradient(to_top,black,transparent)]" />
-            <div className="absolute inset-0 rounded-lg shadow-[0_0_8px_#075985_inset]" />
-          </div>
-        </button>
+        <SelectAuctionProductDialog>
+          <button className="relative flex items-center rounded-lg bg-gradient-to-b from-sky-950/20 to-sky-900/80 px-6 py-2 shadow-[0_0_8px_#075985] transition-all duration-500 hover:shadow-[0_0_12px_#075985]">
+            <span className="mr-2">Register for an auction</span>
+            <ChevronRight className="size-5" />
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 rounded-lg border border-white/20 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+              <div className="absolute inset-0 rounded-lg border border-white/40 [mask-image:linear-gradient(to_top,black,transparent)]" />
+              <div className="absolute inset-0 rounded-lg shadow-[0_0_8px_#075985_inset]" />
+            </div>
+          </button>
+        </SelectAuctionProductDialog>
       </div>
     </main>
   );
