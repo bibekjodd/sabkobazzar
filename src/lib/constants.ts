@@ -11,3 +11,9 @@ export const productsCategories: { title: string; value: string }[] = [
   { title: 'Real Estate', value: 'realestate' },
   { title: 'Others', value: 'others' }
 ] as const;
+
+export const productConditions = [
+  { title: 'New', value: 'new' },
+  { title: 'First Class', value: 'first-class' },
+  { title: 'Repariable', value: 'repairable' }
+] as const;

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  scroll-behavior: smooth;
+}
+
 .react-calendar__navigation__arrow,
 .react-calendar__navigation__label,
 .react-calendar__tile {

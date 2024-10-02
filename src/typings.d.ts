@@ -19,3 +19,25 @@ type Product = {
   addedAt: string;
   owner: User;
 };
+
+type Auction = {
+  id: string;
+  productId: string;
+  banner: string | null;
+  ownerId: string;
+  winnerId: string | null;
+  title: string;
+  description: string | null;
+  lot: number;
+  condition: 'new' | 'first-class' | 'repairable';
+  startsAt: string;
+  endsAt: string;
+  minBid: number;
+  finalBid: number | null;
+  minBidders: number;
+  maxBidders: number;
+  isFinished: boolean;
+  isCancelled: boolean;
+  owner: User;
+  product: Product;
+};

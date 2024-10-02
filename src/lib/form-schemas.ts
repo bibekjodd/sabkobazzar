@@ -19,9 +19,24 @@ export const addProductSchema = z.object({
 export type AddProductSchema = z.infer<typeof addProductSchema>;
 
 export const registerAuctionSchema = z.object({
+  title: z
+    .string({ required_error: 'Title is required' })
+    .min(10, 'Too short title')
+    .max(200, 'Too long title'),
+  description: z
+    .string({ required_error: 'Description is required' })
+    .max(500, 'Too long description'),
+  lot: z.preprocess(
+    (val) => Number(val) || undefined,
+    z
+      .number({ required_error: 'Lot number is required' })
+      .min(1, 'Lot number must be positive and should not exceed 10')
+      .max(10, 'Lot number must be positive and should not exceed 10')
+  ),
+  condition: z.enum(['new', 'first-class', 'repairable']),
   startsAt: z.string().datetime({ message: 'Invalid date' }),
   minBid: z.preprocess(
-    (val) => Number(val) || '',
+    (val) => Number(val) || undefined,
     z
       .number({
         invalid_type_error: '',
@@ -30,7 +45,7 @@ export const registerAuctionSchema = z.object({
       .min(10000, 'Minimum Bid value must be at least 10,000')
   ),
   minBidders: z.preprocess(
-    (val) => Number(val) || '',
+    (val) => Number(val) || undefined,
     z
       .number({
         invalid_type_error: 'Must be at least 2 bidders',
@@ -40,7 +55,7 @@ export const registerAuctionSchema = z.object({
       .max(10, "Bidders can't exceed 10 people")
   ),
   maxBidders: z.preprocess(
-    (val) => Number(val) || '',
+    (val) => Number(val) || undefined,
     z
       .number({
         invalid_type_error: "Max bidders can't exceed 10 people",
