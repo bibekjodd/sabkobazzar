@@ -34,7 +34,7 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
               onClick={() => {
                 closeButtonRef.current?.click();
               }}
-              className={`flex items-center space-x-2 p-4 font-semibold ${link.href === pathname ? 'bg-sky-500/15 text-sky-500' : ''}`}
+              className={`flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500 ${pathname === link.href ? 'border-l-4 border-purple-700 bg-purple-700/15 text-purple-500' : ''}`}
             >
               <link.icon className="size-5" />
               <span>{link.title}</span>

@@ -33,5 +33,5 @@ function BaseLoadingBar() {
     };
   }, [pathname, searchParams, finish, initial, initialLoaded]);
 
-  return <TopLoadingBar progress={progress} waitingTime={200} />;
+  return <TopLoadingBar progress={progress} waitingTime={200} color="#c026d3" />;
 }

@@ -28,7 +28,7 @@ export default function DashboardSidebar() {
   const pathname = usePathname();
   return (
     <aside
-      className={`${poppins.className} fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r py-3 text-sm font-medium lg:flex`}
+      className={`${poppins.className} fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r py-3 text-sm font-medium text-gray-100 lg:flex`}
     >
       <ProgressLink href="/" className="px-5 text-2xl font-semibold">
         {logo}
@@ -39,7 +39,7 @@ export default function DashboardSidebar() {
           <ProgressLink
             key={link.title}
             href={link.href}
-            className={`mb-1 flex h-12 items-center space-x-3 pl-4 hover:bg-sky-500/15 hover:text-sky-500 ${pathname === link.href ? 'border-l-4 border-sky-500 bg-sky-500/15 text-sky-500' : ''}`}
+            className={`mb-1 flex h-12 items-center space-x-3 pl-4 hover:bg-purple-700/15 hover:text-purple-500 ${pathname === link.href ? 'border-l-4 border-purple-700 bg-purple-700/15 text-purple-500' : ''}`}
           >
             <link.icon className="size-5" />
             <span>{link.title}</span>

@@ -41,7 +41,7 @@ export default function ProductCard({ product, view, queryKey }: Props) {
         <h4 className="text-xl font-bold">Rs. {formatPrice(product.price)}</h4>
         {view === 'user' && (
           <ProgressLink href={productLink} className="mt-3 w-full" onClick={updateProductCache}>
-            <Button Icon={MoveRight} className="w-full">
+            <Button Icon={MoveRight} className="w-full" variant="gradient">
               See more
             </Button>
           </ProgressLink>
@@ -49,7 +49,9 @@ export default function ProductCard({ product, view, queryKey }: Props) {
 
         {view === 'seller' && (
           <AddProductDialog product={product} queryKey={queryKey}>
-            <Button className="mt-3 w-full">Update Product</Button>
+            <Button className="mt-3 w-full" variant="gradient">
+              Update Product
+            </Button>
           </AddProductDialog>
         )}
       </div>

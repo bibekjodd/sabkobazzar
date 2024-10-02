@@ -5,13 +5,12 @@ import { Loader2, LucideIcon } from 'lucide-react';
 import * as React from 'react';
 
 const buttonVariants = cva(
-  'inline-flex items-center relative justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all active:scale-[0.98] hover:brightness-110 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center relative justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground shadow hover:bg-primary/90',
-        gradient:
-          'bg-gradient-to-br from-pink-400 to-pink-500 text-primary-foreground shadow hover:brightness-[1.15]',
+        gradient: 'bg-gradient-to-br from-fuchsia-900 to-purple-950 hover:brightness-125',
         destructive: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
           'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',

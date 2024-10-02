@@ -5,6 +5,7 @@ import { formatDate } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { ChevronsRight } from 'lucide-react';
 import CancelAuctionDialog from '../dialogs/cancel-auction-dialog';
+import { Button } from '../ui/button';
 import ProgressLink from '../utils/progress-link';
 
 export default function AuctionCard({ auction }: { auction: Auction }) {
@@ -43,13 +44,10 @@ export default function AuctionCard({ auction }: { auction: Auction }) {
             </CancelAuctionDialog>
           )}
 
-          <ProgressLink
-            href={auctionLink}
-            onClick={upadateCache}
-            className="flex items-center justify-center space-x-1 rounded-lg bg-gradient-to-br from-fuchsia-900 to-purple-950 py-2 text-sm hover:brightness-125"
-          >
-            <span>See more details</span>
-            <ChevronsRight className="size-4" />
+          <ProgressLink href={auctionLink} onClick={upadateCache}>
+            <Button Icon={ChevronsRight} variant="gradient" className="w-full">
+              See more details
+            </Button>
           </ProgressLink>
         </div>
       </div>

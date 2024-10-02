@@ -51,13 +51,13 @@ export default function Page() {
           </p>
 
           <SelectAuctionProductDialog>
-            <button className="relative flex items-center rounded-lg bg-gradient-to-b from-sky-950/20 to-sky-900/80 px-6 py-2 shadow-[0_0_8px_#075985] transition-all duration-500 hover:shadow-[0_0_12px_#075985]">
-              <span className="mr-2">Register for an auction</span>
-              <ChevronRight className="size-5" />
+            <button className="relative flex items-center rounded-lg bg-gradient-to-b from-purple-950/30 to-purple-900/50 px-6 py-2 text-sm font-medium shadow-[0px_0px_10px_#6b21a8]">
+              <span>Register for an auction</span>
+              <ChevronRight className="ml-1 size-5" />
               <div className="absolute inset-0">
                 <div className="absolute inset-0 rounded-lg border border-white/20 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
                 <div className="absolute inset-0 rounded-lg border border-white/40 [mask-image:linear-gradient(to_top,black,transparent)]" />
-                <div className="absolute inset-0 rounded-lg shadow-[0_0_8px_#075985_inset]" />
+                <div className="shadow-[0_0_10px_#6b21a8)_inset] absolute inset-0 rounded-lg" />
               </div>
             </button>
           </SelectAuctionProductDialog>
