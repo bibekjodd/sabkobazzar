@@ -28,7 +28,7 @@ export default function Header() {
   };
 
   return (
-    <div className="sticky left-0 top-0 z-10 flex h-16 w-full items-center border-b bg-background/70 text-sm font-medium filter backdrop-blur-2xl">
+    <div className="sticky left-0 top-0 z-30 flex h-16 w-full items-center border-b bg-background/70 text-sm font-medium filter backdrop-blur-2xl">
       <header className="cont flex items-center justify-between">
         <ProgressLink href="/" className="text-3xl">
           {logo}

@@ -30,6 +30,7 @@ export default function DashboardSidebar() {
     <aside
       className={`${poppins.className} fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r py-3 text-sm font-medium text-gray-100 lg:flex`}
     >
+      {graphics}
       <ProgressLink href="/" className="px-5 text-2xl font-semibold">
         {logo}
       </ProgressLink>
@@ -47,7 +48,7 @@ export default function DashboardSidebar() {
         ))}
 
         <LogoutDialog>
-          <button className="mb-3 mt-auto flex w-fit items-center space-x-3 px-6 hover:text-rose-500">
+          <button className="mb-3 mt-auto flex w-fit items-center space-x-3 px-6 hover:text-purple-500">
             <LogOut className="size-5" />
             <span>Logout</span>
           </button>
@@ -56,3 +57,9 @@ export default function DashboardSidebar() {
     </aside>
   );
 }
+
+const graphics = (
+  <>
+    <div className="fixed left-0 top-0 -z-10 hidden h-full w-64 bg-gradient-to-br from-sky-900/30 to-fuchsia-900/10 blur-3xl filter lg:block" />
+  </>
+);

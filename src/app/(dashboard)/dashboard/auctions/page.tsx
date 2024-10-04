@@ -74,7 +74,7 @@ export default function Page() {
           <div className="mt-5 flex flex-wrap justify-center md:mt-7">
             {upcomingAuctions?.pages.at(0)?.map((auction) => (
               <div key={auction.id} className="mb-7 w-full md:w-1/2 md:p-4 xl:w-1/3">
-                <AuctionCard auction={auction} />
+                <AuctionCard auction={auction} showCancelButton />
               </div>
             ))}
           </div>

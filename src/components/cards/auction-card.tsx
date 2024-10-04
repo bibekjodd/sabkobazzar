@@ -8,7 +8,11 @@ import CancelAuctionDialog from '../dialogs/cancel-auction-dialog';
 import { Button } from '../ui/button';
 import ProgressLink from '../utils/progress-link';
 
-export default function AuctionCard({ auction }: { auction: Auction }) {
+type Props = {
+  auction: Auction;
+  showCancelButton?: boolean;
+};
+export default function AuctionCard({ auction, showCancelButton }: Props) {
   const auctionLink = `/auctions/${auction.id}`;
   const queryClient = useQueryClient();
   const profile = queryClient.getQueryData<User>(['profile']);
@@ -36,19 +40,20 @@ export default function AuctionCard({ auction }: { auction: Auction }) {
         <p className="text-sm text-gray-400">Scheduled for {formatDate(auction.startsAt)}</p>
 
         <div className="mt-5 flex flex-col space-y-1 pb-4">
-          {canCancelAuction && (
+          <ProgressLink href={auctionLink} onClick={upadateCache}>
+            <Button variant="gradient" className="flex w-full items-center">
+              <span>See more details</span>
+              <ChevronsRight className="ml-1 size-4" />
+            </Button>
+          </ProgressLink>
+
+          {canCancelAuction && showCancelButton && (
             <CancelAuctionDialog auctionId={auction.id}>
               <button className="w-full rounded-lg border border-primary/10 py-2 text-sm hover:bg-gray-400 hover:text-black">
-                Cancel
+                Cancel Auction
               </button>
             </CancelAuctionDialog>
           )}
-
-          <ProgressLink href={auctionLink} onClick={upadateCache}>
-            <Button Icon={ChevronsRight} variant="gradient" className="w-full">
-              See more details
-            </Button>
-          </ProgressLink>
         </div>
       </div>
     </div>
