@@ -1,3 +1,4 @@
+import Footer from '@/components/layouts/footer';
 import Header from '@/components/layouts/header';
 import React, { Suspense } from 'react';
 
@@ -8,6 +9,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <Header />
       </Suspense>
       {children}
+      <Footer />
     </>
   );
 }

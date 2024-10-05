@@ -2,15 +2,18 @@
 import { logo } from '@/components/utils/logo';
 import ProgressLink from '@/components/utils/progress-link';
 import { useLoadingBar } from '@/hooks/use-loading-bar';
+import { useTimeout } from '@/hooks/use-timeout';
 import { loginLink } from '@/lib/constants';
 import { poppins } from '@/lib/fonts';
 import { useProfile } from '@/queries/use-profile';
-import { LogIn, Search, X } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
+import { Dot, LogIn, Search, X } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useRef, useState } from 'react';
 import ProfileDropdown from '../dropdowns/profile-dropdown';
 import { Input } from '../ui/input';
 import { Skeleton } from '../ui/skeleton';
+import AutoAnimate from '../utils/auto-animate';
 import Avatar from '../utils/avatar';
 
 export default function Header() {
@@ -19,6 +22,7 @@ export default function Header() {
   const searchParams = useSearchParams();
   const [searchInput, setSearchInput] = useState(searchParams.get('title') || '');
   const { data: profile, isLoading } = useProfile();
+  const pathname = usePathname();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,14 +31,52 @@ export default function Header() {
     router.push(url);
   };
 
+  const isShownLiveIndicatorRef = useRef(false);
+  const [showLiveIndicator, setShowLiveIndicator] = useState(false);
+  const { data: upcomingAuctions, isLoading: isLoadingAuction } = useUpcomingAuctions({
+    ownerId: null,
+    productId: null
+  });
+  const totalUpcomingAuctions = upcomingAuctions?.pages.at(0)?.length || 0;
+
+  useTimeout(
+    () => {
+      if (isShownLiveIndicatorRef.current) return;
+      setShowLiveIndicator(true);
+      isShownLiveIndicatorRef.current = true;
+    },
+    2000,
+    !isShownLiveIndicatorRef.current && !isLoadingAuction
+  );
+
+  useTimeout(
+    () => {
+      setShowLiveIndicator(false);
+    },
+    5000,
+    isShownLiveIndicatorRef.current && !isLoadingAuction
+  );
+
   return (
-    <div className="sticky left-0 top-0 z-30 flex h-16 w-full items-center border-b bg-background/70 text-sm font-medium filter backdrop-blur-2xl">
-      <header className="cont flex items-center justify-between">
+    <div
+      className={`left-0 top-0 z-30 w-full border-b text-sm font-medium filter backdrop-blur-2xl ${pathname === '/' ? 'fixed' : 'sticky bg-background/70'} `}
+    >
+      <AutoAnimate>
+        {showLiveIndicator && totalUpcomingAuctions !== 0 && (
+          <div className="mx-auto flex w-fit items-center pb-2 pt-3 text-sm font-medium text-purple-600">
+            <span>
+              {totalUpcomingAuctions < 4 ? totalUpcomingAuctions : '4+'} Auctions coming live
+            </span>
+            <Dot className="size-6 translate-y-[1px] scale-125 animate-pulse" />
+          </div>
+        )}
+      </AutoAnimate>
+      <header className="cont flex h-16 items-center justify-between">
         <ProgressLink href="/" className="text-3xl">
           {logo}
         </ProgressLink>
 
-        <form onSubmit={onSubmit} className="relative mx-10 w-full lg:mx-20">
+        <form onSubmit={onSubmit} className="relative mx-10 hidden w-full md:block lg:mx-20">
           <Input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}

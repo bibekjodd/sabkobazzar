@@ -17,3 +17,13 @@ export const productConditions = [
   { title: 'First Class', value: 'first-class' },
   { title: 'Repariable', value: 'repairable' }
 ] as const;
+
+const facebookImage = 'https://i.postimg.cc/8CHsQjWC/facebook.png';
+const xImage = 'https://i.postimg.cc/BZ78tdfP/x.png';
+const instagramImage = 'https://i.postimg.cc/g0drTvx5/instagram.png';
+
+export const socialLinks = [
+  { title: 'Facebook', image: facebookImage },
+  { title: 'Instagram', image: instagramImage },
+  { title: 'X', image: xImage }
+];
