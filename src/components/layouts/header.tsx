@@ -7,7 +7,7 @@ import { loginLink } from '@/lib/constants';
 import { poppins } from '@/lib/fonts';
 import { useProfile } from '@/queries/use-profile';
 import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
-import { Dot, LogIn, Search, X } from 'lucide-react';
+import { Dot, LogIn, SearchIcon, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 import ProfileDropdown from '../dropdowns/profile-dropdown';
@@ -17,19 +17,8 @@ import AutoAnimate from '../utils/auto-animate';
 import Avatar from '../utils/avatar';
 
 export default function Header() {
-  const router = useRouter();
-  const start = useLoadingBar((state) => state.start);
-  const searchParams = useSearchParams();
-  const [searchInput, setSearchInput] = useState(searchParams.get('title') || '');
   const { data: profile, isLoading } = useProfile();
   const pathname = usePathname();
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const url = `/products${searchInput ? `?title=${searchInput}` : ''}`;
-    start(url);
-    router.push(url);
-  };
 
   const isShownLiveIndicatorRef = useRef(false);
   const [showLiveIndicator, setShowLiveIndicator] = useState(false);
@@ -63,7 +52,7 @@ export default function Header() {
     >
       <AutoAnimate>
         {showLiveIndicator && totalUpcomingAuctions !== 0 && (
-          <div className="mx-auto flex w-fit items-center pb-2 pt-3 text-sm font-medium text-purple-600">
+          <div className="mx-auto flex w-fit items-center pt-2 text-sm font-medium text-purple-600">
             <span>
               {totalUpcomingAuctions < 4 ? totalUpcomingAuctions : '4+'} Auctions coming live
             </span>
@@ -71,49 +60,74 @@ export default function Header() {
           </div>
         )}
       </AutoAnimate>
-      <header className="cont flex h-16 items-center justify-between">
-        <ProgressLink href="/" className="text-3xl">
-          {logo}
-        </ProgressLink>
+      <div>
+        <header className="cont flex h-16 items-center justify-between">
+          <ProgressLink href="/" className="text-3xl">
+            {logo}
+          </ProgressLink>
 
-        <form onSubmit={onSubmit} className="relative mx-10 hidden w-full md:block lg:mx-20">
-          <Input
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search products..."
-            className={`${poppins.className} h-11 w-full border-primary/20 pr-8 text-base placeholder:font-normal focus:ring-4`}
-          />
-          {searchInput ? (
-            <X
-              onClick={() => setSearchInput('')}
-              className="absolute right-3 top-1/2 size-4 -translate-y-1/2 cursor-pointer text-gray-500"
-            />
-          ) : (
-            <Search className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-gray-500" />
-          )}
-        </form>
+          <div className="mx-10 hidden w-full md:block lg:mx-20">
+            <Search />
+          </div>
 
-        <div className="flex items-center">
-          {profile && (
-            <ProfileDropdown>
-              <button>
-                <Avatar src={profile?.image} />
+          <div className="flex items-center">
+            {profile && (
+              <ProfileDropdown>
+                <button>
+                  <Avatar src={profile?.image} />
+                </button>
+              </ProfileDropdown>
+            )}
+            {isLoading && <Skeleton className="size-8 rounded-full" />}
+
+            {!isLoading && !profile && (
+              <button
+                className="flex items-center space-x-1.5"
+                onClick={() => window.open(loginLink, '_blank')}
+              >
+                <span>Login</span>
+                <LogIn className="size-4" />
               </button>
-            </ProfileDropdown>
-          )}
-          {isLoading && <Skeleton className="size-8 rounded-full" />}
-
-          {!isLoading && !profile && (
-            <button
-              className="flex items-center space-x-1.5"
-              onClick={() => window.open(loginLink, '_blank')}
-            >
-              <span>Login</span>
-              <LogIn className="size-4" />
-            </button>
-          )}
-        </div>
-      </header>
+            )}
+          </div>
+        </header>
+      </div>
+      <div className="mb-2 px-4 md:hidden">
+        <Search />
+      </div>
     </div>
+  );
+}
+
+function Search() {
+  const router = useRouter();
+  const start = useLoadingBar((state) => state.start);
+  const searchParams = useSearchParams();
+
+  const [searchInput, setSearchInput] = useState(searchParams.get('title') || '');
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const url = `/products${searchInput ? `?title=${searchInput}` : ''}`;
+    start(url);
+    router.push(url);
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="relative">
+      <Input
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        placeholder="Search products..."
+        className={`${poppins.className} h-11 w-full border-primary/20 pr-8 text-base placeholder:font-normal focus:ring-4`}
+      />
+      {searchInput ? (
+        <X
+          onClick={() => setSearchInput('')}
+          className="absolute right-3 top-1/2 size-4 -translate-y-1/2 cursor-pointer text-gray-500"
+        />
+      ) : (
+        <SearchIcon className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-gray-500" />
+      )}
+    </form>
   );
 }

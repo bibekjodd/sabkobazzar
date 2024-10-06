@@ -16,7 +16,7 @@ export const useUpcomingAuctions = ({
       fetchUpcomingAuctions({ cursor: pageParam, ownerId, productId, signal }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
-      return lastPage.at(0)?.startsAt;
+      return lastPage.at(lastPage.length - 1)?.startsAt;
     }
   });
 };

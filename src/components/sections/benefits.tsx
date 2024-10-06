@@ -56,7 +56,7 @@ export default function Benefits() {
         </div>
       </div>
 
-      <div className="md:p-5">
+      <div className="text-indigo-300 md:p-5">
         <div className="relative flex w-full items-center space-x-5 overflow-hidden rounded-3xl px-3 py-6">
           <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/25 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
           <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/5 [mask-image:linear-gradient(to_top,black,transparent)]" />
@@ -70,13 +70,13 @@ export default function Benefits() {
               <Asterisk className="size-12" />
               <h3 className="text-3xl font-medium">Sabkobazzar</h3>
             </div>
-            <p className="text-base text-indigo-200 xs:w-9/12 sm:w-10/12 md:text-xl">
-              conducts auctions with strict policies to maintain fairness on the platform
+            <p className="text-base xs:w-9/12 sm:w-10/12 md:text-xl">
+              Manages auctions with strict policies to maintain fairness on the platform
             </p>
           </div>
 
-          <div className="relative hidden w-1/3 flex-col items-center space-y-3 text-indigo-200 sm:flex">
-            <ShieldCheckIcon className="size-12 text-indigo-200 xs:size-20" />
+          <div className="relative hidden w-1/3 flex-col items-center space-y-3 sm:flex">
+            <ShieldCheckIcon className="size-12 xs:size-20" />
             <span className="hidden lg:block">Most reliable platform</span>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function Benefits() {
 const graphics = (
   <>
     <div className="absolute inset-0 -z-10 flex flex-wrap overflow-hidden">
-      {new Array(100).fill('nothing').map((_, i) => (
+      {new Array(120).fill('nothing').map((_, i) => (
         <div key={i} className="size-8 border border-violet-900/10" />
       ))}
     </div>

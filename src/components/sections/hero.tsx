@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react';
+import ProgressLink from '../utils/progress-link';
 
 export default function Hero() {
   return (
@@ -17,7 +18,10 @@ export default function Hero() {
           </h3>
         </div>
 
-        <button className="relative mt-3 flex items-center rounded-lg bg-gradient-to-b from-violet-950/30 to-violet-900/50 px-6 py-2 text-sm font-medium shadow-[0px_0px_10px_#6d28d9]">
+        <ProgressLink
+          href="/auctions"
+          className="relative mt-3 flex items-center rounded-lg bg-gradient-to-b from-violet-950/30 to-violet-900/50 px-6 py-2 text-sm font-medium shadow-[0px_0px_10px_#6d28d9]"
+        >
           <span>Explore Auctions</span>
           <ChevronRight className="ml-1 size-5" />
           <div className="absolute inset-0">
@@ -25,7 +29,7 @@ export default function Hero() {
             <div className="absolute inset-0 rounded-lg border border-white/40 [mask-image:linear-gradient(to_top,black,transparent)]" />
             <div className="shadow-[0_0_10px_#6d28d9)_inset] absolute inset-0 rounded-lg" />
           </div>
-        </button>
+        </ProgressLink>
       </div>
     </section>
   );
