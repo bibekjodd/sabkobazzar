@@ -4,7 +4,7 @@ import Avatar from '../utils/avatar';
 
 export default function HowItWorks() {
   return (
-    <section id="about" className="relative overflow-hidden py-20 text-sm">
+    <section id="about" className="relative overflow-hidden text-sm md:py-12">
       <div className="absolute left-0 top-0 -z-10 size-96 rounded-full bg-purple-900/15 blur-3xl" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-950/10" />
 
@@ -17,12 +17,14 @@ export default function HowItWorks() {
 
       <div className="cont grid lg:grid-cols-2">
         <div className="relative h-full overflow-hidden rounded-lg lg:mr-5 xl:mr-10">
-          <div className="py-20 lg:py-10">
+          <div className="pb-10 xs:px-2">
             <h2 className="mb-2 flex items-center space-x-1 bg-gradient-to-b from-violet-400 to-purple-900 bg-clip-text text-lg font-medium text-transparent">
               <Asterisk className="size-8 text-violet-800/80" />
               <span>How it works</span>
             </h2>
-            <h3 className="text-4xl font-medium">Register and place the highest bid to win</h3>
+            <h3 className="text-3xl font-medium sm:text-4xl">
+              Register and place the highest bid to win
+            </h3>
             <p className="mt-5 text-base text-gray-400">
               At SabkoBazzar, you can participate in exciting auctions for your favorite products.
               Simply browse available items, place your bid, and track the auction in real-time. If

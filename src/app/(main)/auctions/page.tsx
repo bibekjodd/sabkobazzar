@@ -31,7 +31,7 @@ export default function Page() {
           {upcomingAuctions?.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.map((auction) => (
-                <div key={auction.id} className="pb-5 md:px-5">
+                <div key={auction.id} className="pb-5 md:px-2.5">
                   <AuctionCard auction={auction} />
                 </div>
               ))}

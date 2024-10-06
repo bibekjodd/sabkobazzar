@@ -6,8 +6,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ChevronsRight } from 'lucide-react';
 import CancelAuctionDialog from '../dialogs/cancel-auction-dialog';
 import { Button } from '../ui/button';
-import ProgressLink from '../utils/progress-link';
 import { Skeleton } from '../ui/skeleton';
+import ProgressLink from '../utils/progress-link';
 
 type Props = {
   auction: Auction;
@@ -50,9 +50,9 @@ export default function AuctionCard({ auction, showCancelButton }: Props) {
 
       <div className="mt-auto flex flex-col space-y-1 px-4 pb-4 pt-5">
         {canJoinAuction && (
-          <button className="h-9 w-full rounded-lg bg-gradient-to-b from-gray-400 to-gray-500/90 py-2 text-center text-sm font-medium text-background hover:brightness-125">
+          <Button variant="white" className="w-full">
             Join Auction
-          </button>
+          </Button>
         )}
         <ProgressLink href={auctionLink} onClick={upadateCache}>
           <Button variant="gradient" className="flex w-full items-center">

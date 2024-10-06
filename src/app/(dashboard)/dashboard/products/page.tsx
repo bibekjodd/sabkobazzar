@@ -21,7 +21,9 @@ export default function Page() {
       <div className="flex w-full items-center justify-between p-4 filter backdrop-blur-2xl">
         <span className="text-xl font-semibold">Your products</span>
         <AddProductDialog>
-          <Button Icon={Plus}>Add product</Button>
+          <Button Icon={Plus} variant="white">
+            Add product
+          </Button>
         </AddProductDialog>
       </div>
 
@@ -30,12 +32,13 @@ export default function Page() {
           {products?.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  view="seller"
-                  queryKey={['products', `?owner=${profile?.id}`]}
-                />
+                <div key={product.id} className="pb-5 md:px-2.5">
+                  <ProductCard
+                    product={product}
+                    view="seller"
+                    queryKey={['products', `?owner=${profile?.id}`]}
+                  />
+                </div>
               ))}
             </React.Fragment>
           ))}

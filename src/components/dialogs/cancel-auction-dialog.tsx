@@ -32,9 +32,9 @@ export default function CancelAuctionDialog({
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">Close</Button>
           </DialogClose>
-          <Button onClick={() => mutate()} loading={isPending} disabled={isPending}>
+          <Button onClick={() => mutate()} loading={isPending} disabled={isPending} variant="white">
             Confirm
           </Button>
         </DialogFooter>

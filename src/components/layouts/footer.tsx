@@ -4,7 +4,7 @@ import { logo } from '../utils/logo';
 
 export default function Footer() {
   return (
-    <div className="relative z-30 overflow-hidden py-10 font-normal text-gray-400 filter backdrop-blur-3xl">
+    <div className="relative z-10 overflow-hidden py-10 font-normal text-gray-400 filter backdrop-blur-3xl">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-violet-950/5" />
       <footer className="cont grid space-y-10 lg:grid-cols-3 lg:space-y-0">
         <div>

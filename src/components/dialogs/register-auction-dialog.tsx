@@ -82,7 +82,7 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-screen flex-col bg-background/50 filter backdrop-blur-xl">
+      <DialogContent className="flex max-h-screen flex-col bg-background/50 filter backdrop-blur-3xl">
         <DialogHeader>
           <DialogTitle className="text-center">Register an auction</DialogTitle>
         </DialogHeader>
@@ -245,6 +245,7 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
 
           <Button
             type="submit"
+            variant="white"
             onClick={onSubmit}
             loading={isRegisteringAuction}
             disabled={isRegisteringAuction}

@@ -1,7 +1,7 @@
 import { dummyProductImage } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
-import { MoveRight } from 'lucide-react';
+import { ChevronsUp, MoveRight } from 'lucide-react';
 import AddProductDialog from '../dialogs/add-product-dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
@@ -21,7 +21,7 @@ export default function ProductCard({ product, view, queryKey }: Props) {
   const productLink = `/products/${product.id}`;
 
   return (
-    <div className="relative m-4 flex flex-col overflow-hidden rounded-lg p-0.5 shadow-2xl">
+    <div className="relative flex flex-col overflow-hidden rounded-lg p-0.5 shadow-2xl">
       <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/[0.07] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/15 [mask-image:linear-gradient(to_top,black,transparent)]" />
       <ProgressLink
@@ -49,7 +49,7 @@ export default function ProductCard({ product, view, queryKey }: Props) {
 
         {view === 'seller' && (
           <AddProductDialog product={product} queryKey={queryKey}>
-            <Button className="mt-3 w-full" variant="gradient">
+            <Button className="mt-3 w-full" variant="white" Icon={ChevronsUp}>
               Update Product
             </Button>
           </AddProductDialog>

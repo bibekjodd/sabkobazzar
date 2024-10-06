@@ -7,7 +7,7 @@ import { CircleAlert } from 'lucide-react';
 export default function Page({ params }: { params: { id: string } }) {
   const { data: product, isLoading, error } = useProduct(params.id);
   return (
-    <main className="cont py-4 pb-16">
+    <main className="cont py-4 pb-20">
       {error && (
         <Alert variant="destructive">
           <CircleAlert className="size-4" />

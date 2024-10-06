@@ -3,7 +3,9 @@ import { useTimeout } from '@/hooks/use-timeout';
 import { dummyProductImage } from '@/lib/constants';
 import { useProducts } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
+import { CircleAlert } from 'lucide-react';
 import React, { useState } from 'react';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -20,8 +22,6 @@ import { Skeleton } from '../ui/skeleton';
 import AutoAnimate from '../utils/auto-animate';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 import RegisterAuctionDialog from './register-auction-dialog';
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
-import { CircleAlert } from 'lucide-react';
 
 type Props = {
   children: React.ReactNode;
@@ -47,7 +47,7 @@ export default function SelectAuctionProductDialog({ children }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-full flex-col bg-background/70 filter backdrop-blur-lg">
+      <DialogContent className="flex max-h-full flex-col bg-background/50 filter backdrop-blur-3xl">
         <DialogHeader>
           <DialogTitle className="text-center">Select Product</DialogTitle>
         </DialogHeader>
@@ -108,7 +108,7 @@ export default function SelectAuctionProductDialog({ children }: Props) {
 
 function ProductResultItem({ product }: { product: Product }) {
   return (
-    <div className="rounded-md bg-gray-900/80 hover:bg-gray-800/70">
+    <div className="rounded-lg bg-indigo-950/20 hover:bg-indigo-950/40">
       <div className="flex">
         <img
           src={product.image || dummyProductImage}
@@ -118,7 +118,7 @@ function ProductResultItem({ product }: { product: Product }) {
         <div className="flex w-full flex-col justify-between px-4 py-2">
           <span>{product.title}</span>
           <RegisterAuctionDialog product={product}>
-            <Button className="block w-full font-bold" size="sm">
+            <Button className="block w-full" size="sm" variant="white">
               Select
             </Button>
           </RegisterAuctionDialog>

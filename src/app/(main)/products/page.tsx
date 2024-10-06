@@ -23,10 +23,10 @@ export default function Page({ searchParams }: { searchParams: SearchProductsPar
 
   return (
     <>
-      <aside className="fixed left-0 top-16 -z-10 hidden h-[calc(100vh-64px)] w-60 overflow-y-auto border-r lg:block">
+      <aside className="fixed left-0 top-16 hidden h-[calc(100vh-64px)] w-60 overflow-y-auto border-r lg:block">
         <ProductsFilterSidebar searchParams={searchParams} />
       </aside>
-      <main className="min-h-screen pb-4 lg:pl-60">
+      <main className="min-h-screen pb-20 pt-4 lg:pl-60">
         {!isLoading && products?.pages[0].length === 0 && (
           <div className="p-4">
             <Alert>
@@ -58,7 +58,9 @@ export default function Page({ searchParams }: { searchParams: SearchProductsPar
           {products?.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.map((product) => (
-                <ProductCard key={product.id} product={product} view="user" />
+                <div key={product.id} className="pb-5 md:px-2.5">
+                  <ProductCard product={product} view="user" />
+                </div>
               ))}
             </React.Fragment>
           ))}

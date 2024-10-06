@@ -9,7 +9,7 @@ import {
 
 export default function Benefits() {
   return (
-    <section id="benefits" className="cont mt-16 md:mt-24">
+    <section id="benefits" className="cont mt-32">
       <div className="flex items-center justify-center">
         <AsteriskIcon className="size-8 text-violet-800/80" />
         <span className="bg-gradient-to-b from-violet-400 to-purple-900 bg-clip-text text-base font-medium text-transparent">
@@ -56,7 +56,7 @@ export default function Benefits() {
         </div>
       </div>
 
-      <div className="text-indigo-300 md:p-5">
+      <div className="text-indigo-200/70 md:p-5">
         <div className="relative flex w-full items-center space-x-5 overflow-hidden rounded-3xl px-3 py-6">
           <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/25 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
           <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/5 [mask-image:linear-gradient(to_top,black,transparent)]" />

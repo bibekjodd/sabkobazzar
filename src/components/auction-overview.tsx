@@ -4,6 +4,7 @@ import ProgressLink from '@/components/utils/progress-link';
 import { dummyProductImage } from '@/lib/constants';
 import { formatDate, formatPrice } from '@/lib/utils';
 import { useProfile } from '@/queries/use-profile';
+import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
 
 type Props = {
@@ -74,11 +75,10 @@ export default function AuctionOverview({ auction, showProductLinkButton }: Prop
 
           <div className="mt-auto flex flex-col space-y-2 pt-7">
             {showProductLinkButton && (
-              <ProgressLink
-                href={`/products/${auction.productId}`}
-                className="h-9 w-full rounded-lg bg-gradient-to-b from-gray-400 to-gray-500/90 py-2 text-center font-medium text-background hover:brightness-125"
-              >
-                See more about product
+              <ProgressLink href={`/products/${auction.productId}`}>
+                <Button variant="white" className="w-full">
+                  See more about product
+                </Button>
               </ProgressLink>
             )}
 
@@ -89,3 +89,26 @@ export default function AuctionOverview({ auction, showProductLinkButton }: Prop
     </div>
   );
 }
+
+export const auctionOverviewSkeleton = (
+  <div>
+    <Skeleton className="mx-auto mb-3 h-10 w-full max-w-96" />
+    <div className="grid w-full space-y-5 md:grid-cols-2 md:space-y-0">
+      <Skeleton className="aspect-video" />
+      <div className="flex w-full flex-col md:pl-10">
+        <div className="space-y-2">
+          <Skeleton className="h-9" />
+          <Skeleton className="h-9" />
+          <Skeleton className="h-9" />
+          <Skeleton className="h-9" />
+          <Skeleton className="h-9" />
+        </div>
+
+        <div className="mt-auto space-y-2 pt-5">
+          <Skeleton className="h-9" />
+          <Skeleton className="h-9" />
+        </div>
+      </div>
+    </div>
+  </div>
+);

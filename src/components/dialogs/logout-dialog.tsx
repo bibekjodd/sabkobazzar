@@ -22,7 +22,7 @@ export default function LogoutDialog({ children }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children ? children : <Button>Logout</Button>}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-background/50 filter backdrop-blur-3xl">
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
           <DialogDescription>
@@ -35,7 +35,12 @@ export default function LogoutDialog({ children }: Props) {
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button disabled={isPending} loading={isPending} onClick={() => logout()}>
+            <Button
+              disabled={isPending}
+              loading={isPending}
+              onClick={() => logout()}
+              variant="white"
+            >
               Logout
             </Button>
           </DialogClose>

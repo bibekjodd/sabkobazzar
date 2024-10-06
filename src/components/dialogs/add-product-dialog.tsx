@@ -92,7 +92,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-full flex-col">
+      <DialogContent className="flex max-h-full flex-col bg-background/50 filter backdrop-blur-3xl">
         <DialogHeader>
           <DialogTitle className="text-center">
             {product ? 'Update product' : 'Add new Product'}
@@ -100,7 +100,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex h-full flex-grow flex-col space-y-7 overflow-y-auto px-2 pb-2 scrollbar-thin"
+          className="flex h-full flex-grow flex-col space-y-7 overflow-y-auto pb-2 pr-2 scrollbar-thin"
         >
           <FormInput
             error={errors.title?.message}
@@ -144,9 +144,9 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
                 onChange={pickImage}
               />
               {!imageUri && (
-                <div className="flex flex-col items-center space-y-3">
+                <div className="flex flex-col items-center">
                   <ImageIcon className="size-8" />
-                  <p className="text-sm">
+                  <p className="p-4 text-sm">
                     Provide 16:9 aspect ratio image for better compatibility
                   </p>
                 </div>
@@ -213,6 +213,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
 
           <Button
             type="submit"
+            variant="white"
             onClick={handleSubmit(onSubmit)}
             disabled={isAddingProduct || isUpdatingProduct}
             loading={isAddingProduct || isUpdatingProduct}

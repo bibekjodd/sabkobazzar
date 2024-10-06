@@ -17,7 +17,7 @@ export default function ProfileDropdown({ children }: { children: React.ReactNod
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
 
-      <DropdownMenuContent>
+      <DropdownMenuContent className="bg-background/50 filter backdrop-blur-3xl">
         <DropdownMenuLabel>Profile</DropdownMenuLabel>
 
         <DropdownMenuSub>

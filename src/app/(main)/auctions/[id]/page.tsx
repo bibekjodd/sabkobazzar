@@ -1,5 +1,5 @@
 'use client';
-import AuctionOverview from '@/components/auction-overview';
+import AuctionOverview, { auctionOverviewSkeleton } from '@/components/auction-overview';
 import AuctionCard from '@/components/cards/auction-card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useAuction } from '@/queries/use-auction';
@@ -8,13 +8,13 @@ import { ActivityIcon, CircleAlert } from 'lucide-react';
 
 type Props = { params: { id: string } };
 export default function Page({ params: { id } }: Props) {
-  const { data: auction, error } = useAuction(id);
+  const { data: auction, error, isLoading } = useAuction(id);
   const { data } = useUpcomingAuctions({ ownerId: null, productId: null });
 
   const upcomingAuctions = data?.pages.flat(1).filter((auction) => auction.id !== id);
 
   return (
-    <main className="cont">
+    <main className="cont pb-20">
       {graphics}
       {error && (
         <div className="p-4">
@@ -23,6 +23,11 @@ export default function Page({ params: { id } }: Props) {
             <AlertTitle>Could not get auctions details!</AlertTitle>
             <AlertDescription>{error.message}</AlertDescription>
           </Alert>
+        </div>
+      )}
+      {isLoading && (
+        <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
+          {auctionOverviewSkeleton}
         </div>
       )}
       {auction && (
@@ -53,7 +58,7 @@ export default function Page({ params: { id } }: Props) {
 
 const graphics = (
   <>
-    <div className="fixed right-5 top-16 -z-10 size-40 rounded-full bg-purple-400/15 blur-3xl filter md:size-80" />
-    <div className="fixed left-5 top-16 -z-10 size-40 rounded-full bg-sky-400/15 blur-3xl filter md:size-80" />
+    <div className="fixed right-5 top-16 -z-10 size-40 rounded-full bg-purple-500/10 blur-3xl filter md:size-80" />
+    <div className="fixed left-5 top-16 -z-10 size-40 rounded-full bg-sky-500/15 blur-3xl filter md:size-80" />
   </>
 );

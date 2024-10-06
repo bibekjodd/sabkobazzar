@@ -4,7 +4,7 @@ import Avatar from '../utils/avatar';
 
 export default function Testimonials() {
   return (
-    <section className="my-16 md:my-32">
+    <section className="mb-20 mt-32">
       <div id="testimonials" className="cont">
         <div className="flex items-center justify-center">
           <Asterisk className="size-8 text-violet-800/80" />

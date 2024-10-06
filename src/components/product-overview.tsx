@@ -1,5 +1,6 @@
 import { dummyProductImage } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
+import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
 
@@ -32,9 +33,9 @@ export default function ProductOverview({ product }: { product: Product }) {
         )}
 
         <div className="mt-auto pt-5">
-          <button className="h-9 w-full rounded-lg bg-gradient-to-b from-gray-400 to-gray-500/90 text-sm font-medium text-primary-foreground hover:brightness-125">
+          <Button variant="white" className="w-full">
             Interested
-          </button>
+          </Button>
         </div>
       </div>
     </div>

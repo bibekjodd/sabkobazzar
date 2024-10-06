@@ -23,7 +23,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         )}
 
-        <div className="grid h-full place-items-center">
+        <div className="grid h-full place-items-center py-7">
           {isLoading && <div className="w-full">{productOverviewSkeleton}</div>}
           {product && <ProductOverview product={product} />}
         </div>
