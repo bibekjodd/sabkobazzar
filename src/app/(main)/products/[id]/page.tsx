@@ -1,14 +1,13 @@
 'use client';
+import ProductOverview, { productOverviewSkeleton } from '@/components/product-overview';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { dummyProductImage } from '@/lib/constants';
-import { formatPrice } from '@/lib/utils';
 import { useProduct } from '@/queries/use-product';
 import { CircleAlert } from 'lucide-react';
 
 export default function Page({ params }: { params: { id: string } }) {
   const { data: product, isLoading, error } = useProduct(params.id);
   return (
-    <main className="cont py-4">
+    <main className="cont py-4 pb-16">
       {error && (
         <Alert variant="destructive">
           <CircleAlert className="size-4" />
@@ -17,16 +16,10 @@ export default function Page({ params }: { params: { id: string } }) {
         </Alert>
       )}
 
-      {product && (
-        <div className="grid lg:grid-cols-2">
-          <img src={product.image || dummyProductImage} alt="product image" />
-
-          <div className="flex flex-col space-y-3">
-            <h4 className="text-xl font-medium">{product.title}</h4>
-            <h4 className="text-xl font-bold">Rs. {formatPrice(product.price)}</h4>
-          </div>
-        </div>
-      )}
+      <div className="grid min-h-[80vh] place-items-center py-7">
+        {isLoading && <div className="w-full">{productOverviewSkeleton}</div>}
+        {product && <ProductOverview product={product} />}
+      </div>
     </main>
   );
 }
