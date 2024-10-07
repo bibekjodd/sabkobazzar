@@ -1,12 +1,13 @@
 import { backendUrl } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
-import { useQuery } from '@tanstack/react-query';
+import { QueryOptions, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useProduct = (id: string) => {
+export const useProduct = (id: string, queryOptions: QueryOptions<Product>) => {
   return useQuery({
     queryKey: ['product', id],
-    queryFn: ({ signal }) => fetchProduct({ id, signal })
+    queryFn: ({ signal }) => fetchProduct({ id, signal }),
+    ...queryOptions
   });
 };
 

@@ -43,3 +43,14 @@ type Auction = {
   winner: User | null;
   participants: User[];
 };
+
+type UserNotification = {
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  receivedAt: string;
+  entity: string;
+  params: string;
+  user: User;
+};

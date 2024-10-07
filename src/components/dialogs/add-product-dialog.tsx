@@ -5,7 +5,7 @@ import { imageToDataUri } from '@/lib/utils';
 import { useAddProduct } from '@/mutations/use-add-product';
 import { useUpdateProduct } from '@/mutations/use-update-product';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { QueryKey, useIsMutating } from '@tanstack/react-query';
+import { useIsMutating } from '@tanstack/react-query';
 import { Image as ImageIcon, X } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -25,11 +25,8 @@ import { Textarea } from '../ui/textarea';
 import AutoAnimate from '../utils/auto-animate';
 import { FormInput } from '../utils/form-input';
 
-type Props = { children: React.ReactNode } & (
-  | { product?: undefined; queryKey?: undefined }
-  | { product: Product; queryKey: QueryKey }
-);
-export default function AddProductDialog({ children, product, queryKey }: Props) {
+type Props = { children: React.ReactNode; product?: Product };
+export default function AddProductDialog({ children, product }: Props) {
   const [imageUri, setImageUri] = useState<string | null>(product?.image || null);
   const imagePickerRef = useRef<HTMLInputElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -76,10 +73,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
   const onSubmit = (data: AddProductSchema) => {
     const imageFile = imagePickerRef.current?.files ? imagePickerRef.current.files[0] : null;
     if (product) {
-      updateProduct(
-        { ...data, image: imageFile || product.image, queryKey },
-        { onSuccess: resetAndClose }
-      );
+      updateProduct({ ...data, image: imageFile || product.image }, { onSuccess: resetAndClose });
       return;
     }
     addProduct({ ...data, image: imageFile }, { onSuccess: resetAndClose });
@@ -100,7 +94,7 @@ export default function AddProductDialog({ children, product, queryKey }: Props)
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex h-full flex-grow flex-col space-y-7 overflow-y-auto pb-2 pr-2 scrollbar-thin"
+          className="flex h-full flex-grow flex-col space-y-7 overflow-y-auto px-1 pb-2 scrollbar-thin"
         >
           <FormInput
             error={errors.title?.message}

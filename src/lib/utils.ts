@@ -20,6 +20,14 @@ export const extractErrorMessage = (err: unknown): string => {
   return 'Unknown error occurred!';
 };
 
+export const wait = async (time = 1000) => {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res('okay');
+    }, time);
+  });
+};
+
 export const formatPrice = (price: number): string => {
   let priceStr = price.toString().split('').reverse().join('');
   let formattedPrice = '';

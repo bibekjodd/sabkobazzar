@@ -1,7 +1,7 @@
 import { backendUrl } from '@/lib/constants';
 import { AddProductSchema } from '@/lib/form-schemas';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
-import { InfiniteData, QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -12,31 +12,16 @@ export const useUpdateProduct = (id: string) => {
     mutationFn: (
       data: Partial<AddProductSchema> & {
         image: string | File | null;
-        queryKey: QueryKey | undefined;
       }
     ) => updateProduct({ ...data, id }),
     onMutate() {
       toast.dismiss();
       toast.loading('Updating product...');
     },
-    onSuccess(product, { queryKey }) {
+    onSuccess(product) {
       toast.dismiss();
       toast.success('Updated product successfully....');
       queryClient.setQueryData<Product>(['product', product.id], { ...product });
-      if (!queryKey) return;
-
-      const productsData = queryClient.getQueryData<InfiniteData<Product[]>>(queryKey);
-      if (!productsData) return;
-      const updatedPages: Product[][] = productsData.pages.map((page) =>
-        page.map((currentProduct) => {
-          if (currentProduct.id !== product.id) return currentProduct;
-          return product;
-        })
-      );
-      queryClient.setQueryData<InfiniteData<Product[]>>(queryKey, (data) => {
-        if (!data) return undefined;
-        return { ...data, pages: updatedPages };
-      });
     },
     onError(err) {
       toast.dismiss();

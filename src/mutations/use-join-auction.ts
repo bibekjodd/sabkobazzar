@@ -20,6 +20,7 @@ export const useJoinAuction = (auctionId: string) => {
       toast.dismiss();
       toast.success('Joined auction successfully');
       queryClient.setQueryData<Auction>(['auction', auction.id], auction);
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
 
     onError(err) {

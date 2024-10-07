@@ -1,6 +1,7 @@
-import { LayoutGrid, LogOut } from 'lucide-react';
+import { BellIcon, LayoutGrid, LogOut } from 'lucide-react';
 import React from 'react';
 import LogoutDialog from '../dialogs/logout-dialog';
+import NotificationsDrawer from '../drawers/notifications-drawer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,17 @@ export default function ProfileDropdown({ children }: { children: React.ReactNod
 
       <DropdownMenuContent className="bg-background/50 filter backdrop-blur-3xl">
         <DropdownMenuLabel>Profile</DropdownMenuLabel>
+
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="w-full">
+            <NotificationsDrawer>
+              <button className="flex items-center">
+                <BellIcon className="mr-2 size-4" />
+                <span>Notifications</span>
+              </button>
+            </NotificationsDrawer>
+          </DropdownMenuSubTrigger>
+        </DropdownMenuSub>
 
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="w-full">

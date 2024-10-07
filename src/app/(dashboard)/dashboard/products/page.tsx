@@ -33,11 +33,7 @@ export default function Page() {
             <React.Fragment key={i}>
               {page.map((product) => (
                 <div key={product.id} className="pb-5 md:px-2.5">
-                  <ProductCard
-                    product={product}
-                    view="seller"
-                    queryKey={['products', `?owner=${profile?.id}`]}
-                  />
+                  <ProductCard product={product} view="seller" />
                 </div>
               ))}
             </React.Fragment>

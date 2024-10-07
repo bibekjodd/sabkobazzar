@@ -1,34 +1,24 @@
 import { dummyProductImage } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
-import { QueryKey, useQueryClient } from '@tanstack/react-query';
+import { useProduct } from '@/queries/use-product';
 import { ChevronsUp, MoveRight } from 'lucide-react';
 import AddProductDialog from '../dialogs/add-product-dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import ProgressLink from '../utils/progress-link';
 
-type Props = { product: Product } & (
-  | { view: 'user'; queryKey?: undefined }
-  | { view: 'seller'; queryKey: QueryKey }
-);
-export default function ProductCard({ product, view, queryKey }: Props) {
-  const queryClient = useQueryClient();
-  const updateProductCache = () => {
-    queryClient.setQueryData<Product>(['product', product.id], {
-      ...product
-    });
-  };
+type Props = { product: Product; view: 'seller' | 'user' };
+export default function ProductCard({ product: productData, view }: Props) {
+  const { data } = useProduct(productData.id, { initialData: productData });
+  const product = data || productData;
+
   const productLink = `/products/${product.id}`;
 
   return (
     <div className="relative flex flex-col overflow-hidden rounded-lg p-0.5 shadow-2xl">
       <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/[0.07] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/15 [mask-image:linear-gradient(to_top,black,transparent)]" />
-      <ProgressLink
-        href={productLink}
-        onClick={updateProductCache}
-        className="w-full overflow-hidden rounded-sm bg-background"
-      >
+      <ProgressLink href={productLink} className="w-full overflow-hidden rounded-sm bg-background">
         <img
           src={product.image || dummyProductImage}
           alt="product image"
@@ -40,7 +30,7 @@ export default function ProductCard({ product, view, queryKey }: Props) {
         <h4 className="text-xl font-medium">{product.title}</h4>
         <h4 className="text-xl font-bold">Rs. {formatPrice(product.price)}</h4>
         {view === 'user' && (
-          <ProgressLink href={productLink} className="mt-3 w-full" onClick={updateProductCache}>
+          <ProgressLink href={productLink} className="mt-3 w-full">
             <Button Icon={MoveRight} className="w-full" variant="gradient">
               See more
             </Button>
@@ -48,7 +38,7 @@ export default function ProductCard({ product, view, queryKey }: Props) {
         )}
 
         {view === 'seller' && (
-          <AddProductDialog product={product} queryKey={queryKey}>
+          <AddProductDialog product={product}>
             <Button className="mt-3 w-full" variant="white" Icon={ChevronsUp}>
               Update Product
             </Button>

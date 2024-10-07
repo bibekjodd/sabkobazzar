@@ -26,8 +26,8 @@ export default function AuctionCard({
   const queryClient = useQueryClient();
   const profile = queryClient.getQueryData<User>(['profile']);
 
-  const { data: auction } = useAuction(auctionData.id);
-  if (!auction) return null;
+  const { data } = useAuction(auctionData.id, { initialData: auctionData });
+  const auction = data || auctionData;
 
   const canCancelAuction =
     profile?.id === auction.ownerId && !auction.isCancelled && !auction.isFinished;

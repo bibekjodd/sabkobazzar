@@ -17,8 +17,8 @@ type Props = {
 };
 export default function AuctionOverview({ auction: auctionData, showProductLinkButton }: Props) {
   const { data: profile } = useProfile();
-  const { data: auction } = useAuction(auctionData.id);
-  if (!auction) return null;
+  const { data } = useAuction(auctionData.id, { initialData: auctionData });
+  const auction = data || auctionData;
 
   const isJoined = auction.participants.find((participant) => participant.id === profile?.id);
   const canJoinAuction =

@@ -1,10 +1,15 @@
+'use client';
 import { dummyProductImage } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
+import { useProduct } from '@/queries/use-product';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
 
-export default function ProductOverview({ product }: { product: Product }) {
+type Props = { product: Product };
+export default function ProductOverview({ product: productData }: Props) {
+  const { data } = useProduct(productData.id, { initialData: productData });
+  const product = data || productData;
   return (
     <div className="grid w-full space-y-5 lg:grid-cols-2 lg:space-y-0">
       <img

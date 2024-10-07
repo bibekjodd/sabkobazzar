@@ -19,6 +19,7 @@ export const useLeaveAuction = (auctionId: string) => {
     onSuccess() {
       toast.dismiss();
       toast.success('Left auction successfully');
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
       const auction = queryClient.getQueryData<Auction>(['auction', auctionId]);
       const profile = queryClient.getQueryData<User>(['profile']);
       if (!auction) return;
