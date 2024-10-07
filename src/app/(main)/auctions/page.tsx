@@ -32,7 +32,7 @@ export default function Page() {
             <React.Fragment key={i}>
               {page.map((auction) => (
                 <div key={auction.id} className="pb-5 md:px-2.5">
-                  <AuctionCard auction={auction} />
+                  <AuctionCard auction={auction} showJoinButton />
                 </div>
               ))}
             </React.Fragment>

@@ -3,7 +3,10 @@ import { Button } from '@/components/ui/button';
 import ProgressLink from '@/components/utils/progress-link';
 import { dummyProductImage } from '@/lib/constants';
 import { formatDate, formatPrice } from '@/lib/utils';
+import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
+import JoinAuctionDialog from './dialogs/join-auction-dialog';
+import LeaveAuctionDialog from './dialogs/leave-auction.dialog';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
 
@@ -12,13 +15,24 @@ type Props = {
   showProductLinkButton?: boolean;
   showProductDetails?: boolean;
 };
-export default function AuctionOverview({ auction, showProductLinkButton }: Props) {
+export default function AuctionOverview({ auction: auctionData, showProductLinkButton }: Props) {
   const { data: profile } = useProfile();
+  const { data: auction } = useAuction(auctionData.id);
+  if (!auction) return null;
+
+  const isJoined = auction.participants.find((participant) => participant.id === profile?.id);
   const canJoinAuction =
-    !auction.isFinished &&
+    !isJoined &&
     !auction.isCancelled &&
+    !auction.isFinished &&
     Date.now() < new Date(auction.startsAt).getTime() &&
     profile?.id !== auction.ownerId;
+
+  const canLeaveAuction =
+    isJoined &&
+    !auction.isCancelled &&
+    !auction.isFinished &&
+    Date.now() + 3 * 60 * 60 * 1000 < new Date(auction.startsAt).getTime();
 
   return (
     <div>
@@ -82,7 +96,18 @@ export default function AuctionOverview({ auction, showProductLinkButton }: Prop
               </ProgressLink>
             )}
 
-            {canJoinAuction && <Button variant="gradient">Join Auction</Button>}
+            {canJoinAuction && (
+              <JoinAuctionDialog auctionId={auction.id}>
+                <Button variant="gradient">Join Auction</Button>
+              </JoinAuctionDialog>
+            )}
+            {canLeaveAuction && (
+              <LeaveAuctionDialog auctionId={auction.id}>
+                <Button variant="outline" className="bg-transparent">
+                  Leave Auction
+                </Button>
+              </LeaveAuctionDialog>
+            )}
           </div>
         </section>
       </div>

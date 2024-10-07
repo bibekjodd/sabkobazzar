@@ -1,16 +1,23 @@
 import { backendUrl } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
-import { useQuery } from '@tanstack/react-query';
+import { QueryOptions, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useAuction = (auctionId: string) => {
-  return useQuery({
+export const useAuction = (auctionId: string, queryOptions?: QueryOptions<Auction>) => {
+  return useQuery<Auction>({
     queryKey: ['auction', auctionId],
-    queryFn: ({ signal }) => fetchAuction({ auctionId, signal })
+    queryFn: ({ signal }) => fetchAuction({ auctionId, signal }),
+    ...queryOptions
   });
 };
 
-const fetchAuction = async ({ auctionId, signal }: { auctionId: string; signal: AbortSignal }) => {
+const fetchAuction = async ({
+  auctionId,
+  signal
+}: {
+  auctionId: string;
+  signal: AbortSignal;
+}): Promise<Auction> => {
   try {
     const res = await axios.get<{ auction: Auction }>(`${backendUrl}/api/auctions/${auctionId}`, {
       signal

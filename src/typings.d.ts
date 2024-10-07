@@ -39,5 +39,7 @@ type Auction = {
   isFinished: boolean;
   isCancelled: boolean;
   owner: User;
-  product: Product;
+  product: Omit<Product, 'owner'>;
+  winner: User | null;
+  participants: User[];
 };
