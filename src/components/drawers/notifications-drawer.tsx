@@ -1,4 +1,5 @@
 'use client';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { useNotifications } from '@/queries/use-notifications';
 import { AlertCircle, BoxIcon, EggFried, UserIcon } from 'lucide-react';
 import moment from 'moment';
@@ -32,11 +33,11 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
   const closeDrawer = () => {
     closeButtonRef.current?.click();
   };
-
+  const screenWidth = useMediaQuery();
   return (
-    <Drawer direction="right">
+    <Drawer direction={screenWidth < 768 ? 'bottom' : 'right'}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
-      <DrawerContent className="ml-auto flex h-screen w-full max-w-screen-xs flex-col bg-background/50 filter backdrop-blur-3xl">
+      <DrawerContent className="ml-auto flex h-screen w-full flex-col bg-background/50 filter backdrop-blur-3xl md:max-w-screen-xs">
         <DrawerHeader>
           <DrawerTitle className="text-center">Notifications</DrawerTitle>
         </DrawerHeader>

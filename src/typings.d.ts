@@ -54,3 +54,12 @@ type UserNotification = {
   params: string;
   user: User;
 };
+
+type Bid = {
+  id: string;
+  auctionId: string;
+  bidderId: string;
+  at: string;
+  amount: number;
+  bidder: User;
+};

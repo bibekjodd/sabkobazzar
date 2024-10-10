@@ -83,3 +83,53 @@ export const formatDate = (value: string | Date | number) => {
   const minutes = date.getMinutes();
   return `${month} ${day}, ${hours % 12 || 12}${minutes !== 0 ? `:${minutes}` : ''}${hours > 12 ? 'pm' : 'am'}`;
 };
+
+export const getBidAmountOptions = (amount: number): number[] => {
+  amount = Math.ceil(amount / 1000) * 1000;
+  if (amount > 100_000) amount = amount - (amount % 5000);
+  if (amount < 50_000) {
+    return [
+      amount + 1_000,
+      amount + 2_500,
+      amount + 5_000,
+      amount + 7_500,
+      amount + 10_000,
+      amount + 12_500
+    ];
+  }
+  if (amount < 100_000)
+    return [
+      amount + 1_000,
+      amount + 2_500,
+      amount + 5_000,
+      amount + 10_000,
+      amount + 12_500,
+      amount + 15_000
+    ];
+  if (amount < 1_000_000)
+    return [
+      amount + 5_000,
+      amount + 20_000,
+      amount + 25_000,
+      amount + 50_000,
+      amount + 75_000,
+      amount + 100_000
+    ];
+  if (amount < 10_000_000)
+    return [
+      amount + 10_000,
+      amount + 25_000,
+      amount + 50_000,
+      amount + 75_000,
+      amount + 100_000,
+      amount + 125_000
+    ];
+  return [
+    amount + 100_000,
+    amount + 250_000,
+    amount + 500_000,
+    amount + 750_000,
+    amount + 1_000_000,
+    amount + 1_500_000
+  ];
+};

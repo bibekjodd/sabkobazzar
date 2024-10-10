@@ -3,7 +3,7 @@ import { extractErrorMessage } from '@/lib/utils';
 import { QueryOptions, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useProduct = (id: string, queryOptions: QueryOptions<Product>) => {
+export const useProduct = (id: string, queryOptions?: QueryOptions<Product>) => {
   return useQuery({
     queryKey: ['product', id],
     queryFn: ({ signal }) => fetchProduct({ id, signal }),

@@ -26,42 +26,35 @@ export default function Header() {
     >
       <LiveIndicator />
 
-      <div>
-        <header className="cont flex h-16 items-center justify-between">
-          <ProgressLink href="/" className="text-3xl">
-            {logo}
-          </ProgressLink>
+      <header className="cont flex h-16 items-center justify-between">
+        <ProgressLink href="/" className="text-3xl">
+          {logo}
+        </ProgressLink>
 
-          <div className="mx-10 hidden w-full md:block lg:mx-20">
-            <Suspense>
-              <Search />
-            </Suspense>
-          </div>
+        <div className="mx-10 hidden w-full md:block lg:mx-20">
+          <Suspense>
+            <Search />
+          </Suspense>
+        </div>
 
-          <div className="flex items-center">
-            {profile && (
-              <ProfileDropdown>
-                <button>
-                  <Avatar src={profile?.image} />
-                </button>
-              </ProfileDropdown>
-            )}
-            {isLoading && <Skeleton className="size-8 rounded-full" />}
-
-            {!isLoading && !profile && (
-              <button className="flex items-center space-x-1.5" onClick={redirectToLogin}>
-                <span>Login</span>
-                <LogIn className="size-4" />
+        <div className="flex items-center">
+          {profile && (
+            <ProfileDropdown>
+              <button>
+                <Avatar src={profile?.image} />
               </button>
-            )}
-          </div>
-        </header>
-      </div>
-      <div className="mb-2 px-4 md:hidden">
-        <Suspense>
-          <Search />
-        </Suspense>
-      </div>
+            </ProfileDropdown>
+          )}
+          {isLoading && <Skeleton className="size-8 rounded-full" />}
+
+          {!isLoading && !profile && (
+            <button className="flex items-center space-x-1.5" onClick={redirectToLogin}>
+              <span>Login</span>
+              <LogIn className="size-4" />
+            </button>
+          )}
+        </div>
+      </header>
     </div>
   );
 }
