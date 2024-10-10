@@ -1,6 +1,7 @@
 import { backendUrl } from '@/lib/constants';
+import { updateOnBid } from '@/lib/events-actions';
 import { extractErrorMessage } from '@/lib/utils';
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -12,23 +13,7 @@ export const usePlaceBid = (auctionId: string) => {
     mutationFn: ({ amount }: { amount: number }) => placeBid({ auctionId, amount }),
 
     onSuccess(bid) {
-      const bidsData = queryClient.getQueryData<InfiniteData<Bid[]>>(['bids', auctionId]);
-      if (bidsData) {
-        const updatedFirstPage: Bid[] = [bid, ...bidsData.pages[0]];
-        queryClient.setQueryData<InfiniteData<Bid[]>>(['bids', auctionId], {
-          ...bidsData,
-          pages: [updatedFirstPage, ...bidsData.pages.slice(1)]
-        });
-      }
-
-      const bidsSnapshotData = queryClient.getQueryData<Bid[]>(['bids-snapshot', auctionId]);
-      if (!bidsSnapshotData) return;
-      const updatedBidsSnapshot = bidsSnapshotData.filter(
-        (currentBid) => currentBid.bidderId !== bid.bidderId
-      );
-      updatedBidsSnapshot.unshift(bid);
-      updatedBidsSnapshot.sort((a, b) => (a.amount > b.amount ? -1 : 1));
-      queryClient.setQueryData<Bid[]>(['bids-snapshot', auctionId], updatedBidsSnapshot);
+      updateOnBid({ queryClient, bid });
     },
 
     onError(err) {

@@ -18,7 +18,7 @@ import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 export default function BidsHistory({ auctionId }: { auctionId: string }) {
   const { data: bids, hasNextPage, isFetching, fetchNextPage } = useBids(auctionId);
   return (
-    <section className="flex size-full flex-col space-y-2 overflow-y-auto">
+    <section className="flex size-full flex-col space-y-2 overflow-y-auto scrollbar-hide">
       {bids?.pages.map((page, i) => (
         <React.Fragment key={i}>
           {page.map((bid) => (
