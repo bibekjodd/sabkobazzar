@@ -6,7 +6,8 @@ import axios from 'axios';
 export const useBidsSnapshot = (auctionId: string) => {
   return useQuery({
     queryKey: ['bids-snapshot', auctionId],
-    queryFn: ({ signal }) => fetchBidsSnapshot({ auctionId, signal })
+    queryFn: ({ signal }) => fetchBidsSnapshot({ auctionId, signal }),
+    refetchInterval: 60_000
   });
 };
 

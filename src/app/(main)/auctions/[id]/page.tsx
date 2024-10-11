@@ -3,22 +3,32 @@ import AuctionOverview, { auctionOverviewSkeleton } from '@/components/auction-o
 import AuctionCard from '@/components/cards/auction-card';
 import Live from '@/components/live';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useLeaveLiveAuction } from '@/mutations/use-leave-live-auction';
 import { useAuction } from '@/queries/use-auction';
 import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
 import { ActivityIcon, CircleAlert } from 'lucide-react';
+import { useEffect } from 'react';
 
 type Props = { params: { id: string } };
-export default function Page({ params: { id } }: Props) {
-  const { data: auction, error, isLoading } = useAuction(id);
+export default function Page({ params }: Props) {
+  const auctionId = params.id;
+  const { data: auction, error, isLoading } = useAuction(auctionId);
   const { data } = useUpcomingAuctions({ ownerId: null, productId: null });
+  const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
 
-  const upcomingAuctions = data?.pages.flat(1).filter((auction) => auction.id !== id);
+  const upcomingAuctions = data?.pages.flat(1).filter((auction) => auction.id !== auctionId);
   const isLive =
     auction &&
     !auction.isCancelled &&
     !auction.isFinished &&
     Date.now() >= new Date(auction.startsAt).getTime() &&
     Date.now() < new Date(auction.startsAt).getTime() + 60 * 60 * 1000;
+
+  useEffect(() => {
+    return () => {
+      isLive && leaveLiveAuction();
+    };
+  }, [leaveLiveAuction, isLive]);
 
   return (
     <main className="min-h-[calc(100vh-80px)] pb-20">

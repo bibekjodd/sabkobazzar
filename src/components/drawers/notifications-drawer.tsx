@@ -18,6 +18,7 @@ import {
 import { Skeleton } from '../ui/skeleton';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 import ProgressLink from '../utils/progress-link';
+import { useReadNotifications } from '@/mutations/use-read-notifications';
 
 export default function NotificationsDrawer({ children }: { children: React.ReactNode }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -33,9 +34,15 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
   const closeDrawer = () => {
     closeButtonRef.current?.click();
   };
+  const { mutate: readNotifications } = useReadNotifications();
   const screenWidth = useMediaQuery();
   return (
-    <Drawer direction={screenWidth < 768 ? 'bottom' : 'right'}>
+    <Drawer
+      direction={screenWidth < 768 ? 'bottom' : 'right'}
+      onOpenChange={(isOpen) => {
+        isOpen && readNotifications();
+      }}
+    >
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent className="ml-auto flex h-screen w-full flex-col bg-background/50 filter backdrop-blur-3xl md:max-w-screen-xs">
         <DrawerHeader>

@@ -1,9 +1,9 @@
 'use client';
 import { useAuction } from '@/queries/use-auction';
 import { ScrollArea } from '../ui/scroll-area';
+import AuctionRealtimeListener from './auction-realtime-listener';
 import BidsHistory from './bids-history';
 import BidsSnapshot from './bids-snapshot';
-import RealtimeListener from './realtime-listener';
 import Screen from './screen';
 import SendMessage from './send-message';
 
@@ -11,9 +11,10 @@ type Props = { auction: Auction };
 export default function Live({ auction: initialData }: Props) {
   const { data } = useAuction(initialData.id, { initialData });
   const auction = data || initialData;
+
   return (
     <div className="flex size-full h-[calc(100vh-80px)] px-4 py-7 lg:space-x-4">
-      <RealtimeListener auctionId={auction.id} />
+      <AuctionRealtimeListener auctionId={auction.id} />
       <section className="relative mb-10 hidden h-full w-72 overflow-hidden rounded-3xl p-4 lg:block">
         {graphics}
         <h3 className="px-2 pb-2 text-indigo-200">Current Bid leaders</h3>

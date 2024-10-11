@@ -19,6 +19,8 @@ export const useAddProduct = () => {
       toast.dismiss();
       toast.success('Added new product successfully');
       queryClient.setQueryData<Product>(['product', product.id], { ...product });
+      const profile = queryClient.getQueryData<UserProfile>(['profile']);
+      queryClient.invalidateQueries({ queryKey: ['products', `?owner=${profile?.id}`] });
     },
     onError(err) {
       toast.dismiss();

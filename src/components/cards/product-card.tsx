@@ -15,7 +15,7 @@ export default function ProductCard({ product: productData, view }: Props) {
   const productLink = `/products/${product.id}`;
 
   return (
-    <div className="relative flex flex-col overflow-hidden rounded-lg p-0.5 shadow-2xl">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-lg p-0.5 shadow-2xl">
       <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/[0.07] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/15 [mask-image:linear-gradient(to_top,black,transparent)]" />
       <ProgressLink href={productLink} className="w-full overflow-hidden rounded-sm bg-background">
@@ -26,9 +26,12 @@ export default function ProductCard({ product: productData, view }: Props) {
         />
       </ProgressLink>
 
-      <div className="flex flex-col p-4">
-        <h4 className="text-xl font-medium">{product.title}</h4>
+      <div className="flex flex-col p-4 pb-0">
+        <h4 className="line-clamp-2 text-xl font-medium">{product.title}</h4>
         <h4 className="text-xl font-bold">Rs. {formatPrice(product.price)}</h4>
+      </div>
+
+      <div className="mt-auto flex flex-col p-4">
         {view === 'user' && (
           <ProgressLink href={productLink} className="mt-3 w-full">
             <Button Icon={MoveRight} className="w-full" variant="gradient">

@@ -1,6 +1,7 @@
 import { formatPrice } from '@/lib/utils';
 import { useBidsSnapshot } from '@/queries/use-bids-snapshot';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '../ui/button';
 import {
   Drawer,
@@ -18,6 +19,8 @@ type Props = { auctionId: string };
 export default function BidsSnapshot({ auctionId }: Props) {
   const { data: bids } = useBidsSnapshot(auctionId);
   const [parentRef] = useAutoAnimate({ duration: 300 });
+  const queryClient = useQueryClient();
+  const profile = queryClient.getQueryData<UserProfile>(['profile']);
 
   return (
     <section className="w-full text-indigo-200">
@@ -30,17 +33,21 @@ export default function BidsSnapshot({ auctionId }: Props) {
             </TableRow>
           </TableHeader>
           <TableBody ref={parentRef}>
-            {bids?.map((bid) => (
-              <TableRow key={bid.id}>
-                <TableCell>
-                  <div className="flex items-center space-x-2">
-                    <Avatar src={bid.bidder.image} variant="sm" />
-                    <span>{bid.bidder.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell>{formatPrice(bid.amount)}</TableCell>
-              </TableRow>
-            ))}
+            {bids?.map((bid) => {
+              let isOnline = Date.now() - new Date(bid.bidder.lastOnline).getTime() < 65 * 1000;
+              if (profile?.id === bid.bidderId) isOnline = true;
+              return (
+                <TableRow key={bid.id}>
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      <Avatar src={bid.bidder.image} variant="sm" showOnlineIndicator={isOnline} />
+                      <span>{bid.bidder.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>{formatPrice(bid.amount)}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>

@@ -8,6 +8,11 @@ type User = {
   lastOnline: string;
 };
 
+type UserProfile = User & {
+  lastNotificationReadAt: string;
+  totalUnreadNotifications: number;
+};
+
 type Product = {
   id: string;
   title: string;

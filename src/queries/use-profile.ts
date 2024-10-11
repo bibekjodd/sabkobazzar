@@ -11,7 +11,7 @@ export const useProfile = () => {
   });
 };
 
-export const fetchProfile = async ({ signal }: { signal: AbortSignal }): Promise<User> => {
+export const fetchProfile = async ({ signal }: { signal: AbortSignal }): Promise<UserProfile> => {
   try {
     const url = `${backendUrl}/api/users/profile`;
     const { data } = await axios.get(url, { withCredentials: true, signal });

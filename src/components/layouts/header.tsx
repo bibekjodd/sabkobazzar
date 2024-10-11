@@ -41,7 +41,10 @@ export default function Header() {
           {profile && (
             <ProfileDropdown>
               <button>
-                <Avatar src={profile?.image} />
+                <Avatar
+                  src={profile?.image}
+                  unreadNotifications={profile.totalUnreadNotifications}
+                />
               </button>
             </ProfileDropdown>
           )}
