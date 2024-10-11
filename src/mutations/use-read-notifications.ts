@@ -34,6 +34,10 @@ export const useReadNotifications = () => {
 
     onError() {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
+    },
+
+    onSettled() {
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     }
   });
 };

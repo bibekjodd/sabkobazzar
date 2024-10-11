@@ -38,7 +38,7 @@ export default function ProductOverview({ product: productData }: Props) {
         )}
 
         <div className="mt-auto pt-5">
-          <Button variant="white" className="w-full">
+          <Button variant="theme-secondary" className="w-full">
             Interested
           </Button>
         </div>

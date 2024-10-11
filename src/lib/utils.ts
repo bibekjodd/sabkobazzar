@@ -84,6 +84,67 @@ export const formatDate = (value: string | Date | number) => {
   return `${month} ${day}, ${hours % 12 || 12}${minutes !== 0 ? `:${minutes}` : ''}${hours > 12 ? 'pm' : 'am'}`;
 };
 
+export const isJoinedAuction = ({
+  auction,
+  userId
+}: {
+  auction: Auction;
+  userId: string;
+}): boolean => {
+  return !!auction.participants.find((participant) => participant.id === userId);
+};
+
+export const canJoinAuction = ({
+  auction,
+  userId
+}: {
+  auction: Auction;
+  userId: string;
+}): boolean => {
+  return (
+    !isJoinedAuction({ auction, userId }) &&
+    !auction.isCancelled &&
+    !auction.isFinished &&
+    Date.now() < new Date(auction.startsAt).getTime() &&
+    userId !== auction.ownerId
+  );
+};
+
+export const canCancelAuction = ({
+  auction,
+  userId
+}: {
+  auction: Auction;
+  userId: string;
+}): boolean => {
+  return userId === auction.ownerId && !auction.isCancelled && !auction.isFinished;
+};
+
+export const canLeaveAuction = ({
+  auction,
+  userId
+}: {
+  auction: Auction;
+  userId: string;
+}): boolean => {
+  return (
+    isJoinedAuction({ auction, userId }) &&
+    !auction.isCancelled &&
+    !auction.isFinished &&
+    Date.now() + 3 * 60 * 60 * 1000 < new Date(auction.startsAt).getTime()
+  );
+};
+
+export const isAuctionLive = (auction: Auction) => {
+  return (
+    auction &&
+    !auction.isCancelled &&
+    !auction.isFinished &&
+    Date.now() >= new Date(auction.startsAt).getTime() &&
+    Date.now() < new Date(auction.startsAt).getTime() + 60 * 60 * 1000
+  );
+};
+
 export const getBidAmountOptions = (amount: number): number[] => {
   amount = Math.ceil(amount / 1000) * 1000;
   if (amount > 100_000) amount = amount - (amount % 5000);

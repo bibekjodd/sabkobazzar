@@ -16,7 +16,7 @@ export default function Page({ params }: { params: { id: string } }) {
         </Alert>
       )}
 
-      <div className="grid min-h-[80vh] place-items-center py-7">
+      <div className="grid min-h-screen place-items-center py-7 pt-16">
         {isLoading && <div className="w-full">{productOverviewSkeleton}</div>}
         {product && <ProductOverview product={product} />}
       </div>

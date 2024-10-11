@@ -3,6 +3,7 @@ import AuctionOverview, { auctionOverviewSkeleton } from '@/components/auction-o
 import AuctionCard from '@/components/cards/auction-card';
 import Live from '@/components/live';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { isAuctionLive } from '@/lib/utils';
 import { useLeaveLiveAuction } from '@/mutations/use-leave-live-auction';
 import { useAuction } from '@/queries/use-auction';
 import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
@@ -17,13 +18,7 @@ export default function Page({ params }: Props) {
   const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
 
   const upcomingAuctions = data?.pages.flat(1).filter((auction) => auction.id !== auctionId);
-  const isLive =
-    auction &&
-    !auction.isCancelled &&
-    !auction.isFinished &&
-    Date.now() >= new Date(auction.startsAt).getTime() &&
-    Date.now() < new Date(auction.startsAt).getTime() + 60 * 60 * 1000;
-
+  const isLive = auction && isAuctionLive(auction);
   useEffect(() => {
     return () => {
       isLive && leaveLiveAuction();
@@ -31,7 +26,7 @@ export default function Page({ params }: Props) {
   }, [leaveLiveAuction, isLive]);
 
   return (
-    <main className="min-h-[calc(100vh-80px)] pb-20">
+    <main className="min-h-screen pb-20 pt-16">
       {!isLive && graphics}
 
       {error && (

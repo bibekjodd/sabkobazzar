@@ -63,6 +63,7 @@ export const registerAuctionSchema = z.object({
       })
       .min(2, 'Must be at least 2 bidders')
       .max(10, "Max bidders can't exceed 10 people")
-  )
+  ),
+  isInviteOnly: z.boolean().default(false)
 });
 export type RegisterAuctionSchema = z.infer<typeof registerAuctionSchema>;

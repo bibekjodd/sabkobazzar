@@ -4,8 +4,8 @@ import Avatar from '../utils/avatar';
 
 export default function Testimonials() {
   return (
-    <section className="mb-20 mt-32">
-      <div id="testimonials" className="cont">
+    <section className="mb-20 mt-32 scroll-m-20" id="testimonials">
+      <div className="cont">
         <div className="flex items-center justify-center">
           <Asterisk className="size-8 text-violet-800/80" />
           <span className="bg-gradient-to-b from-violet-400 to-purple-900 bg-clip-text text-base font-medium text-transparent">
@@ -45,7 +45,7 @@ function ReviewCard({ review }: { review: Review }) {
         <Avatar src={review.user.image || dummyUserImage} variant="lg" />
         <div className="flex flex-col">
           <span className="text-sm text-gray-200">{review.user.name}</span>
-          <span className="text-xs text-gray-500">{review.user.attribute}</span>
+          <span className="text-xs font-medium text-gray-500">{review.user.attribute}</span>
         </div>
       </div>
     </div>

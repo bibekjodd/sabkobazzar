@@ -27,7 +27,10 @@ export default function QueryProvider({ children }: Props) {
       })
   );
 
-  queryClient.prefetchQuery({ queryKey: ['profile'], queryFn: fetchProfile });
+  queryClient.prefetchQuery({
+    queryKey: ['profile'],
+    queryFn: ({ signal }) => fetchProfile({ queryClient, signal })
+  });
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -46,7 +46,7 @@ export default function LeaveAuctionDialog({ children, auctionId }: Props) {
 
           <Button
             onClick={leaveAuction}
-            variant="white"
+            variant="theme-secondary"
             loading={isLeavingAuction}
             disabled={isLeavingAuction}
           >

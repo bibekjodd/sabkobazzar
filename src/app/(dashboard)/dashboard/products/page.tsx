@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import InfiniteScrollObserver from '@/components/utils/infinite-scroll-observer';
 import { useProducts } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
-import { Plus } from 'lucide-react';
+import { BoxIcon } from 'lucide-react';
 import React from 'react';
 
 export default function Page() {
@@ -21,7 +21,7 @@ export default function Page() {
       <div className="flex w-full items-center justify-between p-4 filter backdrop-blur-2xl">
         <span className="text-xl font-semibold">Your products</span>
         <AddProductDialog>
-          <Button Icon={Plus} variant="white">
+          <Button Icon={BoxIcon} variant="theme-secondary">
             Add product
           </Button>
         </AddProductDialog>

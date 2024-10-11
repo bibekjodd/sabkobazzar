@@ -4,38 +4,19 @@ import SelectAuctionProductDialog from '@/components/dialogs/select-auction-prod
 import { poppins } from '@/lib/fonts';
 import { useProfile } from '@/queries/use-profile';
 import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
-import { ActivityIcon, ArrowDown, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { ActivityIcon, ChevronRight } from 'lucide-react';
 
 export default function Page() {
-  const [showButton, setShowButton] = useState(true);
   const { data: profile } = useProfile();
   const { data: upcomingAuctions } = useUpcomingAuctions({
     ownerId: profile?.id!,
     productId: null
   });
 
-  useEffect(() => {
-    window.addEventListener('scroll', () => {
-      setShowButton(!!upcomingAuctions?.pages.at(0)?.at(0) && window.scrollY < 80);
-    });
-  }, [upcomingAuctions]);
-
   return (
     <main className="p-4">
       <section className="grid min-h-[calc(100vh-96px)] place-items-center py-10">
         {graphics}
-
-        {showButton && (
-          <Link
-            href="/dashboard/auctions#upcoming-auctions"
-            className="fixed bottom-8 right-8 z-30 rounded-full border-2 border-purple-950 p-3 text-purple-900 lg:bottom-16 lg:right-16"
-          >
-            <ArrowDown />
-          </Link>
-        )}
-
         <div className="flex flex-col items-center">
           <div className="relative mb-5 h-fit w-fit overflow-hidden border-b border-rose-500 p-2 uppercase">
             <div className="absolute left-0 top-0 -z-10 aspect-square w-full translate-y-2 rounded-full bg-rose-400/25 blur-md" />

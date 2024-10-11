@@ -26,7 +26,7 @@ export default function Page({ searchParams }: { searchParams: SearchProductsPar
       <aside className="fixed left-0 top-16 hidden h-[calc(100vh-64px)] w-60 overflow-y-auto border-r lg:block">
         <ProductsFilterSidebar searchParams={searchParams} />
       </aside>
-      <main className="min-h-screen pb-20 pt-4 lg:pl-60">
+      <main className="min-h-screen pb-20 pt-32 md:pt-20 lg:pl-60">
         {!isLoading && products?.pages[0].length === 0 && (
           <div className="p-4">
             <Alert>

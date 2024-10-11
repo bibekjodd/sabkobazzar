@@ -2,7 +2,13 @@
 import { Button } from '@/components/ui/button';
 import ProgressLink from '@/components/utils/progress-link';
 import { dummyProductImage } from '@/lib/constants';
-import { formatDate, formatPrice } from '@/lib/utils';
+import {
+  canJoinAuction,
+  canLeaveAuction,
+  formatDate,
+  formatPrice,
+  redirectToLogin
+} from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
 import JoinAuctionDialog from './dialogs/join-auction-dialog';
@@ -20,19 +26,8 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
   const { data } = useAuction(auctionData.id, { initialData: auctionData });
   const auction = data || auctionData;
 
-  const isJoined = auction.participants.find((participant) => participant.id === profile?.id);
-  const canJoinAuction =
-    !isJoined &&
-    !auction.isCancelled &&
-    !auction.isFinished &&
-    Date.now() < new Date(auction.startsAt).getTime() &&
-    profile?.id !== auction.ownerId;
-
-  const canLeaveAuction =
-    isJoined &&
-    !auction.isCancelled &&
-    !auction.isFinished &&
-    Date.now() + 3 * 60 * 60 * 1000 < new Date(auction.startsAt).getTime();
+  const canUserJoinAuction = canJoinAuction({ auction, userId: profile?.id! });
+  const canUserLeaveAuction = canLeaveAuction({ auction, userId: profile?.id! });
 
   return (
     <div>
@@ -90,18 +85,23 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
           <div className="mt-auto flex flex-col space-y-2 pt-7">
             {showProductLinkButton && (
               <ProgressLink href={`/products/${auction.productId}`}>
-                <Button variant="white" className="w-full">
+                <Button variant="theme-secondary" className="w-full">
                   See more about product
                 </Button>
               </ProgressLink>
             )}
 
-            {canJoinAuction && (
-              <JoinAuctionDialog auctionId={auction.id}>
-                <Button variant="gradient">Join Auction</Button>
-              </JoinAuctionDialog>
-            )}
-            {canLeaveAuction && (
+            {canUserJoinAuction &&
+              (profile ? (
+                <JoinAuctionDialog auctionId={auction.id}>
+                  <Button variant="theme">Join Auction</Button>
+                </JoinAuctionDialog>
+              ) : (
+                <Button variant="theme" onClick={redirectToLogin}>
+                  Join Auction
+                </Button>
+              ))}
+            {canUserLeaveAuction && (
               <LeaveAuctionDialog auctionId={auction.id}>
                 <Button variant="outline" className="bg-transparent">
                   Leave Auction

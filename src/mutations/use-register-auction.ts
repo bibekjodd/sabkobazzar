@@ -14,9 +14,10 @@ export const useRegisterAuction = () => {
       toast.dismiss();
       toast.loading('Registering auction...');
     },
-    onSuccess() {
+    onSuccess(auction) {
       toast.dismiss();
       toast.success('Auction registered successfully');
+      queryClient.setQueryData<Auction>(['auction'], auction);
     },
     onError(err) {
       toast.dismiss();
@@ -32,14 +33,15 @@ export const useRegisterAuction = () => {
 };
 
 type Options = { productId: string; image: string | File | undefined } & RegisterAuctionSchema;
-const registerAuction = async ({ productId, image, ...data }: Options) => {
+const registerAuction = async ({ productId, image, ...data }: Options): Promise<Auction> => {
   try {
     const imageUrl = image instanceof File ? await uploadImage(image) : undefined;
-    await axios.post(
+    const res = await axios.post<{ auction: Auction }>(
       `${backendUrl}/api/auctions/${productId}`,
       { ...data, banner: imageUrl || image },
       { withCredentials: true }
     );
+    return res.data.auction;
   } catch (error) {
     throw new Error(extractErrorMessage(error));
   }

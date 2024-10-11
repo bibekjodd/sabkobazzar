@@ -20,7 +20,7 @@ export const useLoadingBar = create<UseLoadingBar>((set) => ({
 
   start(url) {
     const currentUrl = location.pathname + location.search.trim();
-    if (url?.startsWith('#')) return false;
+    if (currentUrl === '/' && url?.startsWith('/#')) return false;
     if (currentUrl === url?.trim() || '') return false;
     set({ progress: 90 });
     return true;

@@ -18,7 +18,12 @@ export default function ProductCard({ product: productData, view }: Props) {
     <div className="relative flex h-full flex-col overflow-hidden rounded-lg p-0.5 shadow-2xl">
       <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/[0.07] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <div className="absolute inset-0 -z-10 rounded-lg border-2 border-primary/15 [mask-image:linear-gradient(to_top,black,transparent)]" />
-      <ProgressLink href={productLink} className="w-full overflow-hidden rounded-sm bg-background">
+      <div className="absolute left-0 top-0 -z-10 size-40 rounded-full bg-indigo-500/20 blur-3xl filter" />
+      <div className="absolute right-0 top-0 -z-10 size-40 rounded-full bg-purple-500/20 blur-3xl filter" />
+      <div className="absolute bottom-0 left-0 -z-10 size-40 rounded-full bg-sky-500/10 blur-3xl filter" />
+      <div className="absolute bottom-0 right-0 -z-10 size-40 rounded-full bg-white/5 blur-3xl filter" />
+
+      <ProgressLink href={productLink} className="w-full overflow-hidden rounded-sm">
         <img
           src={product.image || dummyProductImage}
           alt="product image"
@@ -34,7 +39,7 @@ export default function ProductCard({ product: productData, view }: Props) {
       <div className="mt-auto flex flex-col p-4">
         {view === 'user' && (
           <ProgressLink href={productLink} className="mt-3 w-full">
-            <Button Icon={MoveRight} className="w-full" variant="gradient">
+            <Button Icon={MoveRight} className="w-full" variant="theme">
               See more
             </Button>
           </ProgressLink>
@@ -42,7 +47,7 @@ export default function ProductCard({ product: productData, view }: Props) {
 
         {view === 'seller' && (
           <AddProductDialog product={product}>
-            <Button className="mt-3 w-full" variant="white" Icon={ChevronsUp}>
+            <Button className="mt-3 w-full" variant="theme-secondary" Icon={ChevronsUp}>
               Update Product
             </Button>
           </AddProductDialog>

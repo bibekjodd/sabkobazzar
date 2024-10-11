@@ -118,7 +118,7 @@ function ProductResultItem({ product }: { product: Product }) {
         <div className="flex w-full flex-col justify-between px-4 py-2">
           <span className="line-clamp-2 text-sm">{product.title}</span>
           <RegisterAuctionDialog product={product}>
-            <Button className="mt-4 block w-full" size="sm" variant="white">
+            <Button className="mt-4 block w-full" size="sm" variant="theme-secondary">
               Select
             </Button>
           </RegisterAuctionDialog>

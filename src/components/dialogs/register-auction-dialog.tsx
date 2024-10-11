@@ -11,6 +11,7 @@ import { Calendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Controller, useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
 import {
   Dialog,
   DialogClose,
@@ -58,7 +59,8 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
       minBidders: 2,
       maxBidders: 10,
       lot: 1,
-      condition: 'first-class'
+      condition: 'first-class',
+      isInviteOnly: false
     }
   });
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -89,7 +91,7 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
 
         <form
           onSubmit={onSubmit}
-          className="flex h-full flex-col space-y-7 overflow-y-auto px-1 scrollbar-thin"
+          className="flex h-full flex-col space-y-7 overflow-y-auto px-1 pb-6 scrollbar-thin"
         >
           <FormInput
             Icon={null}
@@ -236,6 +238,21 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
             type="number"
             {...register('maxBidders', { required: true })}
           />
+
+          <section className="flex items-center space-x-2">
+            <Controller
+              control={control}
+              name="isInviteOnly"
+              render={({ field }) => (
+                <Checkbox
+                  id="isInviteOnly"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              )}
+            />
+            <Label htmlFor="isInviteOnly">Only allow invited members to join the auction</Label>
+          </section>
         </form>
 
         <DialogFooter>
@@ -245,7 +262,7 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
 
           <Button
             type="submit"
-            variant="white"
+            variant="theme-secondary"
             onClick={onSubmit}
             loading={isRegisteringAuction}
             disabled={isRegisteringAuction}

@@ -94,7 +94,7 @@ export default function AddProductDialog({ children, product }: Props) {
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex h-full flex-grow flex-col space-y-7 overflow-y-auto px-1 pb-2 scrollbar-thin"
+          className="flex h-full flex-grow flex-col space-y-7 overflow-y-auto px-1 pb-6 scrollbar-thin"
         >
           <FormInput
             error={errors.title?.message}
@@ -114,6 +114,20 @@ export default function AddProductDialog({ children, product }: Props) {
             {...register('price')}
           />
 
+          <AutoAnimate className="space-y-1">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              {...register('description')}
+              id="description"
+              placeholder="Product description..."
+              rows={10}
+              className="scrollbar-thin"
+            />
+            {errors.description && (
+              <p className="text-sm text-rose-500">{errors.description.message}</p>
+            )}
+          </AutoAnimate>
+
           <section className="space-y-1">
             <Label htmlFor="image">Pick an image</Label>
             <div
@@ -121,12 +135,12 @@ export default function AddProductDialog({ children, product }: Props) {
               className="relative grid aspect-video place-items-center rounded-lg border"
             >
               {imageUri && (
-                <button
+                <div
                   onClick={unpickImage}
-                  className="absolute right-1 top-1 rounded-full bg-primary/90 p-1 text-black"
+                  className="absolute right-1 top-1 cursor-pointer rounded-full bg-primary/90 p-1 text-black hover:brightness-75"
                 >
-                  <X className="size-4" />
-                </button>
+                  <X className="size-3.5" />
+                </div>
               )}
               <input
                 type="file"
@@ -184,30 +198,18 @@ export default function AddProductDialog({ children, product }: Props) {
               )}
             />
           </section>
-
-          <AutoAnimate className="space-y-1">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              {...register('description')}
-              id="description"
-              placeholder="Product description..."
-              rows={6}
-              className="scrollbar-thin"
-            />
-            {errors.description && (
-              <p className="text-sm text-rose-500">{errors.description.message}</p>
-            )}
-          </AutoAnimate>
         </form>
 
         <DialogFooter>
           <DialogClose asChild ref={closeButtonRef}>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="bg-transparent">
+              Cancel
+            </Button>
           </DialogClose>
 
           <Button
             type="submit"
-            variant="white"
+            variant="theme-secondary"
             onClick={handleSubmit(onSubmit)}
             disabled={isAddingProduct || isUpdatingProduct}
             loading={isAddingProduct || isUpdatingProduct}

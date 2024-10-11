@@ -9,7 +9,7 @@ import {
 
 export default function Benefits() {
   return (
-    <section id="benefits" className="cont mt-32">
+    <section id="benefits" className="cont mt-32 scroll-m-20">
       <div className="flex items-center justify-center">
         <AsteriskIcon className="size-8 text-violet-800/80" />
         <span className="bg-gradient-to-b from-violet-400 to-purple-900 bg-clip-text text-base font-medium text-transparent">

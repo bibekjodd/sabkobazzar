@@ -1,9 +1,15 @@
 'use client';
 
 import { dummyProductImage } from '@/lib/constants';
-import { formatDate } from '@/lib/utils';
+import {
+  canCancelAuction,
+  canJoinAuction,
+  canLeaveAuction,
+  formatDate,
+  redirectToLogin
+} from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
-import { useQueryClient } from '@tanstack/react-query';
+import { useProfile } from '@/queries/use-profile';
 import { ChevronsRight } from 'lucide-react';
 import CancelAuctionDialog from '../dialogs/cancel-auction-dialog';
 import JoinAuctionDialog from '../dialogs/join-auction-dialog';
@@ -23,28 +29,14 @@ export default function AuctionCard({
   showJoinButton
 }: Props) {
   const auctionLink = `/auctions/${auctionData.id}`;
-  const queryClient = useQueryClient();
-  const profile = queryClient.getQueryData<User>(['profile']);
+  const { data: profile } = useProfile();
 
   const { data } = useAuction(auctionData.id, { initialData: auctionData });
   const auction = data || auctionData;
 
-  const canCancelAuction =
-    profile?.id === auction.ownerId && !auction.isCancelled && !auction.isFinished;
-
-  const isJoined = auction.participants.find((participant) => participant.id === profile?.id);
-  const canJoinAuction =
-    !isJoined &&
-    !auction.isCancelled &&
-    !auction.isFinished &&
-    Date.now() < new Date(auction.startsAt).getTime() &&
-    profile?.id !== auction.ownerId;
-
-  const canLeaveAuction =
-    isJoined &&
-    !auction.isCancelled &&
-    !auction.isFinished &&
-    Date.now() + 3 * 60 * 60 * 1000 < new Date(auction.startsAt).getTime();
+  const canUserCancelAuction = canCancelAuction({ auction, userId: profile?.id! });
+  const canUserJoinAuction = canJoinAuction({ auction, userId: profile?.id! });
+  const canUserLeaveAuction = canLeaveAuction({ auction, userId: profile?.id! });
 
   return (
     <div className="relative flex h-full w-full flex-col rounded-lg filter backdrop-blur-3xl">
@@ -64,14 +56,20 @@ export default function AuctionCard({
       </div>
 
       <div className="mt-auto flex flex-col space-y-1 px-4 pb-4 pt-5">
-        {canJoinAuction && showJoinButton && (
-          <JoinAuctionDialog auctionId={auction.id}>
-            <Button variant="white" className="w-full">
+        {canUserJoinAuction &&
+          showJoinButton &&
+          (profile ? (
+            <JoinAuctionDialog auctionId={auction.id}>
+              <Button variant="theme-secondary" className="w-full">
+                Join Auction
+              </Button>
+            </JoinAuctionDialog>
+          ) : (
+            <Button variant="theme-secondary" className="w-full" onClick={redirectToLogin}>
               Join Auction
             </Button>
-          </JoinAuctionDialog>
-        )}
-        {canLeaveAuction && showJoinButton && (
+          ))}
+        {canUserLeaveAuction && showJoinButton && (
           <LeaveAuctionDialog auctionId={auction.id}>
             <Button variant="outline" className="w-full bg-transparent">
               Leave Auction
@@ -79,13 +77,13 @@ export default function AuctionCard({
           </LeaveAuctionDialog>
         )}
         <ProgressLink href={auctionLink}>
-          <Button variant="gradient" className="flex w-full items-center">
+          <Button variant="theme" className="flex w-full items-center">
             <span>See more details</span>
             <ChevronsRight className="ml-1 size-4" />
           </Button>
         </ProgressLink>
 
-        {canCancelAuction && showCancelButton && (
+        {canUserCancelAuction && showCancelButton && (
           <CancelAuctionDialog auctionId={auction.id}>
             <button className="w-full rounded-lg border border-primary/10 py-2 text-sm hover:bg-gray-400 hover:text-black">
               Cancel Auction

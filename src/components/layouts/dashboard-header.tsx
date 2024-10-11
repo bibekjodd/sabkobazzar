@@ -32,7 +32,7 @@ export default function DashboardHeader() {
 
         <ProfileDropdown>
           <button>
-            <Avatar src={profile.image} />
+            <Avatar src={profile.image} unreadNotifications={profile.totalUnreadNotifications} />
           </button>
         </ProfileDropdown>
       </div>

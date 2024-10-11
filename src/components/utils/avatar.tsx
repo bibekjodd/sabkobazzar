@@ -33,7 +33,7 @@ export default function Avatar({
         <div
           className={`absolute -right-1 -top-1 grid h-4 place-items-center overflow-hidden rounded-full bg-purple-700 px-1 ${unreadNotifications <= 9 ? 'aspect-square' : ''}`}
         >
-          <span className="-translate-y-0.5 text-[10px]">
+          <span className="-translate-y-0.5 text-[10px] text-white">
             {unreadNotifications <= 9 ? unreadNotifications : '9+'}
           </span>
         </div>
