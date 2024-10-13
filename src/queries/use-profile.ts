@@ -1,7 +1,7 @@
 import { backendUrl } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export const useProfile = () => {
   const queryClient = useQueryClient();
@@ -24,7 +24,9 @@ export const fetchProfile = async ({
     const { data } = await axios.get(url, { withCredentials: true, signal });
     return data.user;
   } catch (error) {
-    queryClient.setQueryData(['profile'], null);
+    if (error instanceof AxiosError && error.status === 401) {
+      queryClient.setQueryData(['profile'], null);
+    }
     throw new Error(extractErrorMessage(error));
   }
 };

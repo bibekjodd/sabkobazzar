@@ -23,6 +23,7 @@ type Product = {
   price: number;
   addedAt: string;
   owner: User;
+  isInterested: boolean;
 };
 
 type Auction = {
@@ -47,6 +48,7 @@ type Auction = {
   product: Omit<Product, 'owner'>;
   winner: User | null;
   participants: User[];
+  isInvited: boolean;
 };
 
 type UserNotification = {

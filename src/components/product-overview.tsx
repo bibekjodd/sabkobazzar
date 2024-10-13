@@ -1,7 +1,9 @@
 'use client';
 import { dummyProductImage } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
+import { useInterested } from '@/mutations/use-interested';
 import { useProduct } from '@/queries/use-product';
+import { CircleCheck } from 'lucide-react';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
@@ -10,6 +12,11 @@ type Props = { product: Product };
 export default function ProductOverview({ product: productData }: Props) {
   const { data } = useProduct(productData.id, { initialData: productData });
   const product = data || productData;
+  const { mutate, isPending } = useInterested(product.id);
+  const updateInterested = () => {
+    mutate(!product.isInterested);
+  };
+
   return (
     <div className="grid w-full space-y-5 lg:grid-cols-2 lg:space-y-0">
       <img
@@ -38,8 +45,15 @@ export default function ProductOverview({ product: productData }: Props) {
         )}
 
         <div className="mt-auto pt-5">
-          <Button variant="theme-secondary" className="w-full">
-            Interested
+          <Button
+            disabled={isPending}
+            loading={isPending}
+            onClick={updateInterested}
+            variant={product.isInterested ? 'outline' : 'theme-secondary'}
+            className={`w-full ${product.isInterested ? '' : 'bg-transparent'}`}
+            Icon={product.isInterested ? undefined : CircleCheck}
+          >
+            {product.isInterested ? 'Remove from interested' : 'Add to interested'}
           </Button>
         </div>
       </div>
