@@ -29,7 +29,7 @@ export const useCancelAuction = (auctionId: string) => {
 
     onSettled() {
       queryClient.invalidateQueries({
-        queryKey: ['upcoming-auctions', { ownerId: profile?.id, productId: null }]
+        queryKey: ['auctions', { ownerId: profile?.id, productId: null, order: 'asc' }]
       });
     }
   });

@@ -48,6 +48,7 @@ type Auction = {
   product: Omit<Product, 'owner'>;
   winner: User | null;
   participants: User[];
+  isInviteOnly: boolean;
   isInvited: boolean;
 };
 

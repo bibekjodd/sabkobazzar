@@ -49,11 +49,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
         <span className={`${loading ? 'opacity-0' : ''} inline-flex items-center justify-center`}>
           <span className="inline-flex items-center justify-center">{children}</span>
-          {Icon && <Icon className="ml-2 size-4" />}
+          {Icon && <Icon className={`ml-2 ${size === 'sm' ? 'size-3.5' : 'size-4'}`} />}
         </span>
         {loading && (
           <span className="absolute grid place-items-center">
-            {<Loader2 className="size-4 animate-spin" />}
+            {<Loader2 className={`animate-spin ${size === 'sm' ? 'size-3' : 'size-4'}`} />}
           </span>
         )}
       </Comp>

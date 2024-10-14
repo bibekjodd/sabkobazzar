@@ -24,7 +24,7 @@ const fetchBids = async ({
   cursor: string | undefined;
 }): Promise<Bid[]> => {
   try {
-    const url = new URL(`${backendUrl}/api/bids/${auctionId}`);
+    const url = new URL(`${backendUrl}/api/auctions/${auctionId}/bids`);
     cursor && url.searchParams.set('cursor', cursor);
     const res = await axios.get<{ bids: Bid[] }>(url.href, {
       withCredentials: true,

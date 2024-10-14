@@ -1,7 +1,7 @@
 'use client';
 import ProgressLink from '@/components/utils/progress-link';
 import { useTimeout } from '@/hooks/use-timeout';
-import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
+import { useAuctions } from '@/queries/use-auctions';
 import { Dot } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { create } from 'zustand';
@@ -24,9 +24,10 @@ export default function LiveIndicator() {
 
 function BaseComponent() {
   const { show, isShown } = useLiveIndicator();
-  const { data: upcomingAuctions, isLoading: isLoadingAuction } = useUpcomingAuctions({
+  const { data: upcomingAuctions, isLoading: isLoadingAuction } = useAuctions({
     ownerId: null,
-    productId: null
+    productId: null,
+    order: 'asc'
   });
   const totalUpcomingAuctions = upcomingAuctions?.pages.at(0)?.length || 0;
 

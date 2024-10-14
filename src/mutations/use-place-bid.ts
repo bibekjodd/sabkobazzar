@@ -35,7 +35,7 @@ const placeBid = async ({
 }): Promise<Bid> => {
   try {
     const res = await axios.put<{ bid: Bid }>(
-      `${backendUrl}/api/bids/${auctionId}`,
+      `${backendUrl}/api/auctions/${auctionId}/bid`,
       { amount },
       { withCredentials: true }
     );

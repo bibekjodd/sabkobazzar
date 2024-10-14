@@ -34,7 +34,7 @@ export const useJoinAuction = (auctionId: string) => {
 const joinAuction = async (auctionId: string): Promise<Auction> => {
   try {
     const res = await axios.put<{ auction: Auction }>(
-      `${backendUrl}/api/participants/${auctionId}/join`,
+      `${backendUrl}/api/auctions/${auctionId}/join`,
       undefined,
       {
         withCredentials: true

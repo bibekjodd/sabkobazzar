@@ -26,7 +26,7 @@ export const useRegisterAuction = () => {
     onSettled() {
       const profile = queryClient.getQueryData<User>(['profile']);
       queryClient.invalidateQueries({
-        queryKey: ['upcoming-auctions', { productId: null, ownerId: profile?.id }]
+        queryKey: ['auctions', { productId: null, ownerId: profile?.id, order: 'asc' }]
       });
     }
   });

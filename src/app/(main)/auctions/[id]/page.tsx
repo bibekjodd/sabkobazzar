@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { isAuctionLive } from '@/lib/utils';
 import { useLeaveLiveAuction } from '@/mutations/use-leave-live-auction';
 import { useAuction } from '@/queries/use-auction';
-import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
+import { useAuctions } from '@/queries/use-auctions';
 import { ActivityIcon, CircleAlert } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -14,7 +14,7 @@ type Props = { params: { id: string } };
 export default function Page({ params }: Props) {
   const auctionId = params.id;
   const { data: auction, error, isLoading } = useAuction(auctionId);
-  const { data } = useUpcomingAuctions({ ownerId: null, productId: null });
+  const { data } = useAuctions({ ownerId: null, productId: null, order: 'asc' });
   const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
 
   const upcomingAuctions = data?.pages.flat(1).filter((auction) => auction.id !== auctionId);

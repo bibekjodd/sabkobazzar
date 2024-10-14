@@ -29,12 +29,15 @@ const updateInterested = ({
   productId: string;
 }) => {
   try {
+    const url = `${backendUrl}/api/products/${productId}/interested`;
     if (interested) {
-      return axios.post(`${backendUrl}/api/interests/${productId}`, undefined, {
+      return axios.post(url, undefined, {
         withCredentials: true
       });
     }
-    return axios.delete(`${backendUrl}/api/interests/${productId}`, { withCredentials: true });
+    return axios.delete(url, {
+      withCredentials: true
+    });
   } catch (error) {
     throw new Error(extractErrorMessage(error));
   }

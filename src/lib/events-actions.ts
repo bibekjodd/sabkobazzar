@@ -72,11 +72,16 @@ export const onReceivedNotification = ({
   const profile = queryClient.getQueryData<UserProfile>(['profile']);
   if (!profile) return;
 
-  const updatedProfile: UserProfile = {
+  queryClient.setQueryData<UserProfile>(['profile'], {
     ...profile,
     totalUnreadNotifications: profile.totalUnreadNotifications + 1
-  };
-  queryClient.setQueryData<UserProfile>(['profile'], updatedProfile);
+  });
+  if (notification.entity === 'auctions' && notification.params) {
+    queryClient.invalidateQueries({ queryKey: ['auction', notification.params] });
+  }
+  if (notification.entity === 'products' && notification.params) {
+    queryClient.invalidateQueries({ queryKey: ['product', notification.params] });
+  }
 
   const notificationsData = queryClient.getQueryData<InfiniteData<UserNotification[]>>([
     'notifications'

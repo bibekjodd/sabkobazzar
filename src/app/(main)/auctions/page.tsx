@@ -1,7 +1,7 @@
 'use client';
 import AuctionCard, { auctionCardSkeleton } from '@/components/cards/auction-card';
 import InfiniteScrollObserver from '@/components/utils/infinite-scroll-observer';
-import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
+import { useAuctions } from '@/queries/use-auctions';
 import React from 'react';
 
 export default function Page() {
@@ -11,7 +11,7 @@ export default function Page() {
     hasNextPage,
     fetchNextPage,
     isLoading
-  } = useUpcomingAuctions({ ownerId: null, productId: null });
+  } = useAuctions({ ownerId: null, productId: null, order: 'asc' });
   return (
     <main className="relative min-h-screen overflow-hidden pb-20 pt-16">
       <div className="fixed left-0 top-16 -z-10 h-screen w-full bg-gradient-to-b from-indigo-950/10" />
@@ -32,7 +32,7 @@ export default function Page() {
             <React.Fragment key={i}>
               {page.map((auction) => (
                 <div key={auction.id} className="pb-5 md:px-2.5">
-                  <AuctionCard auction={auction} showJoinButton />
+                  <AuctionCard auction={auction} showJoinButton showInviteOnlyInfo />
                 </div>
               ))}
             </React.Fragment>

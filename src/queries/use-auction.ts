@@ -20,7 +20,8 @@ const fetchAuction = async ({
 }): Promise<Auction> => {
   try {
     const res = await axios.get<{ auction: Auction }>(`${backendUrl}/api/auctions/${auctionId}`, {
-      signal
+      signal,
+      withCredentials: true
     });
     return res.data.auction;
   } catch (error) {

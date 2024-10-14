@@ -2,15 +2,16 @@
 import AuctionCard from '@/components/cards/auction-card';
 import SelectAuctionProductDialog from '@/components/dialogs/select-auction-product-dialog';
 import { poppins } from '@/lib/fonts';
+import { useAuctions } from '@/queries/use-auctions';
 import { useProfile } from '@/queries/use-profile';
-import { useUpcomingAuctions } from '@/queries/use-upcoming-auctions';
 import { ActivityIcon, ChevronRight } from 'lucide-react';
 
 export default function Page() {
   const { data: profile } = useProfile();
-  const { data: upcomingAuctions } = useUpcomingAuctions({
+  const { data: upcomingAuctions } = useAuctions({
     ownerId: profile?.id!,
-    productId: null
+    productId: null,
+    order: 'asc'
   });
 
   return (
@@ -55,7 +56,7 @@ export default function Page() {
           <div className="mt-5 flex flex-wrap justify-center md:mt-7">
             {upcomingAuctions?.pages.at(0)?.map((auction) => (
               <div key={auction.id} className="mb-7 w-full md:w-1/2 md:p-4 xl:w-1/3">
-                <AuctionCard auction={auction} showCancelButton />
+                <AuctionCard auction={auction} showManageAuctionButton />
               </div>
             ))}
           </div>

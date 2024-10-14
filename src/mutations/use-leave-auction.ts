@@ -44,7 +44,7 @@ export const useLeaveAuction = (auctionId: string) => {
 const leaveAuction = async (auctionId: string) => {
   try {
     await axios.put<{ auction: Auction }>(
-      `${backendUrl}/api/participants/${auctionId}/leave`,
+      `${backendUrl}/api/auctions/${auctionId}/leave`,
       undefined,
       {
         withCredentials: true

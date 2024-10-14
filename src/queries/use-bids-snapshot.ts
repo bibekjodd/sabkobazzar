@@ -19,9 +19,12 @@ const fetchBidsSnapshot = async ({
   signal: AbortSignal;
 }): Promise<Bid[]> => {
   try {
-    const res = await axios.get<{ bids: Bid[] }>(`${backendUrl}/api/bids/${auctionId}/snapshot`, {
-      signal
-    });
+    const res = await axios.get<{ bids: Bid[] }>(
+      `${backendUrl}/api/auctions/${auctionId}/bids-snapshot`,
+      {
+        signal
+      }
+    );
     return res.data.bids;
   } catch (error) {
     throw new Error(extractErrorMessage(error));
