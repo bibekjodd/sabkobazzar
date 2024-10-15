@@ -1,14 +1,18 @@
 import { backendUrl } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
+import { auctionKey } from '@/queries/use-auction';
+import { notificationsKey } from '@/queries/use-notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
+
+export const leaveAuctionKey = (auctionId: string) => ['kick-user', auctionId];
 
 export const useLeaveAuction = (auctionId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['leave-auction', auctionId],
+    mutationKey: leaveAuctionKey(auctionId),
     mutationFn: () => leaveAuction(auctionId),
 
     onMutate() {
@@ -19,15 +23,23 @@ export const useLeaveAuction = (auctionId: string) => {
     onSuccess() {
       toast.dismiss();
       toast.success('Left auction successfully');
-      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: notificationsKey });
       const auction = queryClient.getQueryData<Auction>(['auction', auctionId]);
-      const profile = queryClient.getQueryData<User>(['profile']);
-      if (!auction) return;
-      const updatedAuction: Auction = {
-        ...auction,
-        participants: auction.participants.filter((participant) => participant.id !== profile?.id)
-      };
-      queryClient.setQueryData<Auction>(['auction', auction.id], updatedAuction);
+      if (auction) {
+        queryClient.setQueryData<Auction>(['auction', auction.id], {
+          ...auction,
+          participationStatus: null,
+          totalParticipants: auction.totalParticipants - 1
+        });
+      }
+
+      const profile = queryClient.getQueryData<UserProfile>(['profile']);
+      const participants = queryClient.getQueryData<User[]>(['participants', auctionId]);
+      if (!participants) return;
+      const updatedParticipants: User[] = participants.filter(
+        (participant) => participant.id !== profile?.id
+      );
+      queryClient.setQueryData<User[]>(['participants', auctionId], updatedParticipants);
     },
 
     onError(err) {
@@ -36,7 +48,7 @@ export const useLeaveAuction = (auctionId: string) => {
     },
 
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: ['auction', auctionId] });
+      queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     }
   });
 };

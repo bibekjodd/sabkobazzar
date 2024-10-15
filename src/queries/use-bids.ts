@@ -3,9 +3,10 @@ import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+export const bidsKey = (auctionId: string) => ['bids', auctionId];
 export const useBids = (auctionId: string) => {
   return useInfiniteQuery({
-    queryKey: ['bids', auctionId],
+    queryKey: bidsKey(auctionId),
     queryFn: ({ signal, pageParam }) => fetchBids({ auctionId, cursor: pageParam, signal }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
@@ -25,7 +26,7 @@ const fetchBids = async ({
 }): Promise<Bid[]> => {
   try {
     const url = new URL(`${backendUrl}/api/auctions/${auctionId}/bids`);
-    cursor && url.searchParams.set('cursor', cursor);
+    if (cursor) url.searchParams.set('cursor', cursor);
     const res = await axios.get<{ bids: Bid[] }>(url.href, {
       withCredentials: true,
       signal

@@ -1,12 +1,24 @@
+import { SearchProductsParams } from '@/components/layouts/products-filter-sidebar';
 import { backendUrl } from '@/lib/constants';
-import { extractErrorMessage } from '@/lib/utils';
+import { extractErrorMessage, getSearchString } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useProducts = (searchString: string) => {
+type KeyOptions = Partial<SearchProductsParams> & { owner?: string | null };
+export const productsKey = (filterOptions: KeyOptions) => [
+  'products',
+  {
+    title: filterOptions.title || null,
+    category: filterOptions.category || null,
+    pricegte: filterOptions.pricegte || null,
+    pricelte: filterOptions.pricelte || null,
+    owner: filterOptions.owner || null
+  } satisfies Required<KeyOptions>
+];
+export const useProducts = (options: KeyOptions) => {
   return useInfiniteQuery({
-    queryKey: ['products', searchString],
-    queryFn: ({ pageParam, signal }) => fetchProducts({ searchString, cursor: pageParam, signal }),
+    queryKey: productsKey(options),
+    queryFn: ({ pageParam, signal }) => fetchProducts({ ...options, cursor: pageParam, signal }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
       return lastPage[lastPage.length - 1]?.addedAt;
@@ -14,25 +26,14 @@ export const useProducts = (searchString: string) => {
   });
 };
 
-type Options = {
-  searchString: string;
+type Options = KeyOptions & {
   cursor: string | undefined;
   signal: AbortSignal | undefined;
 };
-export const fetchProducts = async ({
-  searchString,
-  cursor,
-  signal
-}: Options): Promise<Product[]> => {
-  cursor ||= new Date().toISOString();
+export const fetchProducts = async ({ signal, ...options }: Options): Promise<Product[]> => {
   try {
-    if (searchString.length) {
-      searchString += `&cursor=${cursor}`;
-    } else {
-      searchString = `?cursor=${cursor}`;
-    }
-    const url = `${backendUrl}/api/products${searchString}`;
-    const { data } = await axios.get(url, { withCredentials: true, signal });
+    const url = new URL(`${backendUrl}/api/products?${getSearchString(options)}`);
+    const { data } = await axios.get(url.href, { withCredentials: true, signal });
     return data.products;
   } catch (error) {
     throw new Error(extractErrorMessage(error));

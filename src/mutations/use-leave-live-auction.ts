@@ -12,7 +12,7 @@ export const useLeaveLiveAuction = (auctionId: string) => {
 
 const leaveLiveAuction = async (auctionId: string) => {
   try {
-    return axios.put(`${backendUrl}/api/events/auctions/${auctionId}/leave`, undefined, {
+    return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/leave`, undefined, {
       withCredentials: true
     });
   } catch (error) {

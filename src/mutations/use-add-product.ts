@@ -1,15 +1,18 @@
 import { backendUrl } from '@/lib/constants';
 import { AddProductSchema } from '@/lib/form-schemas';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
+import { productsKey } from '@/queries/use-products';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { updateProduct } from './use-update-product';
 
+export const addProductKey = ['add-product'];
+
 export const useAddProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ['add-product'],
+    mutationKey: addProductKey,
     mutationFn: addProduct,
     onMutate() {
       toast.dismiss();
@@ -20,7 +23,7 @@ export const useAddProduct = () => {
       toast.success('Added new product successfully');
       queryClient.setQueryData<Product>(['product', product.id], { ...product });
       const profile = queryClient.getQueryData<UserProfile>(['profile']);
-      queryClient.invalidateQueries({ queryKey: ['products', `?owner=${profile?.id}`] });
+      queryClient.invalidateQueries({ queryKey: productsKey({ owner: profile?.id }) });
     },
     onError(err) {
       toast.dismiss();
@@ -50,7 +53,7 @@ const addProduct = async ({
       addProductPromise
     ]);
 
-    uploadedImage && updateProduct({ id: addedProduct.id, image: uploadedImage });
+    if (uploadedImage) updateProduct({ productId: addedProduct.id, image: uploadedImage });
     return { ...addedProduct, image: uploadedImage || addedProduct.image };
   } catch (error) {
     throw new Error(extractErrorMessage(error));

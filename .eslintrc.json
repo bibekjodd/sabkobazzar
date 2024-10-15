@@ -1,11 +1,14 @@
 {
-  "extends": ["next"],
+  "extends": ["next/core-web-vitals", "next/typescript"],
   "plugins": ["unicorn"],
   "rules": {
     "@next/next/no-img-element": "off",
-    "no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": "warn",
     "prefer-const": "warn",
     "unicorn/filename-case": ["error", { "case": "kebabCase" }],
-    "react/no-unescaped-entities": "off"
+    "react/no-unescaped-entities": "off",
+    "no-var": "off",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+    "@typescript-eslint/no-empty-object-type": "off"
   }
 }

@@ -40,7 +40,7 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
     <Drawer
       direction={screenWidth < 768 ? 'bottom' : 'right'}
       onOpenChange={(isOpen) => {
-        isOpen && readNotifications();
+        if (isOpen) readNotifications();
       }}
     >
       <DrawerTrigger asChild>{children}</DrawerTrigger>

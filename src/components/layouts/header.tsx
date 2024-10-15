@@ -3,7 +3,7 @@ import { logo } from '@/components/utils/logo';
 import ProgressLink from '@/components/utils/progress-link';
 import { useLoadingBar } from '@/hooks/use-loading-bar';
 import { redirectToLogin } from '@/lib/utils';
-import { fetchProducts } from '@/queries/use-products';
+import { fetchProducts, productsKey } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
 import { useQueryClient } from '@tanstack/react-query';
 import { LogIn, SearchIcon, X } from 'lucide-react';
@@ -118,10 +118,9 @@ function NavItems() {
   const queryClient = useQueryClient();
   const prefetchProducts = () => {
     queryClient.prefetchInfiniteQuery({
-      queryKey: ['products', ''],
+      queryKey: productsKey({}),
       initialPageParam: undefined,
-      queryFn: ({ signal, pageParam }) =>
-        fetchProducts({ cursor: pageParam, searchString: '', signal })
+      queryFn: ({ signal, pageParam }) => fetchProducts({ cursor: pageParam, signal })
     });
   };
 

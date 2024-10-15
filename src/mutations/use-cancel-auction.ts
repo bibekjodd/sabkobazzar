@@ -1,15 +1,18 @@
 import { backendUrl } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
+import { auctionsKey } from '@/queries/use-auctions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
+
+export const cancelAuctionKey = (auctionId: string) => ['cancel-auction', auctionId];
 
 export const useCancelAuction = (auctionId: string) => {
   const queryClient = useQueryClient();
   const profile = queryClient.getQueryData<User>(['profile']);
 
   return useMutation({
-    mutationKey: ['cancel-auction', auctionId],
+    mutationKey: cancelAuctionKey(auctionId),
     mutationFn: () => cancelAuction(auctionId),
 
     onMutate() {
@@ -29,7 +32,7 @@ export const useCancelAuction = (auctionId: string) => {
 
     onSettled() {
       queryClient.invalidateQueries({
-        queryKey: ['auctions', { ownerId: profile?.id, productId: null, order: 'asc' }]
+        queryKey: auctionsKey({ ownerId: profile?.id || null, productId: null, order: 'asc' })
       });
     }
   });
@@ -37,7 +40,7 @@ export const useCancelAuction = (auctionId: string) => {
 
 const cancelAuction = async (auctionId: string) => {
   try {
-    return axios.put(`${backendUrl}/api/auctions/${auctionId}/cancel`, undefined, {
+    return await axios.put(`${backendUrl}/api/auctions/${auctionId}/cancel`, undefined, {
       withCredentials: true
     });
   } catch (error) {

@@ -29,7 +29,7 @@ function BaseLoadingBar() {
     }, 3000);
 
     return () => {
-      timeout && clearTimeout(timeout);
+      if (timeout) clearTimeout(timeout);
     };
   }, [pathname, searchParams, finish, initial, initialLoaded]);
 

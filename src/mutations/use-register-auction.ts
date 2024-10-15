@@ -1,14 +1,17 @@
 import { backendUrl } from '@/lib/constants';
 import { RegisterAuctionSchema } from '@/lib/form-schemas';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
+import { auctionsKey } from '@/queries/use-auctions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
+export const registerAuctionKey = ['register-auction'];
+
 export const useRegisterAuction = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ['register-auction'],
+    mutationKey: registerAuctionKey,
     mutationFn: registerAuction,
     onMutate() {
       toast.dismiss();
@@ -26,7 +29,7 @@ export const useRegisterAuction = () => {
     onSettled() {
       const profile = queryClient.getQueryData<User>(['profile']);
       queryClient.invalidateQueries({
-        queryKey: ['auctions', { productId: null, ownerId: profile?.id, order: 'asc' }]
+        queryKey: auctionsKey({ productId: null, ownerId: profile?.id || null, order: 'asc' })
       });
     }
   });

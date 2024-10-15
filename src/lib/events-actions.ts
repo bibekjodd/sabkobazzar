@@ -1,3 +1,6 @@
+import { auctionKey } from '@/queries/use-auction';
+import { participantsKey } from '@/queries/use-participants';
+import { productKey } from '@/queries/use-product';
 import { InfiniteData, QueryClient } from '@tanstack/react-query';
 
 export const updateOnBid = ({ queryClient, bid }: { queryClient: QueryClient; bid: Bid }) => {
@@ -77,10 +80,12 @@ export const onReceivedNotification = ({
     totalUnreadNotifications: profile.totalUnreadNotifications + 1
   });
   if (notification.entity === 'auctions' && notification.params) {
-    queryClient.invalidateQueries({ queryKey: ['auction', notification.params] });
+    queryClient.invalidateQueries({ queryKey: auctionKey(notification.params) });
+    if (notification.type === 'kick')
+      queryClient.invalidateQueries({ queryKey: participantsKey(notification.params) });
   }
   if (notification.entity === 'products' && notification.params) {
-    queryClient.invalidateQueries({ queryKey: ['product', notification.params] });
+    queryClient.invalidateQueries({ queryKey: productKey(notification.params) });
   }
 
   const notificationsData = queryClient.getQueryData<InfiniteData<UserNotification[]>>([

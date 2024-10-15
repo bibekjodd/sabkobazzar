@@ -23,11 +23,14 @@ type Props = {
 };
 export default function AuctionOverview({ auction: auctionData, showProductLinkButton }: Props) {
   const { data: profile } = useProfile();
-  const { data } = useAuction(auctionData.id, { initialData: auctionData });
+  const { data } = useAuction(auctionData.id, {
+    initialData: auctionData,
+    refetchInterval: 60 * 1000
+  });
   const auction = data || auctionData;
 
   const canUserJoinAuction = canJoinAuction({ auction, userId: profile?.id! });
-  const canUserLeaveAuction = canLeaveAuction({ auction, userId: profile?.id! });
+  const canUserLeaveAuction = canLeaveAuction({ auction });
 
   return (
     <div>

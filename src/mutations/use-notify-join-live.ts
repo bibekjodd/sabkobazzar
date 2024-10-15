@@ -1,5 +1,6 @@
 import { backendUrl } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
+import { auctionKey } from '@/queries/use-auction';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -10,7 +11,7 @@ export const useNotifyJoinLive = (auctionId: string) => {
     mutationKey: ['notify-join-live', auctionId],
     mutationFn: () => notifyJoinLive(auctionId),
     onError() {
-      queryClient.invalidateQueries({ queryKey: ['auction', auctionId] });
+      queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     },
     retry: 1
   });
@@ -18,7 +19,7 @@ export const useNotifyJoinLive = (auctionId: string) => {
 
 const notifyJoinLive = async (auctionId: string) => {
   try {
-    return axios.put(`${backendUrl}/api/events/auctions/${auctionId}/join`, undefined, {
+    return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/join`, undefined, {
       withCredentials: true
     });
   } catch (error) {

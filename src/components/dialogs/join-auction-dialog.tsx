@@ -1,4 +1,4 @@
-import { useJoinAuction } from '@/mutations/use-join-auction';
+import { joinAuctionKey, useJoinAuction } from '@/mutations/use-join-auction';
 import { useIsMutating } from '@tanstack/react-query';
 import React, { useRef } from 'react';
 import { Button } from '../ui/button';
@@ -19,7 +19,7 @@ type Props = {
 };
 export default function JoinAuctionDialog({ children, auctionId }: Props) {
   const { mutate } = useJoinAuction(auctionId);
-  const isJoiningAuction = !!useIsMutating({ mutationKey: ['join-auction', auctionId] });
+  const isJoiningAuction = !!useIsMutating({ mutationKey: joinAuctionKey(auctionId) });
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const joinAuction = () => {

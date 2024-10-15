@@ -1,5 +1,5 @@
 import { formatPrice, getBidAmountOptions } from '@/lib/utils';
-import { usePlaceBid } from '@/mutations/use-place-bid';
+import { placeBidKey, usePlaceBid } from '@/mutations/use-place-bid';
 import { useBidsSnapshot } from '@/queries/use-bids-snapshot';
 import { useProfile } from '@/queries/use-profile';
 import { useIsMutating } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ export default function PlaceBid({ auctionId, minBid }: Props) {
   const isValidInputAmount = !!Number(inputAmount);
   const { mutate } = usePlaceBid(auctionId);
   const { data: bidsSnapshot } = useBidsSnapshot(auctionId);
-  const isPlacingBid = !!useIsMutating({ mutationKey: ['place-bid', auctionId] });
+  const isPlacingBid = !!useIsMutating({ mutationKey: placeBidKey(auctionId) });
   const lastBid = bidsSnapshot?.at(0);
   const { data: profile } = useProfile();
   const disabled = isPlacingBid || lastBid?.bidderId === profile?.id;

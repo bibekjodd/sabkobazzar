@@ -3,9 +3,12 @@ import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useSearchInvite = ({ auctionId, q }: { auctionId: string; q: string }) => {
+type KeyOptions = { auctionId: string; q: string };
+export const searchInviteKey = (options: KeyOptions) => ['search-invite', options];
+
+export const useSearchInvite = ({ auctionId, q }: KeyOptions) => {
   return useInfiniteQuery({
-    queryKey: ['search-invite', { auctionId, q }],
+    queryKey: searchInviteKey({ auctionId, q }),
     queryFn: ({ pageParam, signal }) => searchInvite({ auctionId, q, page: pageParam, signal }),
     initialPageParam: 1,
     getNextPageParam(lastPage, _, lastPageParam) {
@@ -17,13 +20,13 @@ export const useSearchInvite = ({ auctionId, q }: { auctionId: string; q: string
   });
 };
 
-type Result = User & { isInvited: boolean };
+type Result = User & { status: ParticipationStatus };
 type Options = { signal: AbortSignal; q: string; auctionId: string; page: number | undefined };
 const searchInvite = async ({ signal, q, auctionId, page }: Options): Promise<Result[]> => {
   try {
     const url = new URL(`${backendUrl}/api/auctions/${auctionId}/search-invite`);
     url.searchParams.set('q', q);
-    page && url.searchParams.set('page', page.toString());
+    if (page) url.searchParams.set('page', page.toString());
     const res = await axios.get<{ users: Result[] }>(url.href, {
       withCredentials: true,
       signal

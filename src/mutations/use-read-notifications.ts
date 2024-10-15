@@ -1,4 +1,5 @@
 import { backendUrl } from '@/lib/constants';
+import { profileKey } from '@/queries/use-profile';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -17,7 +18,7 @@ export const useReadNotifications = () => {
       const lastNotification = notificationsData.pages.at(0)?.at(0);
       if (!lastNotification) return null;
       if (profile.lastNotificationReadAt > lastNotification?.receivedAt) return null;
-      return axios.put(`${backendUrl}/api/notifications/read`, undefined, {
+      return await axios.put(`${backendUrl}/api/notifications/read`, undefined, {
         withCredentials: true
       });
     },
@@ -33,11 +34,11 @@ export const useReadNotifications = () => {
     },
 
     onError() {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      queryClient.invalidateQueries({ queryKey: profileKey });
     },
 
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      queryClient.invalidateQueries({ queryKey: profileKey });
     }
   });
 };

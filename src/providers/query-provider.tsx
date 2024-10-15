@@ -17,11 +17,12 @@ export default function QueryProvider({ children }: Props) {
             refetchOnMount: false,
             refetchOnWindowFocus: false,
             retry: false,
-            gcTime: 5 * 60 * 1000
+            gcTime: 3 * 60 * 1000,
+            refetchIntervalInBackground: false
           },
           mutations: {
             retry: false,
-            gcTime: 5 * 60 * 1000
+            gcTime: 30 * 1000
           }
         }
       })

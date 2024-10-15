@@ -47,20 +47,22 @@ type Auction = {
   owner: User;
   product: Omit<Product, 'owner'>;
   winner: User | null;
-  participants: User[];
   isInviteOnly: boolean;
-  isInvited: boolean;
+  participationStatus: ParticipationStatus;
+  totalParticipants: number;
 };
+type ParticipationStatus = 'joined' | 'invited' | 'kicked' | 'rejected' | null;
 
 type UserNotification = {
   id: string;
   userId: string;
   title: string;
-  description: string;
+  description?: string;
   receivedAt: string;
   entity: string;
-  params: string;
+  params?: string;
   user: User;
+  type?: string;
 };
 
 type Bid = {

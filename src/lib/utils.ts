@@ -71,7 +71,8 @@ export const uploadImage = async (file: File): Promise<string> => {
     );
     return data.data.display_url;
   } catch (error) {
-    throw new Error('Could not upload image');
+    const message = `Could not upload image! ${error instanceof Error ? error.message : ''}`;
+    throw new Error(message);
   }
 };
 
@@ -99,16 +100,6 @@ export const isAuctionLive = (auction: Auction) => {
   );
 };
 
-export const isJoinedAuction = ({
-  auction,
-  userId
-}: {
-  auction: Auction;
-  userId: string;
-}): boolean => {
-  return !!auction.participants.find((participant) => participant.id === userId);
-};
-
 export const canJoinAuction = ({
   auction,
   userId
@@ -116,13 +107,14 @@ export const canJoinAuction = ({
   auction: Auction;
   userId: string;
 }): boolean => {
-  return (
-    !isJoinedAuction({ auction, userId }) &&
+  return !!(
     !auction.isCancelled &&
     !auction.isFinished &&
     Date.now() < new Date(auction.startsAt).getTime() &&
     userId !== auction.ownerId &&
-    (auction.isInviteOnly ? auction.isInvited : true)
+    (auction.isInviteOnly
+      ? auction.participationStatus === 'invited'
+      : auction.participationStatus === null)
   );
 };
 
@@ -136,15 +128,9 @@ export const canCancelAuction = ({
   return userId === auction.ownerId && !auction.isCancelled && !auction.isFinished;
 };
 
-export const canLeaveAuction = ({
-  auction,
-  userId
-}: {
-  auction: Auction;
-  userId: string;
-}): boolean => {
+export const canLeaveAuction = ({ auction }: { auction: Auction }): boolean => {
   return (
-    isJoinedAuction({ auction, userId }) &&
+    auction.participationStatus === 'joined' &&
     !auction.isCancelled &&
     !auction.isFinished &&
     Date.now() + 3 * 60 * 60 * 1000 < new Date(auction.startsAt).getTime()

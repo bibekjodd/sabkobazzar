@@ -12,10 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Slider } from '../ui/slider';
 
 export type SearchProductsParams = {
-  title: string | undefined;
-  category: string | undefined;
-  pricegte: string | undefined;
-  pricelte: string | undefined;
+  title: string | undefined | null;
+  category: string | undefined | null;
+  pricegte: string | undefined | null;
+  pricelte: string | undefined | null;
 };
 export default function ProductsFilterSidebar({
   searchParams

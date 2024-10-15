@@ -1,4 +1,4 @@
-import { useLeaveAuction } from '@/mutations/use-leave-auction';
+import { leaveAuctionKey, useLeaveAuction } from '@/mutations/use-leave-auction';
 import { useIsMutating } from '@tanstack/react-query';
 import React, { useRef } from 'react';
 import { Button } from '../ui/button';
@@ -19,7 +19,7 @@ type Props = {
 };
 export default function LeaveAuctionDialog({ children, auctionId }: Props) {
   const { mutate } = useLeaveAuction(auctionId);
-  const isLeavingAuction = !!useIsMutating({ mutationKey: ['leave-auction', auctionId] });
+  const isLeavingAuction = !!useIsMutating({ mutationKey: leaveAuctionKey(auctionId) });
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const leaveAuction = () => {

@@ -3,9 +3,10 @@ import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+export const notificationsKey = ['notifications'];
 export const useNotifications = () => {
   return useInfiniteQuery({
-    queryKey: ['notifications'],
+    queryKey: notificationsKey,
     queryFn: ({ signal, pageParam }) => fetchNotifications({ signal, cursor: pageParam }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
@@ -18,7 +19,7 @@ type Options = { signal: AbortSignal; cursor: string | undefined };
 const fetchNotifications = async ({ signal, cursor }: Options): Promise<UserNotification[]> => {
   try {
     const url = new URL(`${backendUrl}/api/notifications`);
-    cursor && url.searchParams.set('cursor', cursor);
+    if (cursor) url.searchParams.set('cursor', cursor);
     const res = await axios.get<{ notifications: UserNotification[] }>(url.href, {
       withCredentials: true,
       signal

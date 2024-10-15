@@ -1,5 +1,6 @@
 'use client';
 
+import ManageAuctionDialog from '@/components/dialogs/manage-auction-dialog';
 import { dummyProductImage } from '@/lib/constants';
 import {
   canJoinAuction,
@@ -13,7 +14,6 @@ import { useProfile } from '@/queries/use-profile';
 import { ChartNoAxesGanttIcon, ChevronsRight, InfoIcon } from 'lucide-react';
 import JoinAuctionDialog from '../dialogs/join-auction-dialog';
 import LeaveAuctionDialog from '../dialogs/leave-auction.dialog';
-import ManageAuctionDrawer from '../dialogs/manage-auction-dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
@@ -38,7 +38,7 @@ export default function AuctionCard({
   const auction = data || auctionData;
 
   const canUserJoinAuction = canJoinAuction({ auction, userId: profile?.id! });
-  const canUserLeaveAuction = canLeaveAuction({ auction, userId: profile?.id! });
+  const canUserLeaveAuction = canLeaveAuction({ auction });
   const canShowInviteOnlyInfo =
     showInviteOnlyInfo &&
     auction.isInviteOnly &&
@@ -107,11 +107,11 @@ export default function AuctionCard({
         </ProgressLink>
 
         {showManageAuctionButton && (
-          <ManageAuctionDrawer auction={auction}>
+          <ManageAuctionDialog auction={auction}>
             <Button variant="theme-secondary" className="w-full" Icon={ChartNoAxesGanttIcon}>
               Manage auction
             </Button>
-          </ManageAuctionDrawer>
+          </ManageAuctionDialog>
         )}
       </div>
     </div>

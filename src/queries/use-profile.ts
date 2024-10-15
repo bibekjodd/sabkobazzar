@@ -3,12 +3,14 @@ import { extractErrorMessage } from '@/lib/utils';
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
+export const profileKey = ['profile'];
 export const useProfile = () => {
   const queryClient = useQueryClient();
   return useQuery({
-    queryKey: ['profile'],
+    queryKey: profileKey,
     queryFn: ({ signal }) => fetchProfile({ signal, queryClient }),
-    refetchOnWindowFocus: true
+    refetchOnWindowFocus: true,
+    refetchInterval: 60 * 1000
   });
 };
 

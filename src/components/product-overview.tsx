@@ -10,7 +10,10 @@ import Avatar from './utils/avatar';
 
 type Props = { product: Product };
 export default function ProductOverview({ product: productData }: Props) {
-  const { data } = useProduct(productData.id, { initialData: productData });
+  const { data } = useProduct(productData.id, {
+    initialData: productData,
+    refetchInterval: 60 * 1000
+  });
   const product = data || productData;
   const { mutate, isPending } = useInterested(product.id);
   const updateInterested = () => {

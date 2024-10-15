@@ -1,5 +1,5 @@
 'use client';
-import { useTimeout } from '@/hooks/use-timeout';
+import { useDebounce } from '@/hooks/use-debounce';
 import { dummyProductImage } from '@/lib/constants';
 import { useProducts } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
@@ -29,11 +29,8 @@ type Props = {
 export default function SelectAuctionProductDialog({ children }: Props) {
   const { data: profile } = useProfile();
   const [title, setTitle] = useState('');
-  const [query, setQuery] = useState(`?title=${title}&owner=${profile?.id}`);
 
-  useTimeout(() => {
-    setQuery(`?title=${title}&owner=${profile?.id}`);
-  }, 250);
+  const debouncedValues = useDebounce({ profile, title }, 250);
 
   const {
     data: products,
@@ -42,7 +39,7 @@ export default function SelectAuctionProductDialog({ children }: Props) {
     isFetching,
     hasNextPage,
     error
-  } = useProducts(query);
+  } = useProducts(debouncedValues);
 
   return (
     <Dialog>

@@ -3,9 +3,10 @@ import { extractErrorMessage } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+export const bidsSnapshotKey = (auctionId: string) => ['bids-snapshot', auctionId];
 export const useBidsSnapshot = (auctionId: string) => {
   return useQuery({
-    queryKey: ['bids-snapshot', auctionId],
+    queryKey: bidsSnapshotKey(auctionId),
     queryFn: ({ signal }) => fetchBidsSnapshot({ auctionId, signal }),
     refetchInterval: 60_000
   });

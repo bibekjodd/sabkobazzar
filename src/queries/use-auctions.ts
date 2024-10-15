@@ -3,19 +3,17 @@ import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useAuctions = ({
-  ownerId,
-  productId,
-  order
-}: {
+type KeyOptions = {
   ownerId: string | null;
   productId: string | null;
-  order: 'asc' | 'desc';
-}) => {
+  order: string;
+};
+export const auctionsKey = (options: KeyOptions) => ['auctions', options];
+export const useAuctions = (options: KeyOptions) => {
   return useInfiniteQuery({
-    queryKey: ['auctions', { ownerId, productId, order }],
+    queryKey: auctionsKey(options),
     queryFn: ({ pageParam, signal }) =>
-      fetchUpcomingAuctions({ cursor: pageParam, ownerId, productId, signal, order }),
+      fetchUpcomingAuctions({ cursor: pageParam, signal, ...options }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
       return lastPage.at(lastPage.length - 1)?.startsAt;
@@ -23,12 +21,9 @@ export const useAuctions = ({
   });
 };
 
-type Options = {
+type Options = KeyOptions & {
   cursor: string | undefined;
-  ownerId: string | null;
-  productId: string | null;
   signal: AbortSignal;
-  order: 'asc' | 'desc';
 };
 const fetchUpcomingAuctions = async ({
   cursor,
@@ -39,9 +34,9 @@ const fetchUpcomingAuctions = async ({
 }: Options): Promise<Auction[]> => {
   try {
     const url = new URL(`${backendUrl}/api/auctions`);
-    cursor && url.searchParams.set('cursor', cursor);
-    productId && url.searchParams.set('product', productId);
-    ownerId && url.searchParams.set('owner', ownerId);
+    if (cursor) url.searchParams.set('cursor', cursor);
+    if (productId) url.searchParams.set('product', productId);
+    if (ownerId) url.searchParams.set('owner', ownerId);
     url.searchParams.set('order', order);
     const { data } = await axios.get<{ auctions: Auction[] }>(url.href, {
       signal,

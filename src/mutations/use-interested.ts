@@ -1,12 +1,15 @@
 import { backendUrl } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
+import { productKey } from '@/queries/use-product';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+
+export const interestedKey = (productId: string) => ['interested', productId];
 
 export const useInterested = (productId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ['interested', productId],
+    mutationKey: interestedKey(productId),
     mutationFn: (interested: boolean) => updateInterested({ productId, interested }),
 
     onSuccess(_, interested) {
@@ -16,12 +19,12 @@ export const useInterested = (productId: string) => {
       queryClient.setQueryData<Product>(['product', productId], updatedProduct);
     },
     onError() {
-      queryClient.invalidateQueries({ queryKey: ['product', productId] });
+      queryClient.invalidateQueries({ queryKey: productKey(productId) });
     }
   });
 };
 
-const updateInterested = ({
+const updateInterested = async ({
   interested,
   productId
 }: {
@@ -31,11 +34,11 @@ const updateInterested = ({
   try {
     const url = `${backendUrl}/api/products/${productId}/interested`;
     if (interested) {
-      return axios.post(url, undefined, {
+      return await axios.post(url, undefined, {
         withCredentials: true
       });
     }
-    return axios.delete(url, {
+    return await axios.delete(url, {
       withCredentials: true
     });
   } catch (error) {

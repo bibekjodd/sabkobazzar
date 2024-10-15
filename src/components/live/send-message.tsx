@@ -1,4 +1,4 @@
-import { useSendMessage } from '@/mutations/use-send-message';
+import { sendMessageKey, useSendMessage } from '@/mutations/use-send-message';
 import { useIsMutating } from '@tanstack/react-query';
 import { Loader2, SendIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -8,7 +8,7 @@ export default function SendMessage({ auctionId }: { auctionId: string }) {
   const inputElementRef = useRef<HTMLTextAreaElement>(null);
 
   const { mutate } = useSendMessage(auctionId);
-  const isSendingMessage = !!useIsMutating({ mutationKey: ['send-message', auctionId] });
+  const isSendingMessage = !!useIsMutating({ mutationKey: sendMessageKey(auctionId) });
   const sendMessage = () => {
     const text = message.trim();
     setMessage('');
@@ -16,7 +16,7 @@ export default function SendMessage({ auctionId }: { auctionId: string }) {
       { text, emoji: undefined },
       {
         onError() {
-          !message && setMessage(text);
+          if (!message) setMessage(text);
         }
       }
     );

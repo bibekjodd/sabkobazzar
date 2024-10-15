@@ -21,7 +21,7 @@ export default function Page({ params }: Props) {
   const isLive = auction && isAuctionLive(auction);
   useEffect(() => {
     return () => {
-      isLive && leaveLiveAuction();
+      if (isLive) leaveLiveAuction();
     };
   }, [leaveLiveAuction, isLive]);
 

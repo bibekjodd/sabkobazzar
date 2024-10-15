@@ -1,19 +1,22 @@
 import { backendUrl } from '@/lib/constants';
 import { AddProductSchema } from '@/lib/form-schemas';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
+import { productKey } from '@/queries/use-product';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
-export const useUpdateProduct = (id: string) => {
+export const updateProductKey = (productId: string) => ['update-product', productId];
+
+export const useUpdateProduct = (productId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ['update-product', id],
+    mutationKey: updateProductKey(productId),
     mutationFn: (
       data: Partial<AddProductSchema> & {
         image: string | File | null;
       }
-    ) => updateProduct({ ...data, id }),
+    ) => updateProduct({ ...data, productId }),
     onMutate() {
       toast.dismiss();
       toast.loading('Updating product...');
@@ -26,21 +29,24 @@ export const useUpdateProduct = (id: string) => {
     onError(err) {
       toast.dismiss();
       toast.error(`Could not update product! ${err.message}`);
-      queryClient.invalidateQueries({ queryKey: ['product', id] });
+      queryClient.invalidateQueries({ queryKey: productKey(productId) });
     }
   });
 };
 
 export const updateProduct = async ({
   image,
-  id,
+  productId,
   ...data
-}: Partial<AddProductSchema> & { id: string; image?: string | File | null }): Promise<Product> => {
+}: Partial<AddProductSchema> & {
+  productId: string;
+  image?: string | File | null;
+}): Promise<Product> => {
   try {
     const uploadImagePromise = image instanceof File ? uploadImage(image) : undefined;
     const updateProductPromise = axios
       .put<{ product: Product }>(
-        `${backendUrl}/api/products/${id}`,
+        `${backendUrl}/api/products/${productId}`,
         { ...data, image: typeof image === 'string' ? image : undefined },
         {
           withCredentials: true
@@ -51,7 +57,7 @@ export const updateProduct = async ({
       uploadImagePromise,
       updateProductPromise
     ]);
-    uploadedImage && updateProduct({ id, image: uploadedImage });
+    if (uploadedImage) updateProduct({ productId, image: uploadedImage });
     return { ...updatedProduct, image: uploadedImage || updatedProduct.image };
   } catch (error) {
     throw new Error(extractErrorMessage(error));

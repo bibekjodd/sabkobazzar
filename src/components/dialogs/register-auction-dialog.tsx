@@ -2,7 +2,7 @@
 import { dummyProductImage, productConditions } from '@/lib/constants';
 import { registerAuctionSchema, RegisterAuctionSchema } from '@/lib/form-schemas';
 import { imageToDataUri } from '@/lib/utils';
-import { useRegisterAuction } from '@/mutations/use-register-auction';
+import { registerAuctionKey, useRegisterAuction } from '@/mutations/use-register-auction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useIsMutating } from '@tanstack/react-query';
 import { ImageIcon, X } from 'lucide-react';
@@ -64,7 +64,7 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
     }
   });
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const isRegisteringAuction = !!useIsMutating({ mutationKey: ['register-auction'] });
+  const isRegisteringAuction = !!useIsMutating({ mutationKey: registerAuctionKey });
   const { mutate } = useRegisterAuction();
 
   const onSubmit = handleSubmit((data: RegisterAuctionSchema) => {

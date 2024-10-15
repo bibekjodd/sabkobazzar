@@ -15,7 +15,7 @@ export default function Page() {
     isFetching,
     fetchNextPage,
     hasNextPage
-  } = useProducts(`?owner=${profile?.id}`);
+  } = useProducts({ owner: profile?.id });
   return (
     <main>
       <div className="flex w-full items-center justify-between p-4 filter backdrop-blur-2xl">

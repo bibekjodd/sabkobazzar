@@ -5,13 +5,11 @@ import ProductsFilterSidebar, {
 } from '@/components/layouts/products-filter-sidebar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import InfiniteScrollObserver from '@/components/utils/infinite-scroll-observer';
-import { getSearchString } from '@/lib/utils';
 import { useProducts } from '@/queries/use-products';
 import { CircleAlert, Info } from 'lucide-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 export default function Page({ searchParams }: { searchParams: SearchProductsParams }) {
-  const searchString = useMemo(() => getSearchString(searchParams), [searchParams]);
   const {
     data: products,
     isLoading,
@@ -19,7 +17,7 @@ export default function Page({ searchParams }: { searchParams: SearchProductsPar
     isFetching,
     hasNextPage,
     fetchNextPage
-  } = useProducts(searchString);
+  } = useProducts(searchParams);
 
   return (
     <>

@@ -2,8 +2,8 @@
 import { productsCategories } from '@/lib/constants';
 import { addProductSchema, AddProductSchema } from '@/lib/form-schemas';
 import { imageToDataUri } from '@/lib/utils';
-import { useAddProduct } from '@/mutations/use-add-product';
-import { useUpdateProduct } from '@/mutations/use-update-product';
+import { addProductKey, useAddProduct } from '@/mutations/use-add-product';
+import { updateProductKey, useUpdateProduct } from '@/mutations/use-update-product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useIsMutating } from '@tanstack/react-query';
 import { Image as ImageIcon, X } from 'lucide-react';
@@ -61,8 +61,8 @@ export default function AddProductDialog({ children, product }: Props) {
   });
   const { mutate: addProduct } = useAddProduct();
   const { mutate: updateProduct } = useUpdateProduct(product?.id || '');
-  const isAddingProduct = !!useIsMutating({ mutationKey: ['add-product'] });
-  const isUpdatingProduct = !!useIsMutating({ mutationKey: ['update-product', product?.id] });
+  const isAddingProduct = !!useIsMutating({ mutationKey: addProductKey });
+  const isUpdatingProduct = !!useIsMutating({ mutationKey: updateProductKey(product?.id || '') });
 
   const resetAndClose = () => {
     reset();

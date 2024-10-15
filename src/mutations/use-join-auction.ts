@@ -1,14 +1,17 @@
 import { backendUrl } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
+import { auctionKey } from '@/queries/use-auction';
+import { notificationsKey } from '@/queries/use-notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
+export const joinAuctionKey = (auctionId: string) => ['join-auction', auctionId];
 export const useJoinAuction = (auctionId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['join-auction', auctionId],
+    mutationKey: joinAuctionKey(auctionId),
     mutationFn: () => joinAuction(auctionId),
 
     onMutate() {
@@ -20,13 +23,13 @@ export const useJoinAuction = (auctionId: string) => {
       toast.dismiss();
       toast.success('Joined auction successfully');
       queryClient.setQueryData<Auction>(['auction', auction.id], auction);
-      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: notificationsKey });
     },
 
     onError(err) {
       toast.dismiss();
       toast.error(`Could not join auction! ${err.message}`);
-      queryClient.invalidateQueries({ queryKey: ['auction', auctionId] });
+      queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     }
   });
 };
