@@ -179,6 +179,33 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
             />
           </section>
 
+          <section className="flex items-center space-x-5">
+            <Select>
+              <SelectTrigger className="w-fit">
+                <SelectValue placeholder="10" />
+              </SelectTrigger>
+
+              <SelectContent className="max-h-40">
+                {new Array(12).fill('nothing').map((_, i) => (
+                  <SelectItem key={i} value={i.toString()}>
+                    {i + 1}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select>
+              <SelectTrigger className="w-fit">
+                <SelectValue placeholder="am" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectItem value="am">am</SelectItem>
+                <SelectItem value="pm">pm</SelectItem>
+              </SelectContent>
+            </Select>
+          </section>
+
           <FormInput
             Icon={null}
             error={errors.lot?.message}
@@ -257,7 +284,9 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
 
         <DialogFooter>
           <DialogClose asChild ref={closeButtonRef}>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="bg-transparent">
+              Cancel
+            </Button>
           </DialogClose>
 
           <Button

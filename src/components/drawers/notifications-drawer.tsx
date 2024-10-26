@@ -1,6 +1,8 @@
 'use client';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { useReadNotifications } from '@/mutations/use-read-notifications';
 import { useNotifications } from '@/queries/use-notifications';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { AlertCircle, BoxIcon, EggFried, UserIcon } from 'lucide-react';
 import moment from 'moment';
 import React, { useRef } from 'react';
@@ -17,8 +19,6 @@ import {
 } from '../ui/drawer';
 import { Skeleton } from '../ui/skeleton';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
-import ProgressLink from '../utils/progress-link';
-import { useReadNotifications } from '@/mutations/use-read-notifications';
 
 export default function NotificationsDrawer({ children }: { children: React.ReactNode }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);

@@ -1,11 +1,11 @@
 'use client';
-import ProgressLink from '@/components/utils/progress-link';
 import { useTimeout } from '@/hooks/use-timeout';
 import { useAuctions } from '@/queries/use-auctions';
+import { AutoAnimate } from '@jodd/auto-animate';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { Dot } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { create } from 'zustand';
-import AutoAnimate from '../utils/auto-animate';
 
 type LiveIndicator = {
   show: boolean;

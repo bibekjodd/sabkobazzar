@@ -1,4 +1,6 @@
+import { cn } from '@/lib/utils';
 import { useProfile } from '@/queries/use-profile';
+import { ProgressButton } from '@jodd/next-top-loading-bar';
 import { BellIcon, DotIcon, LayoutGrid, LogOut } from 'lucide-react';
 import React from 'react';
 import LogoutDialog from '../dialogs/logout-dialog';
@@ -12,7 +14,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
-import ProgressButton from '../utils/progress-button';
 
 export default function ProfileDropdown({ children }: { children: React.ReactNode }) {
   const { data: profile } = useProfile();
@@ -25,10 +26,10 @@ export default function ProfileDropdown({ children }: { children: React.ReactNod
         <DropdownMenuLabel>Account</DropdownMenuLabel>
 
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger className={`w-full ${hasNotifications ? 'text-purple-700' : ''}`}>
+          <DropdownMenuSubTrigger className={cn('w-full', hasNotifications && 'text-purple-700')}>
             <NotificationsDrawer>
               <button className="flex w-full items-center">
-                <BellIcon className={`mr-2 size-4 ${hasNotifications ? 'fill-purple-700' : ''}`} />
+                <BellIcon className={cn('mr-2 size-4', hasNotifications && 'text-purple-700')} />
                 <span>Notifications</span>
                 {hasNotifications && <DotIcon className="size-4 scale-150" />}
               </button>

@@ -21,7 +21,7 @@ export const useProducts = (options: KeyOptions) => {
     queryFn: ({ pageParam, signal }) => fetchProducts({ ...options, cursor: pageParam, signal }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
-      return lastPage[lastPage.length - 1]?.addedAt;
+      return lastPage.at(lastPage.length - 1)?.addedAt;
     }
   });
 };
@@ -32,7 +32,7 @@ type Options = KeyOptions & {
 };
 export const fetchProducts = async ({ signal, ...options }: Options): Promise<Product[]> => {
   try {
-    const url = new URL(`${backendUrl}/api/products?${getSearchString(options)}`);
+    const url = new URL(`${backendUrl}/api/products${getSearchString(options)}`);
     const { data } = await axios.get(url.href, { withCredentials: true, signal });
     return data.products;
   } catch (error) {

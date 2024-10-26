@@ -1,10 +1,11 @@
 import { backendUrl } from '@/lib/constants';
+import { getQueryClient } from '@/lib/query-client';
 import { profileKey } from '@/queries/use-profile';
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 export const useReadNotifications = () => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   return useMutation({
     mutationKey: ['read-notifications'],
     mutationFn: async () => {

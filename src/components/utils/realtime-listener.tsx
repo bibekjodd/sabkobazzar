@@ -2,8 +2,8 @@
 import { EVENTS, ReceivedNotificationResponse } from '@/lib/events';
 import { onReceivedNotification } from '@/lib/events-actions';
 import { pusher } from '@/lib/pusher';
+import { getQueryClient } from '@/lib/query-client';
 import { useProfile } from '@/queries/use-profile';
-import { useQueryClient } from '@tanstack/react-query';
 import { Channel } from 'pusher-js';
 import { useEffect, useState } from 'react';
 
@@ -11,7 +11,7 @@ export default function RealtimeListener() {
   const { data: profile } = useProfile();
   const profileId = profile?.id;
   const [channel, setChannel] = useState<Channel | null>(null);
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
 
   useEffect(() => {
     if (!profileId) return;

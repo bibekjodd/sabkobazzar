@@ -1,10 +1,11 @@
 'use client';
 import LogoutDialog from '@/components/dialogs/logout-dialog';
 import { poppins } from '@/lib/fonts';
+import { cn } from '@/lib/utils';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { LayoutGrid, LogOut, LucideIcon, Route, UsersRound } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { logo } from '../utils/logo';
-import ProgressLink from '../utils/progress-link';
 
 export const dashboardLinks: { title: string; href: string; icon: LucideIcon }[] = [
   {
@@ -28,7 +29,10 @@ export default function DashboardSidebar() {
   const pathname = usePathname();
   return (
     <aside
-      className={`${poppins.className} fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r py-3 text-sm font-medium text-gray-100 lg:flex`}
+      className={cn(
+        poppins.className,
+        'fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r py-3 text-sm font-medium text-gray-100 lg:flex'
+      )}
     >
       {graphics}
       <ProgressLink href="/" className="px-5 text-2xl font-semibold">

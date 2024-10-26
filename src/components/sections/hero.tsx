@@ -1,5 +1,5 @@
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { ChevronRight } from 'lucide-react';
-import ProgressLink from '../utils/progress-link';
 
 export default function Hero() {
   return (

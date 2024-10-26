@@ -1,6 +1,6 @@
 'use client';
 import { dummyProductImage } from '@/lib/constants';
-import { formatPrice } from '@/lib/utils';
+import { cn, formatPrice } from '@/lib/utils';
 import { useInterested } from '@/mutations/use-interested';
 import { useProduct } from '@/queries/use-product';
 import { CircleCheck } from 'lucide-react';
@@ -36,7 +36,7 @@ export default function ProductOverview({ product: productData }: Props) {
           <span className="">Owner - </span>
           <div className="inline-flex items-center space-x-3">
             <p> {product.owner.name}</p>
-            <Avatar src={product.owner.image} variant="sm" />
+            <Avatar src={product.owner.image} size="sm" />
           </div>
         </div>
 
@@ -53,7 +53,7 @@ export default function ProductOverview({ product: productData }: Props) {
             loading={isPending}
             onClick={updateInterested}
             variant={product.isInterested ? 'outline' : 'theme-secondary'}
-            className={`w-full ${product.isInterested ? '' : 'bg-transparent'}`}
+            className={cn('w-full', !product.isInterested && 'bg-transparent')}
             Icon={product.isInterested ? undefined : CircleCheck}
           >
             {product.isInterested ? 'Remove from interested' : 'Add to interested'}

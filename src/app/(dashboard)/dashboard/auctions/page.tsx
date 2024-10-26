@@ -2,6 +2,7 @@
 import AuctionCard from '@/components/cards/auction-card';
 import SelectAuctionProductDialog from '@/components/dialogs/select-auction-product-dialog';
 import { poppins } from '@/lib/fonts';
+import { cn } from '@/lib/utils';
 import { useAuctions } from '@/queries/use-auctions';
 import { useProfile } from '@/queries/use-profile';
 import { ActivityIcon, ChevronRight } from 'lucide-react';
@@ -24,7 +25,10 @@ export default function Page() {
             <p className="text-xs tracking-wider text-rose-500">#1 Reselling Platform</p>
           </div>
           <p
-            className={`${poppins.className} mb-7 flex flex-col items-center space-y-5 text-center text-3xl font-medium xs:text-5xl`}
+            className={cn(
+              poppins.className,
+              'mb-7 flex flex-col items-center space-y-5 text-center text-3xl font-medium xs:text-5xl'
+            )}
           >
             <span>Drop your product</span>
             <span className="bg-gradient-to-r from-sky-700 to-purple-500 bg-clip-text text-transparent">

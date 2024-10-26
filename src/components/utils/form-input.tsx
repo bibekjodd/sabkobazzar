@@ -1,4 +1,5 @@
-import AutoAnimate from '@/components/utils/auto-animate';
+import { cn } from '@/lib/utils';
+import { AutoAnimate } from '@jodd/auto-animate';
 import { LucideIcon } from 'lucide-react';
 import { InputHTMLAttributes, forwardRef } from 'react';
 import { Label } from '../ui/label';
@@ -16,7 +17,7 @@ export const FormInput = forwardRef<HTMLInputElement, Props>(function Component(
   ref
 ) {
   return (
-    <AutoAnimate className={`${className ? className : ''} space-y-1`}>
+    <AutoAnimate className={cn(className, 'space-y-1')}>
       <Label htmlFor={props.id}>{label}</Label>
       <div className="group flex h-10 items-center space-x-3 rounded-md border-2 border-gray-700 border-input px-3 py-1 text-sm focus-within:ring-2 focus-within:ring-ring">
         {Icon && <Icon className="size-4 text-gray-900" />}

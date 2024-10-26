@@ -1,6 +1,6 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
-  "plugins": ["unicorn"],
+  "plugins": ["unicorn", "react-compiler"],
   "rules": {
     "@next/next/no-img-element": "off",
     "@typescript-eslint/no-unused-vars": "warn",
@@ -9,6 +9,7 @@
     "react/no-unescaped-entities": "off",
     "no-var": "off",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
-    "@typescript-eslint/no-empty-object-type": "off"
+    "@typescript-eslint/no-empty-object-type": "off",
+    "react-compiler/react-compiler": "off"
   }
 }

@@ -1,6 +1,5 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import ProgressLink from '@/components/utils/progress-link';
 import { dummyProductImage } from '@/lib/constants';
 import {
   canJoinAuction,
@@ -11,6 +10,7 @@ import {
 } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import JoinAuctionDialog from './dialogs/join-auction-dialog';
 import LeaveAuctionDialog from './dialogs/leave-auction.dialog';
 import { Skeleton } from './ui/skeleton';
@@ -74,7 +74,7 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
             <span className="">Hosted by - </span>
             <div className="inline-flex items-center space-x-3">
               <p> {auction.owner.name}</p>
-              <Avatar src={auction.owner.image} variant="sm" />
+              <Avatar src={auction.owner.image} size="sm" />
             </div>
           </div>
 

@@ -1,36 +1,20 @@
 'use client';
+import { getQueryClient } from '@/lib/query-client';
 import { fetchProfile } from '@/queries/use-profile';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import React, { useState } from 'react';
+import React from 'react';
 
 type Props = {
   children: React.ReactNode;
 };
 
 export default function QueryProvider({ children }: Props) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            refetchOnMount: false,
-            refetchOnWindowFocus: false,
-            retry: false,
-            gcTime: 3 * 60 * 1000,
-            refetchIntervalInBackground: false
-          },
-          mutations: {
-            retry: false,
-            gcTime: 30 * 1000
-          }
-        }
-      })
-  );
+  const queryClient = getQueryClient();
 
   queryClient.prefetchQuery({
     queryKey: ['profile'],
-    queryFn: ({ signal }) => fetchProfile({ queryClient, signal })
+    queryFn: fetchProfile
   });
 
   return (

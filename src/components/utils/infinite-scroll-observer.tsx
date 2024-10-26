@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
@@ -40,7 +41,7 @@ export default function InfiniteScrollObserver({
       <span ref={observerRef} />
       {isFetching && hasNextPage && showLoader && (
         <div className="grid w-full place-items-center">
-          <Loader2 className={`size-4 animate-spin ${className || ''}`} />
+          <Loader2 className={cn('size-4 animate-spin', className)} />
         </div>
       )}
     </>

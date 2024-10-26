@@ -2,8 +2,11 @@ import { auctionKey } from '@/queries/use-auction';
 import { participantsKey } from '@/queries/use-participants';
 import { productKey } from '@/queries/use-product';
 import { InfiniteData, QueryClient } from '@tanstack/react-query';
+import { BidResponse } from './events';
+import { getQueryClient } from './query-client';
 
-export const updateOnBid = ({ queryClient, bid }: { queryClient: QueryClient; bid: Bid }) => {
+export const onPlaceBid = ({ bid }: BidResponse) => {
+  const queryClient = getQueryClient();
   const bidsData = queryClient.getQueryData<InfiniteData<Bid[]>>(['bids', bid.auctionId]);
   if (bidsData) {
     const bidExists = bidsData.pages[0].find((currentBid) => currentBid.id === bid.id);
@@ -22,19 +25,12 @@ export const updateOnBid = ({ queryClient, bid }: { queryClient: QueryClient; bi
     (currentBid) => currentBid.bidderId !== bid.bidderId
   );
   updatedBidsSnapshot.unshift(bid);
-  updatedBidsSnapshot.sort((a, b) => (a.amount > b.amount ? -1 : 1));
+  updatedBidsSnapshot.sort((a, b) => b.amount - a.amount);
   queryClient.setQueryData<Bid[]>(['bids-snapshot', bid.auctionId], updatedBidsSnapshot);
 };
 
-export const onJoinedAuction = ({
-  queryClient,
-  auctionId,
-  user
-}: {
-  queryClient: QueryClient;
-  auctionId: string;
-  user: User;
-}) => {
+export const onJoinedAuction = ({ auctionId, user }: { auctionId: string; user: User }) => {
+  const queryClient = getQueryClient();
   const bidsSnapshot = queryClient.getQueryData<Bid[]>(['bids-snapshot', auctionId]);
   if (!bidsSnapshot) return;
   const updatedData: Bid[] = bidsSnapshot.map((bid) => {
@@ -44,15 +40,8 @@ export const onJoinedAuction = ({
   queryClient.setQueryData<Bid[]>(['bids-snapshot', auctionId], updatedData);
 };
 
-export const onLeftAuction = ({
-  auctionId,
-  queryClient,
-  user
-}: {
-  queryClient: QueryClient;
-  auctionId: string;
-  user: User;
-}) => {
+export const onLeftAuction = ({ auctionId, user }: { auctionId: string; user: User }) => {
+  const queryClient = getQueryClient();
   const bidsSnapshot = queryClient.getQueryData<Bid[]>(['bids-snapshot', auctionId]);
   if (!bidsSnapshot) return;
   const updatedBidsSnapshot: Bid[] = bidsSnapshot.map((bid) => {

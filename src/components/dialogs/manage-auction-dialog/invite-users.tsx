@@ -1,4 +1,3 @@
-import AutoAnimate from '@/components/utils/auto-animate';
 import Avatar from '@/components/utils/avatar';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useInviteUser } from '@/mutations/use-invite-user';
@@ -7,6 +6,7 @@ import { Button } from '@/ui/button';
 import { Input } from '@/ui/input';
 import { ScrollArea } from '@/ui/scroll-area';
 import { Skeleton } from '@/ui/skeleton';
+import { AutoAnimate } from '@jodd/auto-animate';
 import { DotIcon } from 'lucide-react';
 import { MutableRefObject, useEffect, useState } from 'react';
 
@@ -76,7 +76,7 @@ function ResultUser({
 
   return (
     <div className="flex items-center font-medium">
-      <Avatar src={user.image} variant="sm" /> <span className="ml-2 mr-auto">{user.name}</span>
+      <Avatar src={user.image} size="sm" /> <span className="ml-2 mr-auto">{user.name}</span>
       {isInvited && (
         <div className="flex items-center text-xs text-sky-600">
           <DotIcon className="size-3 scale-150" />

@@ -3,6 +3,7 @@ import { useDebounce } from '@/hooks/use-debounce';
 import { dummyProductImage } from '@/lib/constants';
 import { useProducts } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
+import { AutoAnimate } from '@jodd/auto-animate';
 import { CircleAlert } from 'lucide-react';
 import React, { useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
@@ -19,7 +20,6 @@ import {
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Skeleton } from '../ui/skeleton';
-import AutoAnimate from '../utils/auto-animate';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 import RegisterAuctionDialog from './register-auction-dialog';
 
@@ -28,10 +28,8 @@ type Props = {
 };
 export default function SelectAuctionProductDialog({ children }: Props) {
   const { data: profile } = useProfile();
-  const [title, setTitle] = useState('');
-
-  const debouncedValues = useDebounce({ profile, title }, 250);
-
+  const [searchInput, setSearchInput] = useState('');
+  const { owner, title } = useDebounce({ owner: profile?.id, title: searchInput }, 250);
   const {
     data: products,
     isLoading,
@@ -39,12 +37,12 @@ export default function SelectAuctionProductDialog({ children }: Props) {
     isFetching,
     hasNextPage,
     error
-  } = useProducts(debouncedValues);
+  } = useProducts({ owner, title });
 
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-full flex-col bg-background/50 filter backdrop-blur-3xl">
+      <DialogContent className="flex max-h-screen flex-col bg-background/50 filter backdrop-blur-3xl">
         <DialogHeader>
           <DialogTitle className="text-center">Select Product</DialogTitle>
         </DialogHeader>
@@ -54,8 +52,8 @@ export default function SelectAuctionProductDialog({ children }: Props) {
             <Label id="search">Select products</Label>
             <Input
               placeholder="Search..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
           </div>
 

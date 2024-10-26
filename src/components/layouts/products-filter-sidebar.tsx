@@ -1,11 +1,12 @@
 'use client';
-import { useLoadingBar } from '@/hooks/use-loading-bar';
+import { usePrevious } from '@/hooks/use-previous';
 import { useTimeout } from '@/hooks/use-timeout';
 import { productsCategories } from '@/lib/constants';
 import { formatPrice, getSearchString } from '@/lib/utils';
+import { useLoadingBar } from '@jodd/next-top-loading-bar';
 import { Filter, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -25,12 +26,19 @@ export default function ProductsFilterSidebar({
   const startRouteTransition = useLoadingBar((state) => state.start);
   const [filterOptions, setFilterOptions] = useState(searchParams);
   const router = useRouter();
+  const searchString = getSearchString(searchParams);
+  const previousSearchString = usePrevious(searchString);
 
-  const applyFilters = useCallback(() => {
+  useEffect(() => {
+    if (previousSearchString === searchString) return;
+    setFilterOptions(searchParams);
+  }, [searchParams, searchString, previousSearchString]);
+
+  const applyFilters = () => {
     const url = `/products${getSearchString(filterOptions)}`;
     startRouteTransition(url);
     router.push(url);
-  }, [filterOptions, router, startRouteTransition]);
+  };
 
   useTimeout(applyFilters, 250);
 
@@ -38,13 +46,7 @@ export default function ProductsFilterSidebar({
     setFilterOptions({ title: filterOptions.title, category: '', pricegte: '', pricelte: '' });
   };
 
-  useEffect(() => {
-    setFilterOptions(searchParams);
-  }, [searchParams]);
-
-  const canClearFilters = useMemo(() => {
-    return !!getSearchString({ ...searchParams, title: '' });
-  }, [searchParams]);
+  const canClearFilters = !!getSearchString({ ...searchParams, title: '' });
 
   return (
     <div className="flex w-full flex-col space-y-7 p-4">

@@ -1,11 +1,11 @@
 import { dummyProductImage } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { useProduct } from '@/queries/use-product';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { ChevronsUp, MoveRight } from 'lucide-react';
 import AddProductDialog from '../dialogs/add-product-dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
-import ProgressLink from '../utils/progress-link';
 
 type Props = { product: Product; view: 'seller' | 'user' };
 export default function ProductCard({ product: productData, view }: Props) {

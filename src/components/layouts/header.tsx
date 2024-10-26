@@ -1,11 +1,10 @@
 'use client';
 import { logo } from '@/components/utils/logo';
-import ProgressLink from '@/components/utils/progress-link';
-import { useLoadingBar } from '@/hooks/use-loading-bar';
+import { getQueryClient } from '@/lib/query-client';
 import { redirectToLogin } from '@/lib/utils';
 import { fetchProducts, productsKey } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
-import { useQueryClient } from '@tanstack/react-query';
+import { ProgressLink, useLoadingBar } from '@jodd/next-top-loading-bar';
 import { LogIn, SearchIcon, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, useState } from 'react';
@@ -115,8 +114,9 @@ function NavItems() {
     { title: 'Explore Products', href: '/products' }
   ];
 
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   const prefetchProducts = () => {
+    if (queryClient.getQueryData(productsKey({}))) return;
     queryClient.prefetchInfiniteQuery({
       queryKey: productsKey({}),
       initialPageParam: undefined,

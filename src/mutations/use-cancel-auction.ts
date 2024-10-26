@@ -1,14 +1,15 @@
 import { backendUrl } from '@/lib/constants';
+import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionsKey } from '@/queries/use-auctions';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
 export const cancelAuctionKey = (auctionId: string) => ['cancel-auction', auctionId];
 
 export const useCancelAuction = (auctionId: string) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   const profile = queryClient.getQueryData<User>(['profile']);
 
   return useMutation({

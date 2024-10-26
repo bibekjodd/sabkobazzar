@@ -62,7 +62,7 @@ export default function HowItWorks() {
               <div className="flex items-end space-x-5">
                 <div>
                   <div className="mb-2.5 h-6 w-0.5 translate-x-4 rounded-full bg-purple-200/10" />
-                  <Avatar src={dummyUserImage} variant="sm" className="translate-x-1" />
+                  <Avatar src={dummyUserImage} size="sm" className="translate-x-1" />
                 </div>
                 <div className="relative flex items-center rounded-2xl rounded-bl-none bg-gradient-to-br from-violet-950/20 to-sky-900/30 py-2 pl-4 pr-14">
                   <Signpost className="mr-3 size-5 rotate-12 fill-primary" />
@@ -77,7 +77,7 @@ export default function HowItWorks() {
                   <div className="mb-2.5 h-6 w-0.5 translate-x-4 rounded-full bg-purple-200/10" />
                   <Avatar
                     src="https://i.ibb.co/1sdhJwp/457798439-122189143832018472-4277241618558647922-n-1-2.jpg"
-                    variant="sm"
+                    size="sm"
                     className="translate-x-1"
                   />
                 </div>

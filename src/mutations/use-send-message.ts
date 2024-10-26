@@ -1,13 +1,14 @@
 import { backendUrl } from '@/lib/constants';
+import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 export const sendMessageKey = (auctionId: string) => ['send-message', auctionId];
 
 export const useSendMessage = (auctionId: string) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   return useMutation({
     mutationKey: sendMessageKey(auctionId),
     mutationFn: (data: Omit<Options, 'auctionId'>) => sendMessage({ auctionId, ...data }),

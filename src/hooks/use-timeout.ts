@@ -6,10 +6,8 @@ export const useTimeout = (
   enabled: boolean = true
 ) => {
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (enabled) callback();
-    }, delay);
-
+    if (!enabled) return;
+    const timeout = setTimeout(callback, delay);
     return () => {
       if (timeout) clearTimeout(timeout);
     };

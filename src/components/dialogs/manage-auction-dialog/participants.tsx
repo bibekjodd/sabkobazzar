@@ -61,7 +61,7 @@ function ParticipantItem({
   };
   return (
     <div key={participant.id} className="flex items-center">
-      <Avatar variant="sm" src={participant.image} />
+      <Avatar size="sm" src={participant.image} />
       <span className="ml-2 mr-auto">{participant.name}</span>
       <Button
         onClick={kickUser}

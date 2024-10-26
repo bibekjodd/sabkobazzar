@@ -1,8 +1,9 @@
 import { backendUrl } from '@/lib/constants';
+import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { participantsKey } from '@/queries/use-participants';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -10,7 +11,7 @@ type KeyOptions = { auctionId: string; userId: string };
 export const kickUserKey = (options: KeyOptions) => ['kick-user', options];
 
 export const useKickUser = ({ auctionId, userId }: KeyOptions) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   return useMutation({
     mutationKey: kickUserKey({ auctionId, userId }),
     mutationFn: () => kickUser({ auctionId, userId }),

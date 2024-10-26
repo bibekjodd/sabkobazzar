@@ -1,13 +1,14 @@
 import { backendUrl } from '@/lib/constants';
+import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { productKey } from '@/queries/use-product';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 export const interestedKey = (productId: string) => ['interested', productId];
 
 export const useInterested = (productId: string) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   return useMutation({
     mutationKey: interestedKey(productId),
     mutationFn: (interested: boolean) => updateInterested({ productId, interested }),

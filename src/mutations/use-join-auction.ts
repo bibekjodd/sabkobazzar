@@ -1,14 +1,15 @@
 import { backendUrl } from '@/lib/constants';
+import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { notificationsKey } from '@/queries/use-notifications';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
 export const joinAuctionKey = (auctionId: string) => ['join-auction', auctionId];
 export const useJoinAuction = (auctionId: string) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
 
   return useMutation({
     mutationKey: joinAuctionKey(auctionId),

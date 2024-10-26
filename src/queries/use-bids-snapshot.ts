@@ -8,7 +8,8 @@ export const useBidsSnapshot = (auctionId: string) => {
   return useQuery({
     queryKey: bidsSnapshotKey(auctionId),
     queryFn: ({ signal }) => fetchBidsSnapshot({ auctionId, signal }),
-    refetchInterval: 60_000
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: true
   });
 };
 

@@ -5,6 +5,7 @@ import { imageToDataUri } from '@/lib/utils';
 import { addProductKey, useAddProduct } from '@/mutations/use-add-product';
 import { updateProductKey, useUpdateProduct } from '@/mutations/use-update-product';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AutoAnimate } from '@jodd/auto-animate';
 import { useIsMutating } from '@tanstack/react-query';
 import { Image as ImageIcon, X } from 'lucide-react';
 import React, { useRef, useState } from 'react';
@@ -22,7 +23,6 @@ import {
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
-import AutoAnimate from '../utils/auto-animate';
 import { FormInput } from '../utils/form-input';
 
 type Props = { children: React.ReactNode; product?: Product };

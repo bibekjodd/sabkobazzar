@@ -11,52 +11,46 @@ export const redirectToLogin = () => {
   window.open(`${backendUrl}/api/auth/login/google?redirect=${location.origin}`, '_blank');
 };
 
-export const extractErrorMessage = (err: unknown): string => {
-  if (err instanceof AxiosError) {
-    return err.response?.data.message || err.message;
-  } else if (err instanceof Error) {
-    return err.message;
+export const extractErrorMessage = (error: unknown): string => {
+  if (error instanceof AxiosError) {
+    return error.response?.data.message || error.message;
+  } else if (error instanceof Error) {
+    return error.message;
   }
   return 'Unknown error occurred!';
 };
 
 export const wait = async (time = 1000) => {
-  return new Promise((res) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
-      res('okay');
+      resolve('okay');
     }, time);
   });
 };
 
 export const formatPrice = (price: number): string => {
-  let priceStr = price.toString().split('').reverse().join('');
-  let formattedPrice = '';
-  while (priceStr !== '') {
-    formattedPrice += `,${priceStr.slice(0, 3)}`;
-    priceStr = priceStr.slice(3);
-  }
-  return formattedPrice.split('').reverse().join('').slice(0, -1);
+  return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(price);
 };
 
-export const getSearchString = (searchParams: Record<string, unknown>): string => {
+export const getSearchString = (searchParameters: Record<string, unknown>): string => {
   let searchString = '';
-  const keys = Object.keys(searchParams).sort();
-  keys.forEach((key) => {
-    if (!key || !searchParams[key]) return;
-    searchString += `&${key}=${searchParams[key]}`;
-  });
+  const keys = Object.keys(searchParameters).sort();
+  for (const key of keys) {
+    if (!key || !searchParameters[key]) continue;
+    searchString += `&${key}=${searchParameters[key]}`;
+  }
   searchString = searchString.slice(1);
   if (searchString) return '?' + searchString;
   return '';
 };
 
 export const imageToDataUri = (file: File): Promise<string> => {
-  return new Promise((res) => {
+  return new Promise((resolve) => {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
-    fileReader.addEventListener('load', (ev) => {
-      const result = ev.target?.result?.toString();
-      res(result || '');
+    fileReader.addEventListener('load', (event) => {
+      const result = event.target?.result?.toString();
+      resolve(result || '');
     });
   });
 };
@@ -82,7 +76,7 @@ export const formatDate = (value: string | Date | number) => {
   const day = date.getDate();
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  return `${month} ${day}, ${hours % 12 || 12}${minutes !== 0 ? `:${minutes}` : ''}${hours > 12 ? 'pm' : 'am'}`;
+  return `${month} ${day}, ${hours % 12 || 12}${minutes === 0 ? '' : `:${minutes}`}${hours > 12 ? 'pm' : 'am'}`;
 };
 
 export const isAuctionPending = (auction: Auction) => {
@@ -138,51 +132,19 @@ export const canLeaveAuction = ({ auction }: { auction: Auction }): boolean => {
 };
 
 export const getBidAmountOptions = (amount: number): number[] => {
-  amount = Math.ceil(amount / 1000) * 1000;
-  if (amount > 100_000) amount = amount - (amount % 5000);
-  if (amount < 50_000) {
-    return [
-      amount + 1_000,
-      amount + 2_500,
-      amount + 5_000,
-      amount + 7_500,
-      amount + 10_000,
-      amount + 12_500
-    ];
-  }
-  if (amount < 100_000)
-    return [
-      amount + 1_000,
-      amount + 2_500,
-      amount + 5_000,
-      amount + 10_000,
-      amount + 12_500,
-      amount + 15_000
-    ];
-  if (amount < 1_000_000)
-    return [
-      amount + 5_000,
-      amount + 20_000,
-      amount + 25_000,
-      amount + 50_000,
-      amount + 75_000,
-      amount + 100_000
-    ];
-  if (amount < 10_000_000)
-    return [
-      amount + 10_000,
-      amount + 25_000,
-      amount + 50_000,
-      amount + 75_000,
-      amount + 100_000,
-      amount + 125_000
-    ];
-  return [
-    amount + 100_000,
-    amount + 250_000,
-    amount + 500_000,
-    amount + 750_000,
-    amount + 1_000_000,
-    amount + 1_500_000
+  const amounts = [
+    amount * 1.06,
+    amount * 1.1,
+    amount * 1.2,
+    amount * 1.3,
+    amount * 1.4,
+    amount * 1.5
   ];
+  let balancer = 500;
+  if (amount > 100_000) balancer = 1000;
+  if (amount > 500_000) balancer = 5000;
+  if (amount > 1_000_000) balancer = 10_000;
+  if (amount > 10_000_000) balancer = 50_000;
+  if (amount > 100_000_000) balancer = 100_000;
+  return amounts.map((amount) => amount - (amount % balancer));
 };

@@ -1,10 +1,10 @@
-import { formatPrice, getBidAmountOptions } from '@/lib/utils';
+import { cn, formatPrice, getBidAmountOptions } from '@/lib/utils';
 import { placeBidKey, usePlaceBid } from '@/mutations/use-place-bid';
 import { useBidsSnapshot } from '@/queries/use-bids-snapshot';
 import { useProfile } from '@/queries/use-profile';
 import { useIsMutating } from '@tanstack/react-query';
 import { ArrowRightIcon, Loader2 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 type Props = { auctionId: string; minBid: number };
 export default function PlaceBid({ auctionId, minBid }: Props) {
@@ -15,17 +15,14 @@ export default function PlaceBid({ auctionId, minBid }: Props) {
   const isPlacingBid = !!useIsMutating({ mutationKey: placeBidKey(auctionId) });
   const lastBid = bidsSnapshot?.at(0);
   const { data: profile } = useProfile();
-  const disabled = isPlacingBid || lastBid?.bidderId === profile?.id;
+  const disabled = (isPlacingBid || lastBid?.bidderId === profile?.id) && lastBid?.amount !== 0;
 
   const placeBid = (amount?: number) => {
     if (!isValidInputAmount) return;
     mutate({ amount: amount || Number(inputAmount) });
   };
 
-  const bidAmounts = useMemo(
-    () => getBidAmountOptions(lastBid?.amount || minBid),
-    [lastBid, minBid]
-  );
+  const bidAmounts = getBidAmountOptions(lastBid?.amount || minBid);
 
   const onInputAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -61,7 +58,10 @@ export default function PlaceBid({ auctionId, minBid }: Props) {
               key={i}
               disabled={disabled}
               onClick={() => placeBid(amount)}
-              className={`relative m-1 h-9 overflow-hidden rounded-md bg-gradient-to-b from-gray-500 to-gray-600/90 px-4 text-xs font-semibold text-background transition hover:brightness-125 active:scale-95 disabled:opacity-50 xs:text-sm ${i >= 4 ? 'hidden sm:block' : ''} `}
+              className={cn(
+                (i === 2 || i === 3) && 'hidden sm:block',
+                'relative m-1 h-9 overflow-hidden rounded-md bg-gradient-to-b from-gray-500 to-gray-600/90 px-4 text-xs font-semibold text-background transition hover:brightness-125 active:scale-95 disabled:opacity-50 xs:text-sm'
+              )}
             >
               Rs {formatPrice(amount)}
             </button>

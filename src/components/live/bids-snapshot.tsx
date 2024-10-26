@@ -1,7 +1,7 @@
+import { getQueryClient } from '@/lib/query-client';
 import { formatPrice } from '@/lib/utils';
 import { useBidsSnapshot } from '@/queries/use-bids-snapshot';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '../ui/button';
 import {
   Drawer,
@@ -19,7 +19,7 @@ type Props = { auctionId: string };
 export default function BidsSnapshot({ auctionId }: Props) {
   const { data: bids } = useBidsSnapshot(auctionId);
   const [parentRef] = useAutoAnimate({ duration: 300 });
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   const profile = queryClient.getQueryData<UserProfile>(['profile']);
 
   return (
@@ -40,7 +40,7 @@ export default function BidsSnapshot({ auctionId }: Props) {
                 <TableRow key={bid.id}>
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <Avatar src={bid.bidder.image} variant="sm" showOnlineIndicator={isOnline} />
+                      <Avatar src={bid.bidder.image} size="sm" showOnlineIndicator={isOnline} />
                       <span>{bid.bidder.name}</span>
                     </div>
                   </TableCell>

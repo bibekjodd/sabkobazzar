@@ -11,13 +11,13 @@ import {
 } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { ChartNoAxesGanttIcon, ChevronsRight, InfoIcon } from 'lucide-react';
 import JoinAuctionDialog from '../dialogs/join-auction-dialog';
 import LeaveAuctionDialog from '../dialogs/leave-auction.dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
-import ProgressLink from '../utils/progress-link';
 
 type Props = {
   auction: Auction;

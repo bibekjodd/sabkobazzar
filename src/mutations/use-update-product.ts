@@ -1,15 +1,16 @@
 import { backendUrl } from '@/lib/constants';
 import { AddProductSchema } from '@/lib/form-schemas';
+import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
 import { productKey } from '@/queries/use-product';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 
 export const updateProductKey = (productId: string) => ['update-product', productId];
 
 export const useUpdateProduct = (productId: string) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   return useMutation({
     mutationKey: updateProductKey(productId),
     mutationFn: (

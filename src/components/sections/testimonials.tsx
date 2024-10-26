@@ -42,7 +42,7 @@ function ReviewCard({ review }: { review: Review }) {
       <p className="text-gray-400">{review.text}</p>
 
       <div className="mt-auto flex items-center space-x-3 pt-7">
-        <Avatar src={review.user.image || dummyUserImage} variant="lg" />
+        <Avatar src={review.user.image || dummyUserImage} size="lg" />
         <div className="flex flex-col">
           <span className="text-sm text-gray-200">{review.user.name}</span>
           <span className="text-xs font-medium text-gray-500">{review.user.attribute}</span>

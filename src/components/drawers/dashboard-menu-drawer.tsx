@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { Button } from '@/ui/button';
 import {
   Drawer,
@@ -8,11 +9,11 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/ui/drawer';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { usePathname } from 'next/navigation';
 import React, { useRef } from 'react';
 import { dashboardLinks } from '../layouts/dashboard-sidebar';
 import { logo } from '../utils/logo';
-import ProgressLink from '../utils/progress-link';
 
 export default function DashboardMenuDrawer({ children }: { children: React.ReactNode }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -34,7 +35,11 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
               onClick={() => {
                 closeButtonRef.current?.click();
               }}
-              className={`flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500 ${pathname === link.href ? 'border-l-4 border-purple-700 bg-purple-700/15 text-purple-500' : ''}`}
+              className={cn(
+                'flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500',
+                pathname === link.href &&
+                  'border-l-4 border-purple-700 bg-purple-700/15 text-purple-500'
+              )}
             >
               <link.icon className="size-5" />
               <span>{link.title}</span>

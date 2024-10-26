@@ -1,10 +1,11 @@
 import { dummyUserImage } from '@/lib/constants';
-import ProgressLink from './progress-link';
+import { cn } from '@/lib/utils';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 
 type Props = {
   src: string | null | undefined;
   className?: string;
-  variant?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   isLink?: boolean;
   href?: string;
   showOnlineIndicator?: boolean;
@@ -12,12 +13,12 @@ type Props = {
 };
 
 /**
- * `variant` defaults to `md`
+ * `size` defaults to `md`
  */
 export default function Avatar({
   src,
   className,
-  variant,
+  size,
   isLink,
   href,
   showOnlineIndicator,
@@ -31,7 +32,10 @@ export default function Avatar({
 
       {!!unreadNotifications && (
         <div
-          className={`absolute -right-1 -top-1 grid h-4 place-items-center overflow-hidden rounded-full bg-purple-700 px-1 ${unreadNotifications <= 9 ? 'aspect-square' : ''}`}
+          className={cn(
+            'absolute -right-1 -top-1 grid h-4 place-items-center overflow-hidden rounded-full bg-purple-700 px-1',
+            unreadNotifications <= 9 && 'aspect-square'
+          )}
         >
           <span className="-translate-y-0.5 text-[10px] text-white">
             {unreadNotifications <= 9 ? unreadNotifications : '9+'}
@@ -40,7 +44,17 @@ export default function Avatar({
       )}
 
       <div
-        className={` ${variant === 'xs' ? 'size-4' : ''} ${variant === 'sm' ? 'size-6' : ''} ${variant === 'md' || !variant ? 'size-8' : ''} ${variant === 'lg' ? 'size-10' : ''} ${variant === 'xl' ? 'size-12' : ''} ${variant === 'xl' ? 'size-14' : ''} ${className || ''} ${variant === '2xl' ? 'size-16' : ''}`}
+        className={cn(
+          {
+            'size-4': size === 'xs',
+            'size-6': size === 'sm',
+            'size-8': size === 'md' || !size,
+            'size-10': size === 'lg',
+            'size-12': size === 'xl',
+            'size-14': size === '2xl'
+          },
+          className
+        )}
       >
         <img
           src={src || dummyUserImage}

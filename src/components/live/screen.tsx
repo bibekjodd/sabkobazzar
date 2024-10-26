@@ -1,11 +1,11 @@
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { formatPrice } from '@/lib/utils';
 import { useBidsSnapshot } from '@/queries/use-bids-snapshot';
+import NumberFlow from '@number-flow/react';
 import { ChevronDownIcon, RadioIcon } from 'lucide-react';
+import AuctionDetailsDrawer from '../drawers/auction-details-drawer';
 import { BidsHistoryDrawer } from './bids-history';
 import { BidsSnapshotDrawer } from './bids-snapshot';
 import PlaceBid from './place-bid';
-import AuctionDetailsDrawer from '../drawers/auction-details-drawer';
 
 export default function Screen({ auction }: { auction: Auction }) {
   const { data } = useBidsSnapshot(auction.id);
@@ -24,7 +24,7 @@ export default function Screen({ auction }: { auction: Auction }) {
         <div>
           <div className="flex flex-col items-center space-y-3">
             <span className="text-3xl font-semibold text-indigo-200 xs:text-4xl sm:text-5xl">
-              Rs {formatPrice(currentBid)}
+              Rs <NumberFlow value={currentBid} format={{ notation: 'standard' }} locales="en-IN" />
             </span>
             <span className="">Current Bid</span>
           </div>

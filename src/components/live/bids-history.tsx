@@ -40,7 +40,7 @@ function BidItem({ bid }: { bid: Bid }) {
   return (
     <section className="mx-2 flex flex-col rounded-lg bg-background/20 px-4 py-2 text-sm text-indigo-200">
       <div className="flex items-center space-x-3">
-        <Avatar src={bid.bidder.image} variant="sm" />
+        <Avatar src={bid.bidder.image} size="sm" />
         <div className="flex flex-col">
           <span className="text-xs text-indigo-200/80">{bid.bidder.name}</span>
           <span className="font-medium">Rs {formatPrice(bid.amount)}</span>
