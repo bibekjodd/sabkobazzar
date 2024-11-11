@@ -1,4 +1,4 @@
-import { backendUrl } from '@/lib/constants';
+import { backendUrl, MILLIS } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
@@ -14,7 +14,7 @@ export const useInviteUser = (options: KeyOptions) => {
 
   return useMutation({
     mutationKey: inviteUserKey(options),
-    gcTime: 30 * 1000,
+    gcTime: MILLIS.MINUTE / 2,
     mutationFn: () => inviteUser(options),
 
     onError(err) {

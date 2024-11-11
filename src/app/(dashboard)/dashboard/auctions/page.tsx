@@ -1,4 +1,5 @@
 'use client';
+
 import AuctionCard from '@/components/cards/auction-card';
 import SelectAuctionProductDialog from '@/components/dialogs/select-auction-product-dialog';
 import { poppins } from '@/lib/fonts';

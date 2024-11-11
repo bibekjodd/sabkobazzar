@@ -1,4 +1,5 @@
 'use client';
+
 import ProductOverview, { productOverviewSkeleton } from '@/components/product-overview';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useProduct } from '@/queries/use-product';

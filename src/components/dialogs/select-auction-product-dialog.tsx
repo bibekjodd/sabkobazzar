@@ -1,10 +1,11 @@
 'use client';
+
 import { useDebounce } from '@/hooks/use-debounce';
 import { dummyProductImage } from '@/lib/constants';
 import { useProducts } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
 import { AutoAnimate } from '@jodd/auto-animate';
-import { CircleAlert } from 'lucide-react';
+import { CircleAlert, SearchIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
@@ -18,7 +19,7 @@ import {
   DialogTrigger
 } from '../ui/dialog';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+import { ScrollArea } from '../ui/scroll-area';
 import { Skeleton } from '../ui/skeleton';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 import RegisterAuctionDialog from './register-auction-dialog';
@@ -48,45 +49,47 @@ export default function SelectAuctionProductDialog({ children }: Props) {
         </DialogHeader>
 
         <section className="flex h-full flex-col space-y-2">
-          <div className="flex flex-col space-y-2">
-            <Label id="search">Select products</Label>
-            <Input
-              placeholder="Search..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-            />
-          </div>
+          <Input
+            id="search-products"
+            IconLeft={SearchIcon}
+            placeholder="Search..."
+            label="Select products"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
 
-          <AutoAnimate className="flex max-h-96 flex-grow flex-col space-y-3 overflow-y-auto px-1 py-3 scrollbar-thin">
-            {error && (
-              <Alert variant="destructive">
-                <CircleAlert className="size-4" />
-                <AlertTitle>Could not search products</AlertTitle>
-                <AlertDescription>{error.message}</AlertDescription>
-              </Alert>
-            )}
+          <ScrollArea className="flex max-h-96 flex-grow flex-col overflow-y-auto">
+            <AutoAnimate className="flex flex-col space-y-3 px-1 py-3">
+              {error && (
+                <Alert variant="destructive">
+                  <CircleAlert className="size-4" />
+                  <AlertTitle>Could not search products</AlertTitle>
+                  <AlertDescription>{error.message}</AlertDescription>
+                </Alert>
+              )}
 
-            {!isLoading && !products?.pages?.at(0)?.at(0) && (
-              <p className="text-sm text-rose-500">No results found!</p>
-            )}
-            {isLoading &&
-              new Array(4)
-                .fill('nothing')
-                .map((_, i) => <React.Fragment key={i}>{skeleton}</React.Fragment>)}
-            {products?.pages.map((page, i) => (
-              <React.Fragment key={i}>
-                {page.map((product) => (
-                  <ProductResultItem key={product.id} product={product} />
-                ))}
-              </React.Fragment>
-            ))}
-            <InfiniteScrollObserver
-              fetchNextPage={fetchNextPage}
-              hasNextPage={hasNextPage}
-              isFetching={isFetching}
-              showLoader
-            />
-          </AutoAnimate>
+              {!isLoading && !products?.pages?.at(0)?.at(0) && (
+                <p className="text-sm text-rose-500">No results found!</p>
+              )}
+              {isLoading &&
+                new Array(4)
+                  .fill('nothing')
+                  .map((_, i) => <React.Fragment key={i}>{skeleton}</React.Fragment>)}
+              {products?.pages.map((page, i) => (
+                <React.Fragment key={i}>
+                  {page.map((product) => (
+                    <ProductResultItem key={product.id} product={product} />
+                  ))}
+                </React.Fragment>
+              ))}
+              <InfiniteScrollObserver
+                fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage}
+                isFetching={isFetching}
+                showLoader
+              />
+            </AutoAnimate>
+          </ScrollArea>
         </section>
 
         <DialogFooter>
@@ -113,7 +116,7 @@ function ProductResultItem({ product }: { product: Product }) {
         <div className="flex w-full flex-col justify-between px-4 py-2">
           <span className="line-clamp-2 text-sm">{product.title}</span>
           <RegisterAuctionDialog product={product}>
-            <Button className="mt-4 block w-full" size="sm" variant="theme-secondary">
+            <Button className="mt-4 block w-full" size="sm" variant="secondary">
               Select
             </Button>
           </RegisterAuctionDialog>

@@ -1,4 +1,5 @@
 'use client';
+
 import AuctionCard, { auctionCardSkeleton } from '@/components/cards/auction-card';
 import InfiniteScrollObserver from '@/components/utils/infinite-scroll-observer';
 import { useAuctions } from '@/queries/use-auctions';

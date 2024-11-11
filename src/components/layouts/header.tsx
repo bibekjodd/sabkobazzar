@@ -1,4 +1,5 @@
 'use client';
+
 import { logo } from '@/components/utils/logo';
 import { getQueryClient } from '@/lib/query-client';
 import { redirectToLogin } from '@/lib/utils';
@@ -18,7 +19,7 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed left-0 top-0 z-30 w-full border-b border-border/50 text-sm font-medium text-indigo-200/80 filter backdrop-blur-2xl">
+    <div className="fixed left-0 top-0 z-30 w-full border-b border-border/50 text-sm text-indigo-200/80 filter backdrop-blur-2xl">
       <LiveIndicator />
 
       <div>
@@ -48,7 +49,7 @@ export default function Header() {
               </ProfileDropdown>
             )}
 
-            {!isFetched && <Skeleton className="size-8 rounded-full" />}
+            {!isFetched && !profile && <Skeleton className="size-8 rounded-full" />}
 
             {isFetched && !profile && (
               <button
@@ -92,7 +93,7 @@ function Search() {
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         placeholder="Search products..."
-        className="h-11 w-full rounded-lg border border-indigo-200/20 px-3 pr-8 text-base text-gray-100 placeholder:font-normal focus:border-2 focus:border-indigo-200/70 focus:outline-none"
+        className="h-11 w-full rounded-lg border border-indigo-200/20 px-3 pr-8 text-base text-gray-100 focus:border-2 focus:border-indigo-200/70 focus:outline-none"
       />
       {searchInput ? (
         <X
@@ -109,8 +110,8 @@ function Search() {
 function NavItems() {
   const navLinks = [
     { title: 'How it works', href: '/#how-it-works' },
-    { title: 'Testimonials', href: '/#testimonials' },
     { title: 'Benefits', href: '/#benefits' },
+    { title: 'Testimonials', href: '/#testimonials' },
     { title: 'Explore Products', href: '/products' }
   ];
 

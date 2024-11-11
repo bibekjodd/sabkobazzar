@@ -1,6 +1,7 @@
 'use client';
+
 import { Button } from '@/components/ui/button';
-import { dummyProductImage } from '@/lib/constants';
+import { dummyProductImage, MILLIS } from '@/lib/constants';
 import {
   canJoinAuction,
   canLeaveAuction,
@@ -25,7 +26,7 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
   const { data: profile } = useProfile();
   const { data } = useAuction(auctionData.id, {
     initialData: auctionData,
-    refetchInterval: 60 * 1000
+    refetchInterval: MILLIS.MINUTE
   });
   const auction = data || auctionData;
 
@@ -88,7 +89,7 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
           <div className="mt-auto flex flex-col space-y-2 pt-7">
             {showProductLinkButton && (
               <ProgressLink href={`/products/${auction.productId}`}>
-                <Button variant="theme-secondary" className="w-full">
+                <Button variant="secondary" className="w-full">
                   See more about product
                 </Button>
               </ProgressLink>
@@ -97,12 +98,10 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
             {canUserJoinAuction &&
               (profile ? (
                 <JoinAuctionDialog auctionId={auction.id}>
-                  <Button variant="theme">Join Auction</Button>
+                  <Button>Join Auction</Button>
                 </JoinAuctionDialog>
               ) : (
-                <Button variant="theme" onClick={redirectToLogin}>
-                  Join Auction
-                </Button>
+                <Button onClick={redirectToLogin}>Join Auction</Button>
               ))}
             {canUserLeaveAuction && (
               <LeaveAuctionDialog auctionId={auction.id}>

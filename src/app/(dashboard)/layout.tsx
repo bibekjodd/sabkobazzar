@@ -1,4 +1,5 @@
 'use client';
+
 import DashboardHeader from '@/components/layouts/dashboard-header';
 import DashboardSidebar from '@/components/layouts/dashboard-sidebar';
 import { useProfile } from '@/queries/use-profile';

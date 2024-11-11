@@ -1,4 +1,4 @@
-import { backendUrl } from '@/lib/constants';
+import { backendUrl, MILLIS } from '@/lib/constants';
 import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -15,7 +15,7 @@ export const useSearchInvite = ({ auctionId, q }: KeyOptions) => {
       if (lastPage.length) return lastPageParam + 1;
       return undefined;
     },
-    gcTime: 30 * 1000,
+    gcTime: MILLIS.MINUTE / 2,
     maxPages: 3
   });
 };

@@ -3,8 +3,6 @@
   "plugins": ["unicorn", "react-compiler"],
   "rules": {
     "@next/next/no-img-element": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
-    "prefer-const": "warn",
     "unicorn/filename-case": ["error", { "case": "kebabCase" }],
     "react/no-unescaped-entities": "off",
     "no-var": "off",

@@ -6,24 +6,27 @@ import {
   ShieldCheckIcon,
   Signpost
 } from 'lucide-react';
+import { FadeDown, FadeUp } from '../utils/animations';
 
 export default function Benefits() {
   return (
     <section id="benefits" className="cont mt-32 scroll-m-20">
-      <div className="flex items-center justify-center">
-        <AsteriskIcon className="size-8 text-violet-800/80" />
-        <span className="bg-gradient-to-b from-violet-400 to-purple-900 bg-clip-text text-base font-medium text-transparent">
-          Benefits
-        </span>
-      </div>
-      <h3 className="mt-3 flex flex-col items-center justify-center text-center text-3xl font-medium xs:text-4xl sm:text-5xl">
-        <span>Unlock maximum potential</span>
-        <span className="mt-2">with our platform</span>
-      </h3>
+      <FadeDown>
+        <div className="flex items-center justify-center">
+          <AsteriskIcon className="size-8 text-violet-800/80" />
+          <span className="bg-gradient-to-b from-violet-400 to-purple-900 bg-clip-text text-base font-medium text-transparent">
+            Benefits
+          </span>
+        </div>
+        <h3 className="mt-3 flex flex-col items-center justify-center text-center text-3xl font-medium xs:text-4xl sm:text-5xl">
+          <span>Unlock maximum potential</span>
+          <span className="mt-2">with our platform</span>
+        </h3>
+      </FadeDown>
 
       <div className="mt-10 flex flex-wrap justify-center">
-        <div className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
-          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-300">
+        <FadeUp className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
+          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-200/70">
             {graphics}
             <LucideLayers2 className="size-8" />
             <h3 className="mt-3 text-center text-2xl font-semibold">
@@ -31,10 +34,10 @@ export default function Benefits() {
               <span className="block">Listings</span>
             </h3>
           </div>
-        </div>
+        </FadeUp>
 
-        <div className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
-          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-300">
+        <FadeUp className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
+          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-200/70">
             {graphics}
             <DollarSignIcon className="size-8" />
             <h3 className="mt-3 text-center text-2xl font-semibold">
@@ -42,10 +45,10 @@ export default function Benefits() {
               <span className="block">Pricing</span>
             </h3>
           </div>
-        </div>
+        </FadeUp>
 
-        <div className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
-          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-300">
+        <FadeUp className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
+          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-200/70">
             {graphics}
             <Signpost className="size-8 rotate-12 fill-violet-300" />
             <h3 className="mt-3 text-center text-2xl font-semibold">
@@ -53,10 +56,10 @@ export default function Benefits() {
               <span className="block">Biddings</span>
             </h3>
           </div>
-        </div>
+        </FadeUp>
       </div>
 
-      <div className="text-indigo-200/70 md:p-5">
+      <FadeUp className="text-indigo-200/70 md:p-5">
         <div className="relative flex w-full items-center space-x-5 overflow-hidden rounded-3xl px-3 py-6">
           <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/25 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
           <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/5 [mask-image:linear-gradient(to_top,black,transparent)]" />
@@ -80,21 +83,16 @@ export default function Benefits() {
             <span className="hidden lg:block">Most reliable platform</span>
           </div>
         </div>
-      </div>
+      </FadeUp>
     </section>
   );
 }
 
 const graphics = (
   <>
-    <div className="absolute inset-0 -z-10 flex flex-wrap overflow-hidden">
-      {new Array(120).fill('nothing').map((_, i) => (
-        <div key={i} className="size-8 border border-violet-900/10" />
-      ))}
-    </div>
     <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/25 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
     <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/5 [mask-image:linear-gradient(to_top,black,transparent)]" />
     <div className="absolute right-0 top-0 -z-10 size-24 rounded-full bg-purple-500/30 blur-3xl filter" />
-    <div className="absolute left-0 top-0 -z-10 size-24 rounded-full bg-indigo-500/40 blur-3xl filter" />
+    <div className="absolute left-0 top-0 -z-10 size-24 rounded-full bg-indigo-500/20 blur-3xl filter" />
   </>
 );

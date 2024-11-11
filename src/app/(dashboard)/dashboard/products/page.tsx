@@ -1,4 +1,5 @@
 'use client';
+
 import ProductCard from '@/components/cards/product-card';
 import AddProductDialog from '@/components/dialogs/add-product-dialog';
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,7 @@ export default function Page() {
       <div className="flex w-full items-center justify-between p-4 filter backdrop-blur-2xl">
         <span className="text-xl font-semibold">Your products</span>
         <AddProductDialog>
-          <Button Icon={BoxIcon} variant="theme-secondary">
+          <Button Icon={BoxIcon} variant="secondary">
             Add product
           </Button>
         </AddProductDialog>

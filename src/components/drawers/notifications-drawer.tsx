@@ -1,10 +1,12 @@
 'use client';
-import { useMediaQuery } from '@/hooks/use-media-query';
+
+import { useWindowSize } from '@/hooks/use-window-size';
 import { useReadNotifications } from '@/mutations/use-read-notifications';
 import { useNotifications } from '@/queries/use-notifications';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { AlertCircle, BoxIcon, EggFried, UserIcon } from 'lucide-react';
-import moment from 'moment';
 import React, { useRef } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
@@ -12,6 +14,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -19,6 +22,8 @@ import {
 } from '../ui/drawer';
 import { Skeleton } from '../ui/skeleton';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
+
+dayjs.extend(relativeTime);
 
 export default function NotificationsDrawer({ children }: { children: React.ReactNode }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -35,7 +40,7 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
     closeButtonRef.current?.click();
   };
   const { mutate: readNotifications } = useReadNotifications();
-  const screenWidth = useMediaQuery();
+  const { width: screenWidth } = useWindowSize();
   return (
     <Drawer
       direction={screenWidth < 768 ? 'bottom' : 'right'}
@@ -48,6 +53,7 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
         <DrawerHeader>
           <DrawerTitle className="text-center">Notifications</DrawerTitle>
         </DrawerHeader>
+        <DrawerDescription />
 
         <section className="h-full overflow-y-auto pb-4 scrollbar-thin">
           {error && (
@@ -127,7 +133,7 @@ function NotificationCard({
           <span className="font-medium">{notification.title}</span>
           <span className="mt-0.5 text-sm text-gray-400">{notification.description}</span>
           <span className="mt-3 text-xs text-gray-500">
-            {moment(new Date(notification.receivedAt)).fromNow()}
+            {dayjs(notification.receivedAt).fromNow()}
           </span>
         </div>
       </section>

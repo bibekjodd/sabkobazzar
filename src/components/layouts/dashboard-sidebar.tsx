@@ -1,4 +1,5 @@
 'use client';
+
 import LogoutDialog from '@/components/dialogs/logout-dialog';
 import { poppins } from '@/lib/fonts';
 import { cn } from '@/lib/utils';

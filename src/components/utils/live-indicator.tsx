@@ -1,17 +1,18 @@
 'use client';
+
 import { useTimeout } from '@/hooks/use-timeout';
 import { useAuctions } from '@/queries/use-auctions';
 import { AutoAnimate } from '@jodd/auto-animate';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
+import { createStore } from '@jodd/snap';
 import { Dot } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { create } from 'zustand';
 
 type LiveIndicator = {
   show: boolean;
   isShown: boolean;
 };
-const useLiveIndicator = create<LiveIndicator>(() => ({
+const useLiveIndicator = createStore<LiveIndicator>(() => ({
   show: false,
   isShown: false
 }));

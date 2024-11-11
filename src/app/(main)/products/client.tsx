@@ -1,4 +1,5 @@
 'use client';
+
 import ProductCard, { productSkeleton } from '@/components/cards/product-card';
 import ProductsFilterSidebar, {
   SearchProductsParams

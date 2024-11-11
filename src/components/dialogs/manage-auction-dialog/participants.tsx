@@ -69,7 +69,7 @@ function ParticipantItem({
         loading={isPending}
         size="sm"
         className="h-6"
-        variant="theme-secondary"
+        variant="secondary"
       >
         Kick
       </Button>

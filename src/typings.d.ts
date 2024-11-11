@@ -46,11 +46,10 @@ type Auction = {
   isCancelled: boolean;
   owner: User;
   product: Omit<Product, 'owner'>;
-  winner: User | null;
   isInviteOnly: boolean;
   participationStatus: ParticipationStatus;
   totalParticipants: number;
-};
+} & ({ winner: null; isUnbidded: true } | { winner: User; isUnbidded: false });
 type ParticipationStatus = 'joined' | 'invited' | 'kicked' | 'rejected' | null;
 
 type UserNotification = {

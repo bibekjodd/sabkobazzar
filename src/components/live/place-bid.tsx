@@ -2,11 +2,12 @@ import { cn, formatPrice, getBidAmountOptions } from '@/lib/utils';
 import { placeBidKey, usePlaceBid } from '@/mutations/use-place-bid';
 import { useBidsSnapshot } from '@/queries/use-bids-snapshot';
 import { useProfile } from '@/queries/use-profile';
+import { useAuctionStore } from '@/stores/use-auction-store';
 import { useIsMutating } from '@tanstack/react-query';
 import { ArrowRightIcon, Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
 
-type Props = { auctionId: string; minBid: number };
+type Props = { minBid: number; auctionId: string };
 export default function PlaceBid({ auctionId, minBid }: Props) {
   const [inputAmount, setInputAmount] = useState(minBid.toString());
   const isValidInputAmount = !!Number(inputAmount);
@@ -15,10 +16,12 @@ export default function PlaceBid({ auctionId, minBid }: Props) {
   const isPlacingBid = !!useIsMutating({ mutationKey: placeBidKey(auctionId) });
   const lastBid = bidsSnapshot?.at(0);
   const { data: profile } = useProfile();
-  const disabled = (isPlacingBid || lastBid?.bidderId === profile?.id) && lastBid?.amount !== 0;
+  const isLive = useAuctionStore((state) => state.isLive);
+  const disabled =
+    !isLive || ((isPlacingBid || lastBid?.bidderId === profile?.id) && lastBid?.amount !== 0);
 
   const placeBid = (amount?: number) => {
-    if (!isValidInputAmount) return;
+    if (!isValidInputAmount || disabled) return;
     mutate({ amount: amount || Number(inputAmount) });
   };
 

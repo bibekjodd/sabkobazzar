@@ -1,4 +1,5 @@
 'use client';
+
 import { EVENTS, ReceivedNotificationResponse } from '@/lib/events';
 import { onReceivedNotification } from '@/lib/events-actions';
 import { pusher } from '@/lib/pusher';

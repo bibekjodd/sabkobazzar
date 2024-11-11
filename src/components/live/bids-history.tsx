@@ -1,12 +1,14 @@
 import { formatPrice } from '@/lib/utils';
 import { useBids } from '@/queries/use-bids';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
 import { Button } from '../ui/button';
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -14,6 +16,8 @@ import {
 } from '../ui/drawer';
 import Avatar from '../utils/avatar';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
+
+dayjs.extend(relativeTime);
 
 export default function BidsHistory({ auctionId }: { auctionId: string }) {
   const { data: bids, hasNextPage, isFetching, fetchNextPage } = useBids(auctionId);
@@ -46,7 +50,7 @@ function BidItem({ bid }: { bid: Bid }) {
           <span className="font-medium">Rs {formatPrice(bid.amount)}</span>
         </div>
       </div>
-      <span className="mt-2 text-xs italic text-indigo-200/50">{moment(bid.at).fromNow()}</span>
+      <span className="mt-2 text-xs italic text-indigo-200/50">{dayjs(bid.at).fromNow()}</span>
     </section>
   );
 }
@@ -65,6 +69,7 @@ export function BidsHistoryDrawer({
         <DrawerHeader>
           <DrawerTitle>Bids History</DrawerTitle>
         </DrawerHeader>
+        <DrawerDescription />
         <section className="h-full overflow-y-auto">
           <BidsHistory auctionId={auctionId} />
         </section>

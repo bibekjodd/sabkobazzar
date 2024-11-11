@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { backendUrl } from './constants';
+import { backendUrl, MILLIS } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -79,19 +79,31 @@ export const formatDate = (value: string | Date | number) => {
   return `${month} ${day}, ${hours % 12 || 12}${minutes === 0 ? '' : `:${minutes}`}${hours > 12 ? 'pm' : 'am'}`;
 };
 
-export const isAuctionPending = (auction: Auction) => {
+export const isAuctionPending = (auction: Auction): boolean => {
   return (
     !auction.isCancelled && !auction.isFinished && Date.now() < new Date(auction.startsAt).getTime()
   );
 };
 
-export const isAuctionLive = (auction: Auction) => {
+export const isAuctionLive = (auction: Auction): boolean => {
   return (
     !auction.isCancelled &&
     !auction.isFinished &&
     Date.now() >= new Date(auction.startsAt).getTime() &&
-    Date.now() < new Date(auction.startsAt).getTime() + 60 * 60 * 1000
+    Date.now() < new Date(auction.startsAt).getTime() + MILLIS.HOUR
   );
+};
+
+export const isAuctionReady = (auction: Auction): boolean => {
+  return (
+    !auction.isCancelled &&
+    !auction.isFinished &&
+    new Date(auction.startsAt).getTime() - Date.now() < MILLIS.MINUTE
+  );
+};
+
+export const isAuctionFinished = (auction: Auction): boolean => {
+  return !auction.isCancelled && Date.now() >= new Date(auction.startsAt).getTime() + MILLIS.HOUR;
 };
 
 export const canJoinAuction = ({
@@ -127,7 +139,7 @@ export const canLeaveAuction = ({ auction }: { auction: Auction }): boolean => {
     auction.participationStatus === 'joined' &&
     !auction.isCancelled &&
     !auction.isFinished &&
-    Date.now() + 3 * 60 * 60 * 1000 < new Date(auction.startsAt).getTime()
+    Date.now() + 3 * MILLIS.HOUR < new Date(auction.startsAt).getTime()
   );
 };
 
@@ -147,4 +159,22 @@ export const getBidAmountOptions = (amount: number): number[] => {
   if (amount > 10_000_000) balancer = 50_000;
   if (amount > 100_000_000) balancer = 100_000;
   return amounts.map((amount) => amount - (amount % balancer));
+};
+
+export const isShallowEqual = (
+  objA: Record<string | number, unknown>,
+  objB: Record<string | number, unknown>
+): boolean => {
+  if (objA === objB) return true;
+  const keysA = Object.keys(objA);
+  const keysB = Object.keys(objB);
+  if (keysA.length !== keysB.length) return false;
+
+  const isEqual = keysA.every((key) => objA[key] === objB[key]);
+  return isEqual;
+};
+
+export const setImmediateInterval = (callback: () => unknown, interval: number) => {
+  callback();
+  return setInterval(callback, interval);
 };

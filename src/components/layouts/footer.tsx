@@ -53,7 +53,11 @@ export default function Footer() {
 
         <div className="flex items-center space-x-2">
           <span>Based in</span>
-          <img src="https://i.ibb.co/F7Pqzy9/pngwing-com-min.png" alt="flag" className="size-3" />
+          <img
+            src="https://i.ibb.co/F7Pqzy9/pngwing-com-min.png"
+            alt="flag"
+            className="size-3.5 object-contain"
+          />
         </div>
       </div>
     </div>

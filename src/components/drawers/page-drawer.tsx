@@ -1,13 +1,11 @@
 'use client';
+
 import { usePathname, useRouter } from 'next/navigation';
-import { ComponentPropsWithRef, ElementRef, forwardRef, useEffect, useRef } from 'react';
-import { Drawer as DrawerPrimitive } from 'vaul';
+import { useEffect, useRef } from 'react';
 import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from '../ui/drawer';
 
-export const PageDrawer = forwardRef<
-  ElementRef<typeof DrawerPrimitive.Content>,
-  ComponentPropsWithRef<typeof DrawerPrimitive.Content>
->(function Component({ children, ...props }, ref) {
+type Props = JSX.IntrinsicElements['div'];
+export function PageDrawer({ children, ...props }: Props) {
   const openButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const isOpenRef = useRef(true);
@@ -35,7 +33,7 @@ export const PageDrawer = forwardRef<
       <DrawerTrigger className="hidden" ref={openButtonRef}>
         open
       </DrawerTrigger>
-      <DrawerContent {...props} ref={ref}>
+      <DrawerContent {...props}>
         {children}
         <DrawerClose className="hidden" ref={closeButtonRef}>
           Close
@@ -43,4 +41,4 @@ export const PageDrawer = forwardRef<
       </DrawerContent>
     </Drawer>
   );
-});
+}

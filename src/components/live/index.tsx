@@ -1,20 +1,26 @@
 'use client';
+
 import { useAuction } from '@/queries/use-auction';
+import { useAuctionStore } from '@/stores/use-auction-store';
 import { ScrollArea } from '../ui/scroll-area';
 import AuctionRealtimeListener from './auction-realtime-listener';
 import BidsHistory from './bids-history';
 import BidsSnapshot from './bids-snapshot';
 import Screen from './screen';
 import SendMessage from './send-message';
+import WinningScreen from './winning-screen';
 
 type Props = { auction: Auction };
 export default function Live({ auction: initialData }: Props) {
   const { data } = useAuction(initialData.id, { initialData });
   const auction = data || initialData;
+  const isLive = useAuctionStore((state) => state.isLive);
 
   return (
     <div className="flex size-full h-[calc(100vh-80px)] px-4 py-7 lg:space-x-4">
-      <AuctionRealtimeListener auctionId={auction.id} />
+      {isLive && <AuctionRealtimeListener auctionId={auction.id} />}
+      <WinningScreen auction={auction} />
+
       <section className="relative mb-10 hidden h-full w-72 overflow-hidden rounded-3xl p-4 lg:block">
         {graphics}
         <h3 className="px-2 pb-2 text-indigo-200">Current Bid leaders</h3>

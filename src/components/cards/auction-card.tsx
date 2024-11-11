@@ -82,12 +82,12 @@ export default function AuctionCard({
           showJoinButton &&
           (profile ? (
             <JoinAuctionDialog auctionId={auction.id}>
-              <Button variant="theme-secondary" className="w-full">
+              <Button variant="secondary" className="w-full">
                 Join Auction
               </Button>
             </JoinAuctionDialog>
           ) : (
-            <Button variant="theme-secondary" className="w-full" onClick={redirectToLogin}>
+            <Button variant="secondary" className="w-full" onClick={redirectToLogin}>
               Join Auction
             </Button>
           ))}
@@ -100,7 +100,7 @@ export default function AuctionCard({
           </LeaveAuctionDialog>
         )}
         <ProgressLink href={auctionLink}>
-          <Button variant="theme" className="flex w-full items-center">
+          <Button className="flex w-full items-center">
             <span>See more details</span>
             <ChevronsRight className="ml-1 size-4" />
           </Button>
@@ -108,7 +108,7 @@ export default function AuctionCard({
 
         {showManageAuctionButton && (
           <ManageAuctionDialog auction={auction}>
-            <Button variant="theme-secondary" className="w-full" Icon={ChartNoAxesGanttIcon}>
+            <Button variant="secondary" className="w-full" Icon={ChartNoAxesGanttIcon}>
               Manage auction
             </Button>
           </ManageAuctionDialog>

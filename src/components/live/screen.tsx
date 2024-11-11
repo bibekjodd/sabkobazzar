@@ -1,5 +1,6 @@
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { useWindowSize } from '@/hooks/use-window-size';
 import { useBidsSnapshot } from '@/queries/use-bids-snapshot';
+import { useAuctionStore } from '@/stores/use-auction-store';
 import NumberFlow from '@number-flow/react';
 import { ChevronDownIcon, RadioIcon } from 'lucide-react';
 import AuctionDetailsDrawer from '../drawers/auction-details-drawer';
@@ -10,7 +11,7 @@ import PlaceBid from './place-bid';
 export default function Screen({ auction }: { auction: Auction }) {
   const { data } = useBidsSnapshot(auction.id);
   const currentBid = data?.at(0)?.amount || 0;
-  const screenWidth = useMediaQuery();
+  const { width } = useWindowSize();
 
   return (
     <div className="relative flex size-full flex-col justify-between">
@@ -19,6 +20,7 @@ export default function Screen({ auction }: { auction: Auction }) {
           <RadioIcon className="mx-2 inline size-6 -translate-y-0.5 xs:size-8" />
           Live {auction.title}
         </h3>
+        <Timer />
       </div>
       <div className="grid size-full place-items-center">
         <div>
@@ -38,7 +40,7 @@ export default function Screen({ auction }: { auction: Auction }) {
             <ChevronDownIcon className="size-3" />
           </button>
         </AuctionDetailsDrawer>
-        {screenWidth < 1024 && (
+        {width < 1024 && (
           <BidsSnapshotDrawer auctionId={auction.id}>
             <button className="flex items-center space-x-2 rounded-md border border-indigo-200/10 px-2 py-1 text-xs">
               <span>Bids Snapshot</span>
@@ -46,7 +48,7 @@ export default function Screen({ auction }: { auction: Auction }) {
             </button>
           </BidsSnapshotDrawer>
         )}
-        {screenWidth < 1280 && (
+        {width < 1280 && (
           <BidsHistoryDrawer auctionId={auction.id}>
             <button className="flex items-center space-x-2 rounded-md border border-indigo-200/10 px-2 py-1 text-xs">
               <span>Bids History</span>
@@ -56,5 +58,15 @@ export default function Screen({ auction }: { auction: Auction }) {
         )}
       </div>
     </div>
+  );
+}
+
+function Timer() {
+  const { hours, minutes, seconds } = useAuctionStore((state) => state.finishTimer);
+  return (
+    <p>
+      {hours > 10 ? hours : `0${hours}`}:{minutes > 10 ? minutes : `0${minutes}`}:
+      {seconds > 10 ? seconds : `0${seconds}`}
+    </p>
   );
 }

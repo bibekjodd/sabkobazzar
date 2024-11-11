@@ -109,4 +109,7 @@ textarea:focus {
   .h-screen {
     height: calc(100vh - calc(100vh - 100%));
   }
+  .max-h-screen {
+    max-height: calc(100vh - calc(100vh - 100%));
+  }
 }

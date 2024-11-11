@@ -1,5 +1,6 @@
 'use client';
-import { dummyProductImage } from '@/lib/constants';
+
+import { dummyProductImage, MILLIS } from '@/lib/constants';
 import { cn, formatPrice } from '@/lib/utils';
 import { useInterested } from '@/mutations/use-interested';
 import { useProduct } from '@/queries/use-product';
@@ -12,7 +13,7 @@ type Props = { product: Product };
 export default function ProductOverview({ product: productData }: Props) {
   const { data } = useProduct(productData.id, {
     initialData: productData,
-    refetchInterval: 60 * 1000
+    refetchInterval: MILLIS.MINUTE
   });
   const product = data || productData;
   const { mutate, isPending } = useInterested(product.id);
@@ -52,7 +53,7 @@ export default function ProductOverview({ product: productData }: Props) {
             disabled={isPending}
             loading={isPending}
             onClick={updateInterested}
-            variant={product.isInterested ? 'outline' : 'theme-secondary'}
+            variant={product.isInterested ? 'outline' : 'secondary'}
             className={cn('w-full', !product.isInterested && 'bg-transparent')}
             Icon={product.isInterested ? undefined : CircleCheck}
           >

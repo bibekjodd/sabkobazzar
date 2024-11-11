@@ -46,7 +46,7 @@ export default function JoinAuctionDialog({ children, auctionId }: Props) {
 
           <Button
             onClick={joinAuction}
-            variant="theme-secondary"
+            variant="secondary"
             loading={isJoiningAuction}
             disabled={isJoiningAuction}
           >

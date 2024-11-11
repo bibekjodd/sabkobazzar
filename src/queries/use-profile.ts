@@ -1,29 +1,40 @@
-import { backendUrl } from '@/lib/constants';
+import { backendUrl, MILLIS } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
-import { extractErrorMessage } from '@/lib/utils';
+import { extractErrorMessage, isShallowEqual } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 export const profileKey = ['profile'];
 export const useProfile = () => {
-  return useQuery({
+  return useQuery<UserProfile | null>({
     queryKey: profileKey,
-    queryFn: ({ signal }) => fetchProfile({ signal }),
+    queryFn: fetchProfile,
     refetchOnWindowFocus: true,
-    refetchInterval: 60 * 1000
+    refetchInterval: MILLIS.MINUTE,
+    throwOnError(err, query) {
+      query.setData(null);
+      return false;
+    }
   });
 };
 
 export const fetchProfile = async ({ signal }: { signal: AbortSignal }): Promise<UserProfile> => {
   try {
     const url = `${backendUrl}/api/users/profile`;
-    const { data } = await axios.get(url, { withCredentials: true, signal });
+    const { data } = await axios.get<{ user: UserProfile }>(url, { withCredentials: true, signal });
+
+    const queryClient = getQueryClient();
+    const oldProfileData = queryClient.getQueryData<UserProfile>(profileKey);
+    if (!oldProfileData) return data.user;
+
+    const isSame = isShallowEqual(
+      { ...oldProfileData, lastOnline: undefined },
+      { ...data.user, lastOnline: undefined }
+    );
+    if (isSame) return oldProfileData;
+
     return data.user;
   } catch (error) {
-    if (error instanceof AxiosError && error.status === 401) {
-      const queryClient = getQueryClient();
-      queryClient.setQueryData(['profile'], null);
-    }
     throw new Error(extractErrorMessage(error));
   }
 };

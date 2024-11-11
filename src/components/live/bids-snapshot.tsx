@@ -7,6 +7,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -69,6 +70,7 @@ export function BidsSnapshotDrawer({
         <DrawerHeader>
           <DrawerTitle>Current Bids</DrawerTitle>
         </DrawerHeader>
+        <DrawerDescription />
 
         <section className="h-fit max-h-screen overflow-y-auto p-4">
           <BidsSnapshot auctionId={auctionId} />

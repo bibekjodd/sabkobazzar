@@ -1,5 +1,5 @@
 'use client';
-import { usePrevious } from '@/hooks/use-previous';
+
 import { useTimeout } from '@/hooks/use-timeout';
 import { productsCategories } from '@/lib/constants';
 import { formatPrice, getSearchString } from '@/lib/utils';
@@ -27,12 +27,12 @@ export default function ProductsFilterSidebar({
   const [filterOptions, setFilterOptions] = useState(searchParams);
   const router = useRouter();
   const searchString = getSearchString(searchParams);
-  const previousSearchString = usePrevious(searchString);
 
   useEffect(() => {
-    if (previousSearchString === searchString) return;
+    const nextSearchString = getSearchString(searchParams);
+    if (searchString === nextSearchString) return;
     setFilterOptions(searchParams);
-  }, [searchParams, searchString, previousSearchString]);
+  }, [searchParams, searchString]);
 
   const applyFilters = () => {
     const url = `/products${getSearchString(filterOptions)}`;

@@ -38,7 +38,7 @@ export default function CancelAuctionDialog({
             onClick={() => mutate()}
             loading={isPending}
             disabled={isPending}
-            variant="theme-secondary"
+            variant="secondary"
           >
             Confirm
           </Button>

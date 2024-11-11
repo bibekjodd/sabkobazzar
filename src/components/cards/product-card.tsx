@@ -39,7 +39,7 @@ export default function ProductCard({ product: productData, view }: Props) {
       <div className="mt-auto flex flex-col p-4">
         {view === 'user' && (
           <ProgressLink href={productLink} className="mt-3 w-full">
-            <Button Icon={MoveRight} className="w-full" variant="theme">
+            <Button Icon={MoveRight} className="w-full">
               See more
             </Button>
           </ProgressLink>
@@ -47,7 +47,7 @@ export default function ProductCard({ product: productData, view }: Props) {
 
         {view === 'seller' && (
           <AddProductDialog product={product}>
-            <Button className="mt-3 w-full" variant="theme-secondary" Icon={ChevronsUp}>
+            <Button className="mt-3 w-full" variant="secondary" Icon={ChevronsUp}>
               Update Product
             </Button>
           </AddProductDialog>

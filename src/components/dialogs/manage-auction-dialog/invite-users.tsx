@@ -97,7 +97,7 @@ function ResultUser({
       )}
       {(user.status === null || user.status === 'kicked') && !isInvited && (
         <Button
-          variant="theme-secondary"
+          variant="secondary"
           size="sm"
           loading={isPending}
           disabled={isPending}

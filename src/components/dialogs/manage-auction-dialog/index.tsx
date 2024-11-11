@@ -68,7 +68,7 @@ function BaseContent({ auction }: { auction: Auction }) {
         </DialogClose>
 
         <CancelAuctionDialog auctionId={auction.id}>
-          <Button variant="theme-secondary" Icon={TriangleAlertIcon}>
+          <Button variant="secondary" Icon={TriangleAlertIcon}>
             Cancel Auction
           </Button>
         </CancelAuctionDialog>

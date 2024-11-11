@@ -1,12 +1,13 @@
 'use client';
+
 import AuctionOverview, { auctionOverviewSkeleton } from '@/components/auction-overview';
 import AuctionCard from '@/components/cards/auction-card';
 import Live from '@/components/live';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { isAuctionLive } from '@/lib/utils';
 import { useLeaveLiveAuction } from '@/mutations/use-leave-live-auction';
 import { useAuction } from '@/queries/use-auction';
 import { useAuctions } from '@/queries/use-auctions';
+import { useAuctionStore } from '@/stores/use-auction-store';
 import { ActivityIcon, CircleAlert } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -14,18 +15,31 @@ export default function Client({ auctionId }: { auctionId: string }) {
   const { data: auction, error, isLoading } = useAuction(auctionId);
   const { data } = useAuctions({ ownerId: null, productId: null, order: 'asc' });
   const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
+  const isLive = useAuctionStore((state) => state.isLive);
+  const isLivePrevious = useAuctionStore((state) => state.isLivePrevious);
 
   const upcomingAuctions = data?.pages.flat(1).filter((auction) => auction.id !== auctionId);
-  const isLive = auction && isAuctionLive(auction);
   useEffect(() => {
     return () => {
       if (isLive) leaveLiveAuction();
     };
   }, [leaveLiveAuction, isLive]);
 
+  const showLive = isLive || isLivePrevious;
+
+  useEffect(() => {
+    useAuctionStore.getState().onAuctionChange(auction || null);
+  }, [auction]);
+
+  useEffect(() => {
+    return () => {
+      useAuctionStore.getState().onAuctionChange(null);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen pb-20 pt-16">
-      {!isLive && graphics}
+      {!showLive && graphics}
 
       {error && (
         <div className="p-4">
@@ -36,39 +50,39 @@ export default function Client({ auctionId }: { auctionId: string }) {
           </Alert>
         </div>
       )}
+
       {isLoading && (
         <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
           {auctionOverviewSkeleton}
         </div>
       )}
 
-      {isLive && <Live auction={auction} />}
-      {!isLive && (
-        <div className="cont text-indigo-200">
-          {auction && (
-            <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
-              <AuctionOverview auction={auction} showProductLinkButton />
+      {showLive && auction && <Live auction={auction} />}
+
+      <div className="cont text-indigo-200">
+        {auction && !showLive && (
+          <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
+            <AuctionOverview auction={auction} showProductLinkButton />
+          </div>
+        )}
+
+        {upcomingAuctions?.at(0) && !isLive && (
+          <section className="relative z-10 scroll-m-20 pt-4" id="upcoming-auctions">
+            <h3 className="flex items-center space-x-2 px-2 text-2xl font-semibold xs:text-3xl sm:text-4xl md:justify-center">
+              <span className="">Explore more auctions</span>
+              <ActivityIcon className="size-6 text-purple-600 xs:size-7 sm:size-8" />
+            </h3>
+
+            <div className="mt-5 flex flex-wrap justify-center md:mt-7">
+              {upcomingAuctions.slice(0, 6).map((auction) => (
+                <div key={auction.id} className="mb-7 w-full md:w-1/2 md:p-4 xl:w-1/3">
+                  <AuctionCard auction={auction} />
+                </div>
+              ))}
             </div>
-          )}
-
-          {upcomingAuctions?.at(0) && (
-            <section className="relative z-10 scroll-m-20 pt-4" id="upcoming-auctions">
-              <h3 className="flex items-center space-x-2 px-2 text-2xl font-semibold xs:text-3xl sm:text-4xl md:justify-center">
-                <span className="">Explore more auctions</span>
-                <ActivityIcon className="size-6 text-purple-600 xs:size-7 sm:size-8" />
-              </h3>
-
-              <div className="mt-5 flex flex-wrap justify-center md:mt-7">
-                {upcomingAuctions.slice(0, 6).map((auction) => (
-                  <div key={auction.id} className="mb-7 w-full md:w-1/2 md:p-4 xl:w-1/3">
-                    <AuctionCard auction={auction} />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-      )}
+          </section>
+        )}
+      </div>
     </main>
   );
 }

@@ -39,7 +39,7 @@ export default function LogoutDialog({ children }: Props) {
               disabled={isPending}
               loading={isPending}
               onClick={() => logout()}
-              variant="theme-secondary"
+              variant="secondary"
             >
               Logout
             </Button>

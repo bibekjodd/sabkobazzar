@@ -1,21 +1,28 @@
+'use client';
+
 import { dummyUserImage } from '@/lib/constants';
+import { isShallowEqual } from '@/lib/utils';
 import { Asterisk } from 'lucide-react';
+import { useState } from 'react';
+import { FadeDown, FadeUp } from '../utils/animations';
 import Avatar from '../utils/avatar';
 
 export default function Testimonials() {
   return (
-    <section className="mb-20 mt-32 scroll-m-20" id="testimonials">
+    <section className="mt-32 scroll-m-20" id="testimonials">
       <div className="cont">
-        <div className="flex items-center justify-center">
-          <Asterisk className="size-8 text-violet-800/80" />
-          <span className="bg-gradient-to-b from-violet-400 to-purple-900 bg-clip-text text-base font-medium text-transparent">
-            Testimonials
-          </span>
-        </div>
-        <h3 className="mt-3 flex flex-col items-center text-center text-3xl font-medium xs:text-4xl sm:text-5xl">
-          <span>Our Stellar Reviews</span>
-          <span className="mt-2">speak for themselves</span>
-        </h3>
+        <FadeDown>
+          <div className="flex items-center justify-center">
+            <Asterisk className="size-8 text-violet-800/80" />
+            <span className="bg-gradient-to-b from-violet-400 to-purple-900 bg-clip-text text-base font-medium text-transparent">
+              Testimonials
+            </span>
+          </div>
+          <h3 className="mt-3 flex flex-col items-center text-center text-3xl font-medium xs:text-4xl sm:text-5xl">
+            <span>Our Stellar Reviews</span>
+            <span className="mt-2">speak for themselves</span>
+          </h3>
+        </FadeDown>
 
         <div className="mt-10 flex flex-wrap justify-center">
           {reviews.map((review) => (
@@ -29,15 +36,38 @@ export default function Testimonials() {
   );
 }
 
+type MousePosition = { x: number; y: number };
 function ReviewCard({ review }: { review: Review }) {
+  const [mousePosition, setMousePosition] = useState<MousePosition | null>(null);
+
+  const onHover = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mousePosition: MousePosition = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    setMousePosition((pos) => {
+      if (isShallowEqual(pos || {}, mousePosition)) return pos;
+      return mousePosition;
+    });
+  };
+
   return (
-    <div className="relative flex flex-col overflow-hidden rounded-3xl p-6">
+    <FadeUp
+      onMouseMove={onHover}
+      onMouseOut={() => setMousePosition(null)}
+      className="relative flex cursor-default flex-col overflow-hidden rounded-3xl p-6"
+    >
       <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/25 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/5 [mask-image:linear-gradient(to_top,black,transparent)]" />
 
       <div className="absolute right-0 top-0 -z-10 size-24 rounded-full bg-white/20 blur-3xl filter" />
       <div className="absolute left-0 top-0 -z-10 size-24 rounded-full bg-indigo-500/50 blur-3xl filter" />
       <div className="absolute bottom-0 right-0 -z-10 size-24 rounded-full bg-purple-700/25 blur-3xl filter" />
+
+      {mousePosition && (
+        <div
+          className="absolute -z-10 size-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-400/40 blur-3xl filter"
+          style={{ left: mousePosition.x, top: mousePosition.y }}
+        />
+      )}
 
       <p className="text-gray-400">{review.text}</p>
 
@@ -48,7 +78,7 @@ function ReviewCard({ review }: { review: Review }) {
           <span className="text-xs font-medium text-gray-500">{review.user.attribute}</span>
         </div>
       </div>
-    </div>
+    </FadeUp>
   );
 }
 
