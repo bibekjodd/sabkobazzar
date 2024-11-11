@@ -1,4 +1,5 @@
 import { socialLinks } from '@/lib/constants';
+import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { logo } from '../utils/logo';
 
@@ -6,13 +7,13 @@ export default function Footer() {
   return (
     <div className="relative z-10 overflow-hidden py-10 font-normal text-gray-400 filter backdrop-blur-3xl">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-violet-950/5" />
-      <footer className="cont grid space-y-10 lg:grid-cols-3 lg:space-y-0">
-        <div>
+      <footer className="cont grid md:grid-cols-2 2xl:grid-cols-4">
+        <div className="mb-10 2xl:mb-0">
           <h3 className="text-3xl">{logo}</h3>
           <p className="mt-2">Leading auction marketplace in Nepal</p>
         </div>
 
-        <div className="flex flex-col space-y-2">
+        <div className="mb-10 flex flex-col space-y-2 2xl:mb-0">
           <h3 className="pb-1 text-xl">Contact</h3>
           <div className="flex items-center space-x-2">
             <Phone className="size-5" />
@@ -25,6 +26,21 @@ export default function Footer() {
           <div className="flex items-center space-x-2">
             <MapPin className="size-5" />
             <p>Bharatpur-9, Chitwan</p>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="text-xl">Company</h3>
+          <div className="mt-3 flex flex-col space-y-2">
+            <ProgressLink href="/privacy-policy" className="hover:text-gray-200 hover:underline">
+              Privacy Policy
+            </ProgressLink>
+            <ProgressLink
+              href="/terms-and-conditions"
+              className="hover:text-gray-200 hover:underline"
+            >
+              Terms & Conditions
+            </ProgressLink>
           </div>
         </div>
 

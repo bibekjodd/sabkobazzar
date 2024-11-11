@@ -14,16 +14,13 @@ export default function Faqs() {
               FAQs
             </span>
           </div>
-          <h3 className="text-center text-3xl font-medium xs:text-4xl sm:text-5xl">
+          <h3 className="mt-3 text-center text-3xl font-medium xs:text-4xl sm:text-5xl">
             Frequently Asked Questions
           </h3>
         </FadeDown>
 
         <FadeUp className="mt-10">
-          <Accordion
-            type="multiple"
-            className="relative overflow-hidden rounded-3xl bg-violet-800/5 px-6"
-          >
+          <Accordion type="multiple" className="relative overflow-hidden rounded-3xl px-6">
             <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/15 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
             <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/10 [mask-image:linear-gradient(to_top,black,transparent)]" />
 
@@ -39,8 +36,8 @@ export default function Faqs() {
                   'border-b-0': i === faqsList.length - 1
                 })}
               >
-                <AccordionTrigger className="text-base text-gray-300">{faq.title}</AccordionTrigger>
-                <AccordionContent className="text-base text-gray-400">
+                <AccordionTrigger className="text-lg text-gray-400">{faq.title}</AccordionTrigger>
+                <AccordionContent className="text-base text-gray-500">
                   {faq.content}
                 </AccordionContent>
               </AccordionItem>
