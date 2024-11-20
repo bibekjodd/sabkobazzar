@@ -1,12 +1,13 @@
 'use client';
 
 import { useWindowSize } from '@/hooks/use-window-size';
+import { NOTIFICATION_MAP } from '@/lib/constants';
 import { useReadNotifications } from '@/mutations/use-read-notifications';
 import { useNotifications } from '@/queries/use-notifications';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { AlertCircle, BoxIcon, EggFried, UserIcon } from 'lucide-react';
+import { AlertCircle, BellIcon } from 'lucide-react';
 import React, { useRef } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
@@ -20,6 +21,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '../ui/drawer';
+import { ScrollArea } from '../ui/scroll-area';
 import { Skeleton } from '../ui/skeleton';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 
@@ -53,9 +55,9 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
         <DrawerHeader>
           <DrawerTitle className="text-center">Notifications</DrawerTitle>
         </DrawerHeader>
-        <DrawerDescription />
+        <DrawerDescription className="hidden" />
 
-        <section className="h-full overflow-y-auto pb-4 scrollbar-thin">
+        <ScrollArea className="h-full overflow-y-auto pr-2 scrollbar-thin">
           {error && (
             <div className="px-1">
               <Alert variant="destructive">
@@ -66,7 +68,7 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
             </div>
           )}
 
-          <div className="flex flex-col space-y-4 px-1">
+          <div className="flex flex-col space-y-2 px-1">
             {isLoading && new Array(6).fill('nothing').map((_, i) => <div key={i}>{skeleton}</div>)}
             {notifications?.pages.map((page, i) => (
               <React.Fragment key={i}>
@@ -86,13 +88,11 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
               fetchNextPage={fetchNextPage}
             />
           </div>
-        </section>
+        </ScrollArea>
 
         <DrawerFooter>
           <DrawerClose asChild ref={closeButtonRef}>
-            <Button variant="outline" className="bg-transparent">
-              Close
-            </Button>
+            <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -107,15 +107,16 @@ function NotificationCard({
   notification: UserNotification;
   closeDrawer: () => unknown;
 }) {
-  let Icon = UserIcon;
-  if (notification.entity === 'users') Icon = UserIcon;
-  if (notification.entity === 'products') Icon = BoxIcon;
-  if (notification.entity === 'auctions') Icon = EggFried;
   let link: string | null = null;
   if (notification.entity === 'products' && notification.params)
     link = `/products/${notification.params}`;
   if (notification.entity === 'auctions' && notification.params)
     link = `/auctions/${notification.params}`;
+
+  const { Icon } = NOTIFICATION_MAP[`${notification.entity}-${notification.type || ''}`] || {
+    Icon: BellIcon,
+    severity: 'neutral'
+  };
 
   const element = (
     <div className="relative overflow-hidden rounded-xl">
@@ -132,7 +133,7 @@ function NotificationCard({
         <div className="flex flex-col">
           <span className="font-medium">{notification.title}</span>
           <span className="mt-0.5 text-sm text-gray-400">{notification.description}</span>
-          <span className="mt-3 text-xs text-gray-500">
+          <span className="mt-2 text-xs text-gray-500">
             {dayjs(notification.receivedAt).fromNow()}
           </span>
         </div>

@@ -20,7 +20,7 @@ export default function Faqs() {
         </FadeDown>
 
         <FadeUp className="mt-10">
-          <Accordion type="multiple" className="relative overflow-hidden rounded-3xl px-6">
+          <Accordion type="multiple" className="relative overflow-hidden rounded-3xl px-6 py-0.5">
             <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/15 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
             <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/10 [mask-image:linear-gradient(to_top,black,transparent)]" />
 
@@ -32,12 +32,14 @@ export default function Faqs() {
               <AccordionItem
                 value={faq.id}
                 key={faq.id}
-                className={cn('border-indigo-200/10 py-3', {
+                className={cn('border-indigo-200/10 py-2.5', {
                   'border-b-0': i === faqsList.length - 1
                 })}
               >
-                <AccordionTrigger className="text-lg text-gray-400">{faq.title}</AccordionTrigger>
-                <AccordionContent className="text-base text-gray-500">
+                <AccordionTrigger className="text-lg text-indigo-200/90 [&>svg]:text-indigo-200/90">
+                  {faq.title}
+                </AccordionTrigger>
+                <AccordionContent className="text-base text-indigo-200/70">
                   {faq.content}
                 </AccordionContent>
               </AccordionItem>

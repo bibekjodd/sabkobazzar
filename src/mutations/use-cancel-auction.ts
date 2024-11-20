@@ -16,24 +16,17 @@ export const useCancelAuction = (auctionId: string) => {
     mutationKey: cancelAuctionKey(auctionId),
     mutationFn: () => cancelAuction(auctionId),
 
-    onMutate() {
-      toast.dismiss();
-      toast.loading('Cancelling auction...');
-    },
-
     onSuccess() {
-      toast.dismiss();
       toast.success('Auction cancelled successfully');
     },
 
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not cancel auction! ${err.message}`);
     },
 
     onSettled() {
       queryClient.invalidateQueries({
-        queryKey: auctionsKey({ ownerId: profile?.id || null, productId: null, order: 'asc' })
+        queryKey: auctionsKey({ ownerId: profile?.id || null, productId: null, sort: 'asc' })
       });
     }
   });

@@ -70,7 +70,7 @@ export function BidsSnapshotDrawer({
         <DrawerHeader>
           <DrawerTitle>Current Bids</DrawerTitle>
         </DrawerHeader>
-        <DrawerDescription />
+        <DrawerDescription className="hidden" />
 
         <section className="h-fit max-h-screen overflow-y-auto p-4">
           <BidsSnapshot auctionId={auctionId} />
@@ -78,7 +78,7 @@ export function BidsSnapshotDrawer({
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outline" className="w-full bg-transparent">
+            <Button variant="outline" className="w-full">
               Close
             </Button>
           </DrawerClose>

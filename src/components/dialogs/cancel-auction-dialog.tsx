@@ -8,6 +8,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
   DialogTrigger
 } from '../ui/dialog';
 
@@ -23,16 +24,18 @@ export default function CancelAuctionDialog({
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="bg-background/50 filter backdrop-blur-lg">
-        <DialogHeader>Are you sure?</DialogHeader>
-        <DialogDescription>
+      <DialogContent className="backdrop-blur-lg">
+        <DialogHeader>
+          <DialogTitle>Are you sure?</DialogTitle>
+        </DialogHeader>
+        <DialogDescription className="text-indigo-200/80">
           You cannot undo this action and will have to register to bring product to the auction
           again!
         </DialogDescription>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="text">Close</Button>
           </DialogClose>
           <Button
             onClick={() => mutate()}

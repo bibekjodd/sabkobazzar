@@ -18,17 +18,12 @@ export const useUpdateProduct = (productId: string) => {
         image: string | File | null;
       }
     ) => updateProduct({ ...data, productId }),
-    onMutate() {
-      toast.dismiss();
-      toast.loading('Updating product...');
-    },
+
     onSuccess(product) {
-      toast.dismiss();
       toast.success('Updated product successfully....');
       queryClient.setQueryData<Product>(['product', product.id], { ...product });
     },
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not update product! ${err.message}`);
       queryClient.invalidateQueries({ queryKey: productKey(productId) });
     }

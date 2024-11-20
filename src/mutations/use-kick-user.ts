@@ -16,7 +16,6 @@ export const useKickUser = ({ auctionId, userId }: KeyOptions) => {
     mutationKey: kickUserKey({ auctionId, userId }),
     mutationFn: () => kickUser({ auctionId, userId }),
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not kick user from the auction! ${err.message}`);
       queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
       queryClient.invalidateQueries({ queryKey: participantsKey(auctionId) });

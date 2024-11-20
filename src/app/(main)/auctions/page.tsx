@@ -12,7 +12,7 @@ export default function Page() {
     hasNextPage,
     fetchNextPage,
     isLoading
-  } = useAuctions({ ownerId: null, productId: null, order: 'asc' });
+  } = useAuctions({ ownerId: null, productId: null, sort: 'asc' });
   return (
     <main className="relative min-h-screen overflow-hidden pb-20 pt-16">
       <div className="fixed left-0 top-16 -z-10 h-screen w-full bg-gradient-to-b from-indigo-950/10" />

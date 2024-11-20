@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 
 export default function Client({ auctionId }: { auctionId: string }) {
   const { data: auction, error, isLoading } = useAuction(auctionId);
-  const { data } = useAuctions({ ownerId: null, productId: null, order: 'asc' });
+  const { data } = useAuctions({ ownerId: null, productId: null, sort: 'asc' });
   const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
   const isLive = useAuctionStore((state) => state.isLive);
   const isLivePrevious = useAuctionStore((state) => state.isLivePrevious);

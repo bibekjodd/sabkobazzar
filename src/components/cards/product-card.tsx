@@ -32,11 +32,13 @@ export default function ProductCard({ product: productData, view }: Props) {
       </ProgressLink>
 
       <div className="flex flex-col p-4 pb-0">
-        <h4 className="line-clamp-2 text-xl font-medium">{product.title}</h4>
-        <h4 className="text-xl font-bold">Rs. {formatPrice(product.price)}</h4>
+        <h4 className="line-clamp-2 text-xl text-indigo-100/90">{product.title}</h4>
+        <h4 className="mt-2 text-xl font-semibold text-indigo-100">
+          Rs. {formatPrice(product.price)}
+        </h4>
       </div>
 
-      <div className="mt-auto flex flex-col p-4">
+      <div className="mt-auto flex flex-col p-4 pt-2">
         {view === 'user' && (
           <ProgressLink href={productLink} className="mt-3 w-full">
             <Button Icon={MoveRight} className="w-full">
@@ -48,7 +50,7 @@ export default function ProductCard({ product: productData, view }: Props) {
         {view === 'seller' && (
           <AddProductDialog product={product}>
             <Button className="mt-3 w-full" variant="secondary" Icon={ChevronsUp}>
-              Update Product
+              Update
             </Button>
           </AddProductDialog>
         )}
@@ -62,6 +64,6 @@ export const productSkeleton = (
     <Skeleton className="aspect-video w-full" />
     <Skeleton className="h-8" />
     <Skeleton className="h-8" />
-    <Skeleton className="h-10" />
+    <Skeleton className="h-9" />
   </div>
 );

@@ -69,14 +69,14 @@ export function BidsHistoryDrawer({
         <DrawerHeader>
           <DrawerTitle>Bids History</DrawerTitle>
         </DrawerHeader>
-        <DrawerDescription />
+        <DrawerDescription className="hidden" />
         <section className="h-full overflow-y-auto">
           <BidsHistory auctionId={auctionId} />
         </section>
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outline" className="w-full bg-transparent">
+            <Button variant="outline" className="w-full">
               Close
             </Button>
           </DrawerClose>

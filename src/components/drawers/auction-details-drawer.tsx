@@ -26,7 +26,7 @@ export default function AuctionDetailsDrawer({
         <DrawerHeader>
           <DrawerTitle />
         </DrawerHeader>
-        <DialogDescription />
+        <DialogDescription className="hidden" />
         <section className="grid h-full place-items-center overflow-y-auto py-7">
           <AuctionOverview auction={auction} />
         </section>

@@ -105,9 +105,7 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
               ))}
             {canUserLeaveAuction && (
               <LeaveAuctionDialog auctionId={auction.id}>
-                <Button variant="outline" className="bg-transparent">
-                  Leave Auction
-                </Button>
+                <Button variant="outline">Leave Auction</Button>
               </LeaveAuctionDialog>
             )}
           </div>

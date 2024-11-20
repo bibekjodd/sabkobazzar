@@ -69,13 +69,18 @@ function ReviewCard({ review }: { review: Review }) {
         />
       )}
 
-      <p className="text-gray-400">{review.text}</p>
+      <p className="text-indigo-200/75">{review.text}</p>
 
       <div className="mt-auto flex items-center space-x-3 pt-7">
-        <Avatar src={review.user.image || dummyUserImage} size="lg" />
+        <Avatar
+          src={review.user.image || dummyUserImage}
+          size="lg"
+          loading="lazy"
+          decoding="async"
+        />
         <div className="flex flex-col">
-          <span className="text-sm text-gray-200">{review.user.name}</span>
-          <span className="text-xs font-medium text-gray-500">{review.user.attribute}</span>
+          <span className="text-sm text-indigo-200/90">{review.user.name}</span>
+          <span className="text-xs font-medium text-indigo-200/75">{review.user.attribute}</span>
         </div>
       </div>
     </FadeUp>

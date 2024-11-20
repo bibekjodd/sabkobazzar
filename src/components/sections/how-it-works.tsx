@@ -27,7 +27,7 @@ export default function HowItWorks() {
               <h3 className="text-3xl font-medium sm:text-4xl">
                 Register and place the highest bid to win
               </h3>
-              <p className="mt-5 text-base text-gray-400">
+              <p className="mt-5 text-base text-indigo-200/75">
                 At SabkoBazzar, you can participate in exciting auctions for your favorite products.
                 Simply browse available items, place your bid, and track the auction in real-time.
                 If you're the highest bidder when the auction ends, the item is yours!
@@ -43,7 +43,7 @@ export default function HowItWorks() {
             <div className="absolute bottom-0 left-0 size-20 rounded-full bg-sky-500/30 blur-3xl filter" />
             <div className="absolute right-0 top-0 size-20 rounded-full bg-violet-500/60 blur-3xl filter" />
 
-            <FadeDown className="space-y-2.5" delay={0.4}>
+            <FadeDown className="space-y-2.5" delay={0.35}>
               <div className="h-6 w-0.5 translate-x-4 rounded-full bg-purple-200/10" />
               <div className="flex items-center space-x-4">
                 <div className="grid place-items-center rounded-full bg-emerald-500/15 p-1.5">
@@ -53,7 +53,7 @@ export default function HowItWorks() {
               </div>
             </FadeDown>
 
-            <FadeDown className="space-y-2.5" delay={0.5}>
+            <FadeDown className="space-y-2.5" delay={0.4}>
               <div className="h-3 w-0.5 translate-x-4 rounded-full bg-purple-200/10" />
               <div className="flex items-center space-x-4">
                 <div className="grid place-items-center rounded-full bg-sky-500/15 p-1.5">
@@ -63,7 +63,7 @@ export default function HowItWorks() {
               </div>
             </FadeDown>
 
-            <FadeDown delay={0.6}>
+            <FadeDown delay={0.45}>
               <div className="flex">
                 <div className="flex items-end space-x-5">
                   <div>
@@ -78,7 +78,7 @@ export default function HowItWorks() {
               </div>
             </FadeDown>
 
-            <FadeDown delay={0.7}>
+            <FadeDown delay={0.5}>
               <div className="flex">
                 <div className="flex items-end space-x-5">
                   <div>
@@ -97,7 +97,7 @@ export default function HowItWorks() {
               </div>
             </FadeDown>
 
-            <FadeDown delay={0.8}>
+            <FadeDown delay={0.55}>
               <div className="h-5 w-0.5 translate-x-4 rounded-full bg-purple-200/10" />
               <div className="flex items-end space-x-3">
                 <div className="grid place-items-center rounded-full bg-indigo-500/15 p-1.5">
@@ -105,7 +105,7 @@ export default function HowItWorks() {
                 </div>
                 <div className="rounded-full rounded-bl-none bg-gradient-to-br from-indigo-400/10 to-sky-500/15 px-6 py-2">
                   <span>Highest bidder grabs the deal</span>
-                  <PartyPopper className="ml-3 inline size-4 text-indigo-200" />
+                  <PartyPopper className="ml-2 inline size-3.5 text-indigo-200" />
                 </div>
               </div>
             </FadeDown>

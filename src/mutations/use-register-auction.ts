@@ -14,23 +14,18 @@ export const useRegisterAuction = () => {
   return useMutation({
     mutationKey: registerAuctionKey,
     mutationFn: registerAuction,
-    onMutate() {
-      toast.dismiss();
-      toast.loading('Registering auction...');
-    },
+
     onSuccess(auction) {
-      toast.dismiss();
       toast.success('Auction registered successfully');
       queryClient.setQueryData<Auction>(['auction'], auction);
     },
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not register auction! ${err.message}`);
     },
     onSettled() {
       const profile = queryClient.getQueryData<User>(['profile']);
       queryClient.invalidateQueries({
-        queryKey: auctionsKey({ productId: null, ownerId: profile?.id || null, order: 'asc' })
+        queryKey: auctionsKey({ productId: null, ownerId: profile?.id || null, sort: 'asc' })
       });
     }
   });

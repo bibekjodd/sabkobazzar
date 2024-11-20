@@ -1,67 +1,59 @@
 'use client';
 
-import { useTimeout } from '@/hooks/use-timeout';
 import { useAuctions } from '@/queries/use-auctions';
-import { AutoAnimate } from '@jodd/auto-animate';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import { createStore } from '@jodd/snap';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Dot } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type LiveIndicator = {
   show: boolean;
   isShown: boolean;
 };
-const useLiveIndicator = createStore<LiveIndicator>(() => ({
-  show: false,
-  isShown: false
-}));
 
 export default function LiveIndicator() {
-  const pathname = usePathname();
-  if (pathname !== '/') return null;
-  return <BaseComponent />;
-}
-
-function BaseComponent() {
-  const { show, isShown } = useLiveIndicator();
-  const { data: upcomingAuctions, isLoading: isLoadingAuction } = useAuctions({
+  const [show, setShow] = useState(false);
+  const { data: upcomingAuctions } = useAuctions({
     ownerId: null,
     productId: null,
-    order: 'asc'
+    sort: 'asc'
   });
   const totalUpcomingAuctions = upcomingAuctions?.pages.at(0)?.length || 0;
 
-  useTimeout(
-    () => {
-      if (isShown) return;
-      useLiveIndicator.setState({ isShown: true, show: true });
-    },
-    1000,
-    !isShown && !isLoadingAuction
-  );
-
-  useTimeout(
-    () => {
-      useLiveIndicator.setState({ show: false });
-    },
-    5000,
-    isShown && !isLoadingAuction
-  );
+  useEffect(() => {
+    if (!upcomingAuctions) return;
+    setShow(true);
+    const timeout = setTimeout(() => {
+      setShow(false);
+    }, 10_000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [upcomingAuctions]);
 
   return (
-    <AutoAnimate>
+    <AnimatePresence>
       {show && totalUpcomingAuctions !== 0 && (
-        <ProgressLink
-          href="/auctions"
-          className="mx-auto flex w-fit items-center border-b border-transparent px-2 pt-2 text-sm font-medium text-purple-600 hover:border-purple-600"
+        <motion.div
+          initial={{ opacity: 0, y: -40, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -40, scale: 0.98 }}
+          transition={{ ease: 'easeOut', duration: 0.3, delay: 1 }}
+          className="absolute top-24 z-20 w-full text-xs font-medium"
         >
-          <span>
-            {totalUpcomingAuctions < 4 ? totalUpcomingAuctions : '4+'} Auctions coming live
-          </span>
-          <Dot className="size-6 translate-y-[1px] scale-125 animate-pulse" />
-        </ProgressLink>
+          <ProgressLink
+            href="/auctions"
+            className="relative mx-auto flex w-fit items-center justify-center rounded-full bg-violet-950/40 px-2.5 py-0.5 text-gray-300 hover:text-gray-100 hover:underline"
+          >
+            <span className="absolute inset-0 rounded-full border-2 border-purple-900/40 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+            <span className="absolute inset-0 rounded-full border-2 border-purple-900/20 [mask-image:linear-gradient(to_top,black,transparent)]" />
+            <span>
+              {totalUpcomingAuctions < 4 ? totalUpcomingAuctions : '4+'} Auctions coming live
+            </span>
+            <Dot className="size-4 scale-150 animate-pulse" />
+          </ProgressLink>
+        </motion.div>
       )}
-    </AutoAnimate>
+    </AnimatePresence>
   );
 }

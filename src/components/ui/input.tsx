@@ -34,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && <Label htmlFor={id}>{label}</Label>}
         <div className="group relative">
           {IconLeft && (
-            <IconLeft className="absolute left-2 top-1/2 size-4 -translate-y-1/2 text-primary/50 group-focus-within:text-primary/80" />
+            <IconLeft className="absolute left-2 top-1/2 size-4 -translate-y-1/2 text-primary/80 group-focus-within:text-primary/80" />
           )}
           <input
             id={id}

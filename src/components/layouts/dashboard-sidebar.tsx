@@ -32,7 +32,7 @@ export default function DashboardSidebar() {
     <aside
       className={cn(
         poppins.className,
-        'fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r py-3 text-sm font-medium text-gray-100 lg:flex'
+        'fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r py-3 text-sm font-medium lg:flex'
       )}
     >
       {graphics}
@@ -45,7 +45,13 @@ export default function DashboardSidebar() {
           <ProgressLink
             key={link.title}
             href={link.href}
-            className={`mb-1 flex h-12 items-center space-x-3 pl-4 hover:bg-purple-700/15 hover:text-purple-500 ${pathname === link.href ? 'border-l-4 border-purple-700 bg-purple-700/15 text-purple-500' : ''}`}
+            className={cn(
+              'mb-1 flex h-12 items-center space-x-3 pl-4 hover:bg-purple-700/15 hover:text-purple-500',
+              {
+                'border-l-4 border-purple-700 bg-purple-700/15 text-purple-500':
+                  pathname === link.href
+              }
+            )}
           >
             <link.icon className="size-5" />
             <span>{link.title}</span>
@@ -54,7 +60,7 @@ export default function DashboardSidebar() {
 
         <LogoutDialog>
           <button className="mb-3 mt-auto flex w-fit items-center space-x-3 px-6 hover:text-purple-500">
-            <LogOut className="size-5" />
+            <LogOut className="size-4" />
             <span>Logout</span>
           </button>
         </LogoutDialog>

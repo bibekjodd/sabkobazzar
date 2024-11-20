@@ -1,6 +1,17 @@
 import z from 'zod';
 
-const categorySchema = z.enum(['electronics', 'realestate', 'art', 'others']);
+export const updateProfileSchema = z.object({
+  name: z.string().trim().min(4, 'Too short name').max(30, 'Too long name'),
+  phone: z
+    .preprocess((val) => Number(val) || undefined, z.number().optional())
+    .refine((phone) => {
+      if (!phone) return true;
+      return String(phone).length === 10;
+    }, 'Invalid phone number')
+});
+export type UpdateProfileSchema = z.infer<typeof updateProfileSchema>;
+
+const categorySchema = z.enum(['electronics', 'realestate', 'arts', 'others']);
 export const addProductSchema = z.object({
   title: z
     .string({ required_error: 'Title is required' })

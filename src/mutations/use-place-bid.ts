@@ -23,7 +23,6 @@ export const usePlaceBid = (auctionId: string) => {
     },
 
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not place bid! ${err.message}`);
       queryClient.invalidateQueries({ queryKey: bidsSnapshotKey(auctionId) });
       queryClient.invalidateQueries({ queryKey: bidsKey(auctionId) });

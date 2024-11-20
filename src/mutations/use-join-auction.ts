@@ -15,20 +15,13 @@ export const useJoinAuction = (auctionId: string) => {
     mutationKey: joinAuctionKey(auctionId),
     mutationFn: () => joinAuction(auctionId),
 
-    onMutate() {
-      toast.dismiss();
-      toast.loading('Joining auction...');
-    },
-
     onSuccess(auction) {
-      toast.dismiss();
       toast.success('Joined auction successfully');
       queryClient.setQueryData<Auction>(['auction', auction.id], auction);
       queryClient.invalidateQueries({ queryKey: notificationsKey });
     },
 
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not join auction! ${err.message}`);
       queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     }

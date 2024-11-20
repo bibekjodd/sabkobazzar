@@ -29,9 +29,9 @@ export default function ProductOverview({ product: productData }: Props) {
         className="aspect-video w-full object-contain"
       />
 
-      <div className="flex flex-col text-sm text-gray-400/90 lg:pl-10">
-        <h4 className="text-xl font-medium text-primary">{product.title}</h4>
-        <h4 className="text-lg font-semibold text-primary">Rs. {formatPrice(product.price)}</h4>
+      <div className="flex flex-col text-sm text-indigo-200/80 lg:pl-10">
+        <h4 className="text-2xl font-medium text-indigo-100">{product.title}</h4>
+        <h4 className="text-lg font-semibold text-indigo-100">Rs. {formatPrice(product.price)}</h4>
 
         <div className="mt-2 space-y-1">
           <span className="">Owner - </span>
@@ -44,7 +44,7 @@ export default function ProductOverview({ product: productData }: Props) {
         {product.description && (
           <div className="mt-2">
             <p>Description</p>
-            <p className="text-gray-400/60">{product.description}</p>
+            <p className="text-indigo-200/50">{product.description}</p>
           </div>
         )}
 

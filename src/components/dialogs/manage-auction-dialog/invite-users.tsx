@@ -27,7 +27,7 @@ export default function InviteUsers({
   }, [refetch, refetchResultFnRef]);
 
   return (
-    <div className="mb-7">
+    <div className="mb-7 pr-4">
       <h4>Invite Users</h4>
       <Input
         value={searchInput}
@@ -40,7 +40,7 @@ export default function InviteUsers({
           <p className="text-sm text-rose-500">No results found</p>
         )}
         {!isLoading && users.length !== 0 && <p className="mb-2 text-gray-300">Results</p>}
-        <AutoAnimate className="flex flex-col space-y-3 pr-4">
+        <AutoAnimate className="flex flex-col space-y-3">
           {users.map((user) => (
             <ResultUser key={user.id} user={user} auctionId={auctionId} refetchResult={refetch} />
           ))}

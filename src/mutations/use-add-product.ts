@@ -15,19 +15,14 @@ export const useAddProduct = () => {
   return useMutation({
     mutationKey: addProductKey,
     mutationFn: addProduct,
-    onMutate() {
-      toast.dismiss();
-      toast.loading('Adding new product...');
-    },
+
     onSuccess(product) {
-      toast.dismiss();
       toast.success('Added new product successfully');
       queryClient.setQueryData<Product>(['product', product.id], { ...product });
       const profile = queryClient.getQueryData<UserProfile>(['profile']);
       queryClient.invalidateQueries({ queryKey: productsKey({ owner: profile?.id }) });
     },
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not add product! ${err.message}`);
     }
   });

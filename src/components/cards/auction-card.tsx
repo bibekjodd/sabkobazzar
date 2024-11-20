@@ -78,6 +78,13 @@ export default function AuctionCard({
       </div>
 
       <div className="mt-auto flex flex-col space-y-1 px-4 pb-4 pt-5">
+        <ProgressLink href={auctionLink}>
+          <Button className="flex w-full items-center">
+            <span>See more</span>
+            <ChevronsRight className="ml-1 size-4" />
+          </Button>
+        </ProgressLink>
+
         {canUserJoinAuction &&
           showJoinButton &&
           (profile ? (
@@ -94,22 +101,16 @@ export default function AuctionCard({
 
         {canUserLeaveAuction && showJoinButton && (
           <LeaveAuctionDialog auctionId={auction.id}>
-            <Button variant="outline" className="w-full bg-transparent">
+            <Button variant="outline" className="w-full">
               Leave Auction
             </Button>
           </LeaveAuctionDialog>
         )}
-        <ProgressLink href={auctionLink}>
-          <Button className="flex w-full items-center">
-            <span>See more details</span>
-            <ChevronsRight className="ml-1 size-4" />
-          </Button>
-        </ProgressLink>
 
         {showManageAuctionButton && (
           <ManageAuctionDialog auction={auction}>
-            <Button variant="secondary" className="w-full" Icon={ChartNoAxesGanttIcon}>
-              Manage auction
+            <Button variant="outline" className="w-full" Icon={ChartNoAxesGanttIcon}>
+              Manage
             </Button>
           </ManageAuctionDialog>
         )}

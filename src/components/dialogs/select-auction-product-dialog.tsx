@@ -13,6 +13,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -43,10 +44,11 @@ export default function SelectAuctionProductDialog({ children }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-screen flex-col bg-background/50 filter backdrop-blur-3xl">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center">Select Product</DialogTitle>
         </DialogHeader>
+        <DialogDescription className="hidden" />
 
         <section className="flex h-full flex-col space-y-2">
           <Input

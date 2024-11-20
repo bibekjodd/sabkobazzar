@@ -4,6 +4,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -26,8 +27,9 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
         <DrawerHeader>
           <DrawerTitle className="text-3xl">{logo}</DrawerTitle>
         </DrawerHeader>
+        <DrawerDescription className="hidden" />
 
-        <nav className="mt-3 flex h-full flex-col space-y-1 overflow-y-auto text-sm">
+        <nav className="mt-3 flex h-full flex-col space-y-1 overflow-y-auto text-sm text-indigo-200">
           {dashboardLinks.map((link) => (
             <ProgressLink
               key={link.href}
@@ -49,7 +51,7 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
 
         <DrawerFooter>
           <DrawerClose asChild ref={closeButtonRef}>
-            <Button>Close</Button>
+            <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

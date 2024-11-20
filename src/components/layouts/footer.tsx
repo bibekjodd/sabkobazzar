@@ -5,7 +5,7 @@ import { logo } from '../utils/logo';
 
 export default function Footer() {
   return (
-    <div className="relative z-10 overflow-hidden py-10 font-normal text-gray-400 filter backdrop-blur-3xl">
+    <div className="relative z-10 overflow-hidden py-10 font-normal text-indigo-200/90 filter backdrop-blur-3xl">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-violet-950/5" />
       <footer className="cont grid md:grid-cols-2 2xl:grid-cols-4">
         <div className="mb-10 2xl:mb-0">
@@ -15,29 +15,29 @@ export default function Footer() {
 
         <div className="mb-10 flex flex-col space-y-2 2xl:mb-0">
           <h3 className="pb-1 text-xl">Contact</h3>
-          <div className="flex items-center space-x-2">
-            <Phone className="size-5" />
-            <p>+977 9846204281</p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Mail className="size-5" />
+          <a href="tel:+9779820256741" className="flex items-center space-x-2">
+            <Phone className="size-4" />
+            <p>+977 9820256741</p>
+          </a>
+          <a href="mailto:sabkobazzar@gmail.com" className="flex items-center space-x-2">
+            <Mail className="size-4" />
             <p>sabkobazzar@gmail.com</p>
-          </div>
+          </a>
           <div className="flex items-center space-x-2">
-            <MapPin className="size-5" />
+            <MapPin className="size-4" />
             <p>Bharatpur-9, Chitwan</p>
           </div>
         </div>
 
-        <div>
+        <div className="mb-10">
           <h3 className="text-xl">Company</h3>
           <div className="mt-3 flex flex-col space-y-2">
-            <ProgressLink href="/privacy-policy" className="hover:text-gray-200 hover:underline">
+            <ProgressLink href="/privacy-policy" className="hover:text-indigo-100 hover:underline">
               Privacy Policy
             </ProgressLink>
             <ProgressLink
               href="/terms-and-conditions"
-              className="hover:text-gray-200 hover:underline"
+              className="hover:text-indigo-100 hover:underline"
             >
               Terms & Conditions
             </ProgressLink>

@@ -10,7 +10,7 @@ import { FadeDown, FadeUp } from '../utils/animations';
 
 export default function Benefits() {
   return (
-    <section id="benefits" className="cont mt-32 scroll-m-20">
+    <section id="benefits" className="cont mt-32 scroll-m-20 text-indigo-200/90">
       <FadeDown>
         <div className="flex items-center justify-center">
           <AsteriskIcon className="size-8 text-violet-800/80" />
@@ -18,7 +18,7 @@ export default function Benefits() {
             Benefits
           </span>
         </div>
-        <h3 className="mt-3 flex flex-col items-center justify-center text-center text-3xl font-medium xs:text-4xl sm:text-5xl">
+        <h3 className="mt-3 flex flex-col items-center justify-center text-center text-3xl font-medium text-indigo-200 xs:text-4xl sm:text-5xl">
           <span>Unlock maximum potential</span>
           <span className="mt-2">with our platform</span>
         </h3>
@@ -26,7 +26,7 @@ export default function Benefits() {
 
       <div className="mt-10 flex flex-wrap justify-center">
         <FadeUp className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
-          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-200/70">
+          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6">
             {graphics}
             <LucideLayers2 className="size-8" />
             <h3 className="mt-3 text-center text-2xl font-semibold">
@@ -37,7 +37,7 @@ export default function Benefits() {
         </FadeUp>
 
         <FadeUp className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
-          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-200/70">
+          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6">
             {graphics}
             <DollarSignIcon className="size-8" />
             <h3 className="mt-3 text-center text-2xl font-semibold">
@@ -48,7 +48,7 @@ export default function Benefits() {
         </FadeUp>
 
         <FadeUp className="w-full pb-10 md:w-1/2 md:p-5 lg:w-1/3">
-          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6 text-violet-200/70">
+          <div className="relative flex flex-col items-center overflow-hidden rounded-3xl p-6">
             {graphics}
             <Signpost className="size-8 rotate-12 fill-violet-300" />
             <h3 className="mt-3 text-center text-2xl font-semibold">
@@ -59,7 +59,7 @@ export default function Benefits() {
         </FadeUp>
       </div>
 
-      <FadeUp className="text-indigo-200/70 md:p-5">
+      <FadeUp className="md:p-5">
         <div className="relative flex w-full items-center space-x-5 overflow-hidden rounded-3xl px-3 py-6">
           <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/25 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
           <div className="absolute inset-0 -z-10 rounded-3xl border-2 border-violet-500/5 [mask-image:linear-gradient(to_top,black,transparent)]" />

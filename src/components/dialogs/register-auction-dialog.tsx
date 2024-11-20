@@ -17,6 +17,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -120,10 +121,11 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-screen flex-col bg-background/50 px-0 filter backdrop-blur-3xl lg:max-h-[calc(100vh-40px)]">
+      <DialogContent className="px-0">
         <DialogHeader className="px-6">
           <DialogTitle className="text-center">Register an auction</DialogTitle>
         </DialogHeader>
+        <DialogDescription className="hidden" />
 
         <ScrollArea className="mx-1 flex h-full flex-col px-5 scrollbar-hide">
           <form onSubmit={onSubmit} className="flex h-full flex-col space-y-7 px-1 pb-6">

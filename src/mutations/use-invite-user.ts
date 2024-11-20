@@ -18,7 +18,6 @@ export const useInviteUser = (options: KeyOptions) => {
     mutationFn: () => inviteUser(options),
 
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not invite user to the auction! ${err.message}`);
       queryClient.invalidateQueries({ queryKey: auctionKey(options.auctionId) });
     }

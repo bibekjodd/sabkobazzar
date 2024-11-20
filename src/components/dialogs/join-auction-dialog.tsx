@@ -33,15 +33,15 @@ export default function JoinAuctionDialog({ children, auctionId }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="bg-background/50 filter backdrop-blur-3xl">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription className="hidden" />
         </DialogHeader>
 
         <DialogFooter>
           <DialogClose asChild ref={closeButtonRef}>
-            <Button variant="outline">Close</Button>
+            <Button variant="text">Close</Button>
           </DialogClose>
 
           <Button

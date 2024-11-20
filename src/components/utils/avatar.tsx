@@ -2,15 +2,12 @@ import { dummyUserImage } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 
-type Props = {
+type Props = Omit<JSX.IntrinsicElements['img'], 'src'> & {
   src: string | null | undefined;
-  className?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  isLink?: boolean;
-  href?: string;
   showOnlineIndicator?: boolean;
   unreadNotifications?: number;
-};
+} & ({ isLink?: undefined | false; href?: undefined } | { isLink: true; href: string });
 
 /**
  * `size` defaults to `md`
@@ -22,7 +19,8 @@ export default function Avatar({
   isLink,
   href,
   showOnlineIndicator,
-  unreadNotifications
+  unreadNotifications,
+  ...props
 }: Props) {
   const image = (
     <div className="relative inline size-fit select-none rounded-full">
@@ -46,11 +44,11 @@ export default function Avatar({
       <div
         className={cn(
           {
-            'size-4': size === 'xs',
-            'size-6': size === 'sm',
-            'size-8': size === 'md' || !size,
-            'size-10': size === 'lg',
-            'size-12': size === 'xl',
+            'size-3': size === 'xs',
+            'size-5': size === 'sm',
+            'size-7': size === 'md' || !size,
+            'size-9': size === 'lg',
+            'size-11': size === 'xl',
             'size-14': size === '2xl'
           },
           className
@@ -62,11 +60,12 @@ export default function Avatar({
           decoding="async"
           alt="user avatar"
           className="h-full w-full rounded-full object-cover"
+          {...props}
         />
       </div>
     </div>
   );
-  if (isLink && href) {
+  if (isLink) {
     return <ProgressLink href={href}>{image}</ProgressLink>;
   }
   return image;

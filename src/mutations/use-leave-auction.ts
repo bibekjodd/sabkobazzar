@@ -16,13 +16,7 @@ export const useLeaveAuction = (auctionId: string) => {
     mutationKey: leaveAuctionKey(auctionId),
     mutationFn: () => leaveAuction(auctionId),
 
-    onMutate() {
-      toast.dismiss();
-      toast.loading('Leaving auction...');
-    },
-
     onSuccess() {
-      toast.dismiss();
       toast.success('Left auction successfully');
       queryClient.invalidateQueries({ queryKey: notificationsKey });
       const auction = queryClient.getQueryData<Auction>(['auction', auctionId]);
@@ -44,7 +38,6 @@ export const useLeaveAuction = (auctionId: string) => {
     },
 
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not leave auction! ${err.message}`);
     },
 

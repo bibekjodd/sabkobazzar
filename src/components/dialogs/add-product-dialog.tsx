@@ -16,6 +16,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -88,12 +89,13 @@ export default function AddProductDialog({ children, product }: Props) {
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-full flex-col bg-background/50 px-0 filter backdrop-blur-3xl lg:max-h-[calc(100vh-36px)]">
+      <DialogContent className="flex flex-col px-0">
         <DialogHeader className="px-6">
           <DialogTitle className="text-center">
             {product ? 'Update product' : 'Add new Product'}
           </DialogTitle>
         </DialogHeader>
+        <DialogDescription className="hidden" />
         <ScrollArea className="mx-1 flex h-full flex-grow flex-col px-5">
           <form
             onSubmit={handleSubmit(onSubmit)}

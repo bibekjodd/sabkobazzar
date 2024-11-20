@@ -14,11 +14,12 @@ const buttonVariants = cva(
           'bg-gradient-to-b from-gray-400 to-gray-500/90 hover:brightness-125 text-primary-foreground',
         destructive: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
-          'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
+          'border border-input bg-transparent shadow-sm hover:bg-muted/60 hover:text-accent-foreground',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         'moving-border':
-          'relative overflow-hidden rounded-full border-2 !h-12 !px-0.5 border-violet-700/20  font-medium  text-indigo-200 hover:border-violet-700/80 group'
+          'relative overflow-hidden rounded-full border-2 !h-12 !px-0.5 border-violet-700/20  font-medium text-indigo-200 hover:border-purple-700/80 group',
+        text: ''
       },
       size: {
         default: 'h-9 px-4 py-2',
@@ -65,7 +66,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
         {variant === 'moving-border' && (
           <>
-            <span className="absolute inset-0 -z-10 animate-moving-border rounded-full bg-[conic-gradient(#6d28d9_20deg,transparent_120deg)] group-hover:opacity-0" />
+            <span className="absolute inset-0 -z-10 animate-moving-border rounded-full bg-[conic-gradient(#7e22ce_20deg,transparent_120deg)] group-hover:opacity-0" />
             <span className="absolute inset-0 top-7 rounded-full bg-indigo-500/50 opacity-50 blur-md filter transition group-hover:opacity-75" />
           </>
         )}

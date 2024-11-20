@@ -20,7 +20,9 @@ export default function Participants({
         <UsersIcon className="size-4" />{' '}
         <span>
           Participants{' '}
-          {participants?.length !== 0 && <span className="italic">({participants?.length})</span>}
+          {(participants?.length || 0) > 0 && (
+            <span className="italic">({participants?.length})</span>
+          )}
         </span>
       </h4>
       {participants?.length === 0 && (

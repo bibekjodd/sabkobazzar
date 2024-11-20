@@ -1,10 +1,12 @@
 import CancelAuctionDialog from '@/components/dialogs/cancel-auction-dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useCancelAuction } from '@/mutations/use-cancel-auction';
 import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,10 +22,11 @@ export default function ManageAuctionDialog({ auction, children }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex h-screen max-h-screen flex-col bg-background/50 text-sm filter backdrop-blur-3xl lg:h-fit">
+      <DialogContent className="flex flex-col text-sm">
         <DialogHeader>
           <DialogTitle className="line-clamp-1 text-center">{auction.title} </DialogTitle>
         </DialogHeader>
+        <DialogDescription className="hidden" />
         <BaseContent auction={auction} />
       </DialogContent>
     </Dialog>
@@ -39,7 +42,7 @@ function BaseContent({ auction }: { auction: Auction }) {
 
   return (
     <>
-      <section className="h-full overflow-y-auto px-1 pb-4 scrollbar-thin">
+      <ScrollArea className="h-96 overflow-y-auto pb-4">
         {auction.isInviteOnly && (
           <>
             {!isInviteUsersExpanded ? (
@@ -58,13 +61,11 @@ function BaseContent({ auction }: { auction: Auction }) {
         )}
 
         <Participants auction={auction} refetchResultFnRef={refetchResultFnRef} />
-      </section>
+      </ScrollArea>
 
       <DialogFooter>
         <DialogClose asChild ref={closeButtonRef}>
-          <Button variant="outline" className="bg-transparent">
-            Close
-          </Button>
+          <Button variant="text">Close</Button>
         </DialogClose>
 
         <CancelAuctionDialog auctionId={auction.id}>

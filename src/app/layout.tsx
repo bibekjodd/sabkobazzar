@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`antialiased ${GeistSans.className}`}>
+      <body className={`antialiased ${GeistSans.className} text-indigo-100`}>
         <QueryProvider>
           <LoadingBar waitingTime={200} color="#701a75" />
           <Toaster toastOptions={{ duration: 3000 }} theme="dark" richColors closeButton />

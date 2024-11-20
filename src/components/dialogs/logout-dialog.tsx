@@ -13,7 +13,7 @@ import {
 import React from 'react';
 
 type Props = {
-  children?: React.ReactNode;
+  children: React.ReactNode;
 };
 
 export default function LogoutDialog({ children }: Props) {
@@ -21,18 +21,18 @@ export default function LogoutDialog({ children }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children ? children : <Button>Logout</Button>}</DialogTrigger>
-      <DialogContent className="bg-background/50 filter backdrop-blur-3xl">
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-indigo-200/80">
             You will need to log in again to access your account
           </DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="text">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
             <Button
