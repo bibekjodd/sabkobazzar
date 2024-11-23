@@ -1,7 +1,14 @@
 import { auctionsKey, fetchAuctions } from '@/queries/use-auctions';
 import { fetchProducts, productsKey } from '@/queries/use-products';
 import { profileKey } from '@/queries/use-profile';
-import { EggFriedIcon, LayoutGridIcon, LucideIcon, PackageIcon, WebhookIcon } from 'lucide-react';
+import {
+  EggFriedIcon,
+  LayoutGridIcon,
+  LucideIcon,
+  PackageIcon,
+  PackagePlusIcon,
+  WebhookIcon
+} from 'lucide-react';
 import { getQueryClient } from './query-client';
 
 export const dashboardLinks: {
@@ -53,5 +60,10 @@ export const dashboardLinks: {
         initialPageParam: undefined
       });
     }
+  },
+  {
+    title: 'Add new Product',
+    href: '/dashboard/add-new-product',
+    icon: PackagePlusIcon
   }
 ];

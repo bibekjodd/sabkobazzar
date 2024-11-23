@@ -11,11 +11,13 @@ import { logo } from '../utils/logo';
 export default function DashboardSidebar() {
   const pathname = usePathname();
   return (
-    <aside className="fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r py-3 text-sm font-medium lg:flex">
+    <aside className="fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r pb-3 text-sm font-medium lg:flex">
       {graphics}
-      <ProgressLink href="/" className="px-5 text-2xl font-semibold">
-        {logo}
-      </ProgressLink>
+      <div className="flex min-h-16 items-center">
+        <ProgressLink href="/" className="px-5 text-[28px] font-semibold">
+          {logo}
+        </ProgressLink>
+      </div>
 
       <nav className="mt-5 flex h-full flex-grow flex-col">
         {dashboardLinks.map((link) => (

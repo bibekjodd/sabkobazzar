@@ -135,6 +135,7 @@ function BaseFilter({ filters, setFilters }: Props) {
           <PopoverTrigger asChild>
             <Button variant="outline" Icon={CalendarIcon} className="min-w-32">
               {!filters.from && !filters.to && 'All time'}
+              {filters.from && !filters.to && 'From '}
               {filters?.from && dayjs(filters.from).format('MMM DD, YYYY').toString()}{' '}
               {filters?.from && filters?.to && ' - '}
               {filters?.to && dayjs(filters.to).format('MMM DD, YYYY')}
