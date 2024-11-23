@@ -26,7 +26,7 @@ export const useCancelAuction = (auctionId: string) => {
 
     onSettled() {
       queryClient.invalidateQueries({
-        queryKey: auctionsKey({ ownerId: profile?.id || null, productId: null, sort: 'asc' })
+        queryKey: auctionsKey({ owner: profile?.id })
       });
     }
   });

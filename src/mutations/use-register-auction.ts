@@ -25,7 +25,7 @@ export const useRegisterAuction = () => {
     onSettled() {
       const profile = queryClient.getQueryData<User>(['profile']);
       queryClient.invalidateQueries({
-        queryKey: auctionsKey({ productId: null, ownerId: profile?.id || null, sort: 'asc' })
+        queryKey: auctionsKey({ owner: profile?.id })
       });
     }
   });

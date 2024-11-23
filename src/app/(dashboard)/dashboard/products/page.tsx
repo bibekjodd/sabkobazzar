@@ -10,7 +10,7 @@ import { PackageIcon } from 'lucide-react';
 export default function Page() {
   const { data: profile } = useProfile();
   const { data, isFetching, fetchNextPage, hasNextPage } = useProducts({ owner: profile?.id });
-  const products = data?.pages.flat(1) || [];
+  const products = data?.pages.map((page) => page.products).flat(1) || [];
 
   return (
     <main className="relative overflow-hidden">

@@ -41,7 +41,7 @@ function MoreProductsFromOwner({
   currentProduct: Product;
 }) {
   const { data } = useProducts({ owner: ownerId });
-  const products = (data?.pages.flat(1) || [])
+  const products = (data?.pages.map((page) => page.products).flat(1) || [])
     .filter((product) => product.id !== currentProduct.id)
     .slice(0, 4);
 
@@ -74,7 +74,7 @@ function MoreProducts({ skipProducts }: { skipProducts: Product[] }) {
   const { data } = useProducts({});
 
   const products = useMemo((): Product[] => {
-    let products = data?.pages.flat(1) || [];
+    let products = data?.pages.map((page) => page.products).flat(1) || [];
     products = products.filter((product) => {
       const exists = skipProducts.find((curr) => curr.id === product.id);
       return !exists;

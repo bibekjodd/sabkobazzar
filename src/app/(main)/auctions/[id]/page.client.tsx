@@ -13,12 +13,15 @@ import { useEffect } from 'react';
 
 export default function Client({ auctionId }: { auctionId: string }) {
   const { data: auction, error, isLoading } = useAuction(auctionId);
-  const { data } = useAuctions({ ownerId: null, productId: null, sort: 'asc' });
+  const { data } = useAuctions();
   const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
   const isLive = useAuctionStore((state) => state.isLive);
   const isLivePrevious = useAuctionStore((state) => state.isLivePrevious);
 
-  const upcomingAuctions = data?.pages.flat(1).filter((auction) => auction.id !== auctionId);
+  const upcomingAuctions = data?.pages
+    .map((page) => page.auctions)
+    .flat(1)
+    .filter((auction) => auction.id !== auctionId);
   useEffect(() => {
     return () => {
       if (isLive) leaveLiveAuction();

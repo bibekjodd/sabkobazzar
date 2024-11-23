@@ -70,7 +70,7 @@ export default function SelectAuctionProductDialog({ children }: Props) {
                 </Alert>
               )}
 
-              {!isLoading && !products?.pages?.at(0)?.at(0) && (
+              {!isLoading && !products?.pages?.at(0)?.products.at(0) && (
                 <p className="text-sm text-rose-500">No results found!</p>
               )}
               {isLoading &&
@@ -79,7 +79,7 @@ export default function SelectAuctionProductDialog({ children }: Props) {
                   .map((_, i) => <React.Fragment key={i}>{skeleton}</React.Fragment>)}
               {products?.pages.map((page, i) => (
                 <React.Fragment key={i}>
-                  {page.map((product) => (
+                  {page.products.map((product) => (
                     <ProductResultItem key={product.id} product={product} />
                   ))}
                 </React.Fragment>

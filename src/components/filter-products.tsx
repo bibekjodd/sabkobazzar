@@ -1,5 +1,6 @@
 'use client';
 
+import { usePrevious } from '@/hooks/use-previous';
 import { useTimeout } from '@/hooks/use-timeout';
 import { productsCategories, productsResultSortOptions } from '@/lib/constants';
 import { formatPrice, getSearchString } from '@/lib/utils';
@@ -32,12 +33,12 @@ export default function FilterProducts({ searchParams }: { searchParams: SearchP
   const [filterOptions, setFilterOptions] = useState(searchParams);
   const router = useRouter();
   const searchString = getSearchString(searchParams);
+  const previousSearchString = usePrevious(searchString);
 
   useEffect(() => {
-    const nextSearchString = getSearchString(searchParams);
-    if (searchString === nextSearchString) return;
-    setFilterOptions(searchParams);
-  }, [searchParams, searchString]);
+    if (searchString === previousSearchString) return;
+    setFilterOptions({ ...searchParams });
+  }, [searchParams, previousSearchString, searchString]);
 
   const applyFilters = () => {
     const url = `/products${getSearchString(filterOptions)}`;

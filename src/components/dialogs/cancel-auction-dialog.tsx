@@ -1,5 +1,5 @@
 import { useCancelAuction } from '@/mutations/use-cancel-auction';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -19,7 +19,12 @@ export default function CancelAuctionDialog({
   auctionId: string;
   children: React.ReactNode;
 }) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const { mutate, isPending } = useCancelAuction(auctionId);
+
+  const cancelAuction = () => {
+    mutate(undefined, { onSuccess: () => closeButtonRef.current?.click() });
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -35,10 +40,12 @@ export default function CancelAuctionDialog({
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="text">Close</Button>
+            <Button variant="text" ref={closeButtonRef}>
+              Close
+            </Button>
           </DialogClose>
           <Button
-            onClick={() => mutate()}
+            onClick={cancelAuction}
             loading={isPending}
             disabled={isPending}
             variant="secondary"

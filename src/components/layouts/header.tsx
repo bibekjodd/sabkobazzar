@@ -116,7 +116,7 @@ function NavItems() {
     queryClient.prefetchInfiniteQuery({
       queryKey: productsKey({}),
       initialPageParam: undefined,
-      queryFn: ({ signal, pageParam }) => fetchProducts({ pageParam, signal })
+      queryFn: ({ signal, pageParam }) => fetchProducts({ cursor: pageParam, signal })
     });
   };
 

@@ -82,8 +82,8 @@ type NotificationMapItem = {
 export const NOTIFICATION_MAP: Record<string, NotificationMapItem | undefined> = {
   'users-': { Icon: UserIcon, severity: 'neutral' },
   'products-': { Icon: BoxIcon, severity: 'neutral' },
-  'auctions-': { Icon: EggFriedIcon, severity: 'neutral' },
-  'auctions-register': { Icon: WebhookIcon, severity: 'success' },
+  'auctions-': { Icon: WebhookIcon, severity: 'neutral' },
+  'auctions-register': { Icon: EggFriedIcon, severity: 'success' },
   'auctions-join': { Icon: EggFriedIcon, severity: 'success' },
   'auctions-invite': { Icon: UserPlusIcon, severity: 'acknowledge' },
   'auctions-leave': { Icon: BadgeMinusIcon, severity: 'info' },

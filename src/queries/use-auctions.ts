@@ -3,55 +3,65 @@ import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-type KeyOptions = {
-  ownerId: string | null;
-  productId: string | null;
-  sort: 'asc' | 'desc' | undefined;
-};
-export const auctionsKey = (options: KeyOptions) => ['auctions', options];
-export const useAuctions = (options: KeyOptions) => {
+export type KeyOptions = Partial<{
+  title: string;
+  owner: string;
+  product: string;
+  limit: number;
+  sort: 'title_asc' | 'title_desc' | 'starts_at_asc' | 'starts_at_desc' | 'bid_asc' | 'bid_desc';
+  condition: Auction['condition'] | 'all';
+  status: 'pending' | 'finished' | 'cancelled' | 'all';
+  from: string;
+  to: string;
+  inviteOnly: boolean;
+  unbidded: boolean;
+}>;
+export const auctionsKey = (options?: KeyOptions) => [
+  'auctions',
+  {
+    title: options?.title,
+    owner: options?.owner,
+    product: options?.product,
+    limit: options?.limit,
+    sort: options?.sort,
+    condition: options?.condition === 'all' ? undefined : options?.condition,
+    status: options?.status === 'all' ? undefined : options?.status,
+    from: options?.from,
+    to: options?.to,
+    inviteOnly: options?.inviteOnly,
+    unbidded: options?.unbidded
+  }
+];
+
+export const useAuctions = (options?: KeyOptions) => {
   return useInfiniteQuery({
     queryKey: auctionsKey(options),
-    queryFn: ({ pageParam, signal }) => fetchUpcomingAuctions({ pageParam, signal, ...options }),
+    queryFn: ({ pageParam, signal }) => fetchAuctions({ cursor: pageParam, signal, ...options }),
 
-    initialPageParam: undefined as PageParam | undefined,
-    getNextPageParam(lastPage) {
-      const lastResult = lastPage.at(lastPage.length - 1);
-      if (!lastResult) return undefined;
-
-      return {
-        cursor: lastResult.startsAt,
-        cursorId: lastResult.id
-      };
-    }
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => lastPage.cursor
   });
 };
 
-type PageParam = { cursor: string; cursorId: string | undefined };
 type Options = KeyOptions & {
-  pageParam: PageParam | undefined;
+  cursor: string | undefined;
   signal: AbortSignal;
 };
-const fetchUpcomingAuctions = async ({
-  pageParam,
-  ownerId,
-  signal,
-  productId,
-  sort
-}: Options): Promise<Auction[]> => {
+
+type Result = { cursor: string | undefined; auctions: Auction[] };
+export const fetchAuctions = async ({ signal, ...query }: Options): Promise<Result> => {
   try {
     const url = new URL(`${backendUrl}/api/auctions`);
-    if (pageParam?.cursor) url.searchParams.set('cursor', pageParam?.cursor);
-    if (pageParam?.cursorId) url.searchParams.set('cursorId', pageParam?.cursorId);
-    if (productId) url.searchParams.set('product', productId);
-    if (ownerId) url.searchParams.set('owner', ownerId);
-    if (sort) url.searchParams.set('sort', sort);
 
-    const { data } = await axios.get<{ auctions: Auction[] }>(url.href, {
+    for (const [key, value] of Object.entries(query)) {
+      if (value) url.searchParams.set(key, String(value));
+    }
+
+    const { data } = await axios.get<Result>(url.href, {
       signal,
       withCredentials: true
     });
-    return data.auctions;
+    return data;
   } catch (error) {
     throw new Error(extractErrorMessage(error));
   }

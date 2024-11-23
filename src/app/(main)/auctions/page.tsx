@@ -12,7 +12,7 @@ export default function Page() {
     hasNextPage,
     fetchNextPage,
     isLoading
-  } = useAuctions({ ownerId: null, productId: null, sort: 'asc' });
+  } = useAuctions();
   return (
     <main className="relative min-h-screen overflow-hidden pb-20 pt-16">
       <div className="fixed left-0 top-16 -z-10 h-screen w-full bg-gradient-to-b from-indigo-950/10" />
@@ -31,7 +31,7 @@ export default function Page() {
             ))}
           {upcomingAuctions?.pages.map((page, i) => (
             <React.Fragment key={i}>
-              {page.map((auction) => (
+              {page.auctions.map((auction) => (
                 <div key={auction.id} className="pb-5 md:px-2.5">
                   <AuctionCard auction={auction} showJoinButton showInviteOnlyInfo />
                 </div>

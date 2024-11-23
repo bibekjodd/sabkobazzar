@@ -19,43 +19,23 @@ export const productsKey = (filterOptions: KeyOptions) => [
 export const useProducts = (options: KeyOptions) => {
   return useInfiniteQuery({
     queryKey: productsKey(options),
-    queryFn: ({ pageParam, signal }) => fetchProducts({ ...options, pageParam, signal }),
+    queryFn: ({ pageParam, signal }) => fetchProducts({ ...options, cursor: pageParam, signal }),
 
-    initialPageParam: undefined as PageParam | undefined,
-    getNextPageParam(lastPage) {
-      const lastResult = lastPage.at(lastPage.length - 1);
-      if (!lastResult) return undefined;
-
-      let cursor: string | undefined = undefined;
-      if (options.sort === 'added_at_asc' || options.sort === 'added_at_desc' || !options.sort)
-        cursor = lastResult.addedAt;
-      else if (options.sort === 'price_asc' || options.sort === 'price_desc')
-        cursor = String(lastResult.price);
-      else if (options.sort === 'title_asc' || options.sort === 'title_desc')
-        cursor = lastResult.title;
-
-      return { cursor, cursorId: lastResult.id };
-    }
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => lastPage.cursor
   });
 };
 
-type PageParam = { cursor: string | undefined; cursorId: string | undefined };
 type Options = KeyOptions & {
-  pageParam: PageParam | undefined;
+  cursor: string | undefined;
   signal: AbortSignal | undefined;
 };
-export const fetchProducts = async ({
-  signal,
-  pageParam,
-  ...options
-}: Options): Promise<Product[]> => {
+type Result = { cursor: string | undefined; products: Product[] };
+export const fetchProducts = async ({ signal, ...options }: Options): Promise<Result> => {
   try {
     const url = new URL(`${backendUrl}/api/products${getSearchString(options)}`);
-    if (pageParam?.cursor) url.searchParams.set('cursor', pageParam.cursor);
-    if (pageParam?.cursorId) url.searchParams.set('cursorId', pageParam.cursorId);
-
-    const { data } = await axios.get(url.href, { withCredentials: true, signal });
-    return data.products;
+    const { data } = await axios.get<Result>(url.href, { withCredentials: true, signal });
+    return data;
   } catch (error) {
     throw new Error(extractErrorMessage(error));
   }

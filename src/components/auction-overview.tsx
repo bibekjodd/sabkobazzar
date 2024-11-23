@@ -12,6 +12,7 @@ import {
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
+import { CopyIcon } from 'lucide-react';
 import JoinAuctionDialog from './dialogs/join-auction-dialog';
 import LeaveAuctionDialog from './dialogs/leave-auction.dialog';
 import { Skeleton } from './ui/skeleton';
@@ -54,6 +55,11 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
           <div className="absolute inset-0 -z-20 rounded-lg bg-background/20 blur-3xl filter" />
           <h3 className="text-2xl font-semibold text-gray-300">{auction.product.title}</h3>
           <div className="mt-2 w-full space-y-1">
+            <div className="flex items-center space-x-2">
+              <p>sku id - {auction.id}</p>
+              <CopyIcon className="size-3" />
+            </div>
+
             <p>
               Condition - <span className="capitalize">{auction.condition}</span>
             </p>

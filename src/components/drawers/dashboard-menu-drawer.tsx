@@ -1,3 +1,4 @@
+import { dashboardLinks } from '@/lib/dashboard-links';
 import { cn } from '@/lib/utils';
 import { Button } from '@/ui/button';
 import {
@@ -13,7 +14,6 @@ import {
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { usePathname } from 'next/navigation';
 import React, { useRef } from 'react';
-import { dashboardLinks } from '../layouts/dashboard-sidebar';
 import { logo } from '../utils/logo';
 
 export default function DashboardMenuDrawer({ children }: { children: React.ReactNode }) {
@@ -35,6 +35,7 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
               key={link.href}
               href={link.href}
               onClick={() => {
+                if (link.action) link.action();
                 closeButtonRef.current?.click();
               }}
               className={cn(

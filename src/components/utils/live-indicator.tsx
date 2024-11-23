@@ -13,12 +13,9 @@ type LiveIndicator = {
 
 export default function LiveIndicator() {
   const [show, setShow] = useState(false);
-  const { data: upcomingAuctions } = useAuctions({
-    ownerId: null,
-    productId: null,
-    sort: 'asc'
-  });
-  const totalUpcomingAuctions = upcomingAuctions?.pages.at(0)?.length || 0;
+  const { data: upcomingAuctions } = useAuctions();
+  const totalUpcomingAuctions =
+    upcomingAuctions?.pages.map((page) => page.auctions).at(0)?.length || 0;
 
   useEffect(() => {
     if (!upcomingAuctions) return;

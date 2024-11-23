@@ -55,7 +55,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {IconRight && (
             <IconRight
               onClick={iconRightAction}
-              className="absolute right-2 top-1/2 size-4 -translate-y-1/2 text-primary/50 group-focus-within:text-primary/80"
+              className={cn(
+                'absolute right-2 top-1/2 size-4 -translate-y-1/2 text-primary/50 group-focus-within:text-primary/80',
+                { 'cursor-pointer': !!iconRightAction }
+              )}
             />
           )}
         </div>

@@ -1,3 +1,5 @@
+'use client';
+
 import CancelAuctionDialog from '@/components/dialogs/cancel-auction-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useCancelAuction } from '@/mutations/use-cancel-auction';
@@ -21,7 +23,9 @@ type Props = { auction: Auction; children: React.ReactNode };
 export default function ManageAuctionDialog({ auction, children }: Props) {
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger disabled={auction.isCancelled || auction.isFinished} asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent className="flex flex-col text-sm">
         <DialogHeader>
           <DialogTitle className="line-clamp-1 text-center">{auction.title} </DialogTitle>

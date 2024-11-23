@@ -72,7 +72,7 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
             {isLoading && new Array(6).fill('nothing').map((_, i) => <div key={i}>{skeleton}</div>)}
             {notifications?.pages.map((page, i) => (
               <React.Fragment key={i}>
-                {page.map((notification) => (
+                {page.notifications.map((notification) => (
                   <NotificationCard
                     key={notification.id}
                     notification={notification}

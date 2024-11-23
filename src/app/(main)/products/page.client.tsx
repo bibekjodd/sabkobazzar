@@ -10,14 +10,8 @@ import { CircleAlert, FilterIcon, Info } from 'lucide-react';
 import React from 'react';
 
 export default function Client({ searchParams }: { searchParams: SearchProductsParams }) {
-  const {
-    data: products,
-    isLoading,
-    error,
-    isFetching,
-    hasNextPage,
-    fetchNextPage
-  } = useProducts(searchParams);
+  const { data, isLoading, error, isFetching, hasNextPage, fetchNextPage } =
+    useProducts(searchParams);
 
   return (
     <>
@@ -25,7 +19,7 @@ export default function Client({ searchParams }: { searchParams: SearchProductsP
         <FilterProducts searchParams={searchParams} />
       </aside>
       <main className="z-20 min-h-screen pb-20 pt-32 md:pt-20 lg:pl-60">
-        {!isLoading && products?.pages[0].length === 0 && (
+        {!isLoading && data?.pages[0].products.length === 0 && (
           <div className="p-4">
             <Alert>
               <Info className="size-4" />
@@ -53,9 +47,9 @@ export default function Client({ searchParams }: { searchParams: SearchProductsP
               </div>
             ))}
 
-          {products?.pages.map((page, i) => (
+          {data?.pages.map((page, i) => (
             <React.Fragment key={i}>
-              {page.map((product) => (
+              {page.products.map((product) => (
                 <div key={product.id} className="pb-5 md:px-2.5">
                   <ProductCard product={product} view="user" />
                 </div>
