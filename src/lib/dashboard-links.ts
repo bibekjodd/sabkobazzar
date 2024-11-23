@@ -38,7 +38,7 @@ export const dashboardLinks: {
     icon: EggFriedIcon
   },
   {
-    title: 'Manage Products',
+    title: 'Products',
     href: '/dashboard/products',
     icon: PackageIcon,
     action: () => {

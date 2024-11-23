@@ -92,7 +92,7 @@ function BaseFilter({ filters, setFilters }: Props) {
             <SelectValue placeholder="All" />
           </SelectTrigger>
 
-          <SelectContent>
+          <SelectContent className="bg-background/40 filter backdrop-blur-3xl">
             <SelectItem value="all">All</SelectItem>
             {productConditions.map((condition) => (
               <SelectItem key={condition.value} value={condition.value}>
@@ -118,7 +118,7 @@ function BaseFilter({ filters, setFilters }: Props) {
             <SelectValue placeholder="All" />
           </SelectTrigger>
 
-          <SelectContent>
+          <SelectContent className="bg-background/40 filter backdrop-blur-3xl">
             <SelectItem value="all">All</SelectItem>
             {auctionStatuses.map((status) => (
               <SelectItem key={status.value} value={status.value}>
@@ -141,7 +141,7 @@ function BaseFilter({ filters, setFilters }: Props) {
             </Button>
           </PopoverTrigger>
 
-          <PopoverContent>
+          <PopoverContent className="bg-background/40 filter backdrop-blur-3xl">
             <Calendar
               initialFocus
               mode="range"

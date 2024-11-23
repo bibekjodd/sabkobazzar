@@ -4,17 +4,17 @@ import { extractErrorMessage, getSearchString } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-type KeyOptions = Partial<SearchProductsParams> & { owner?: string | null };
+export type KeyOptions = Partial<SearchProductsParams> & { owner?: string | null };
 export const productsKey = (filterOptions: KeyOptions) => [
   'products',
   {
-    title: filterOptions.title || null,
-    category: filterOptions.category || null,
-    pricegte: filterOptions.pricegte || null,
-    pricelte: filterOptions.pricelte || null,
-    owner: filterOptions.owner || null,
-    sort: filterOptions.sort || null
-  } satisfies Required<KeyOptions>
+    title: filterOptions.title,
+    category: filterOptions.category === 'all' ? undefined : filterOptions.category,
+    pricegte: filterOptions.pricegte,
+    pricelte: filterOptions.pricelte,
+    owner: filterOptions.owner,
+    sort: filterOptions.sort
+  } satisfies Partial<Required<KeyOptions>>
 ];
 export const useProducts = (options: KeyOptions) => {
   return useInfiniteQuery({
