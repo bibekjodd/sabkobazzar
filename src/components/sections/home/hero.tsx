@@ -21,9 +21,11 @@ export default function Hero() {
           </h3>
         </div>
 
-        <Button variant="moving-border" className="mt-3">
-          <ProgressLink href="/auctions">Explore Auctions</ProgressLink>
-        </Button>
+        <div className="mt-3 flex flex-col items-center gap-4">
+          <ProgressLink href="/auctions">
+            <Button variant="moving-border">Explore Auctions</Button>
+          </ProgressLink>
+        </div>
       </FadeDown>
     </section>
   );

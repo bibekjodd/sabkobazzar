@@ -5,6 +5,7 @@ import { dummyProductImage } from '@/lib/constants';
 import { useProducts } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
 import { AutoAnimate } from '@jodd/auto-animate';
+import { createStore } from '@jodd/snap';
 import { CircleAlert, SearchIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
@@ -16,8 +17,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { ScrollArea } from '../ui/scroll-area';
@@ -25,10 +25,16 @@ import { Skeleton } from '../ui/skeleton';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 import RegisterAuctionDialog from './register-auction-dialog';
 
-type Props = {
-  children: React.ReactNode;
-};
-export default function SelectAuctionProductDialog({ children }: Props) {
+const useSelectAuctionProductDialog = createStore<{ isOpen: boolean }>(() => ({
+  isOpen: false
+}));
+
+const onOpenChange = (isOpen: boolean) => useSelectAuctionProductDialog.setState({ isOpen });
+
+export const openSelectAuctionDialog = () => onOpenChange(true);
+export const closeSelectAuctionDialog = () => onOpenChange(false);
+
+export default function SelectAuctionProductDialog() {
   const { data: profile } = useProfile();
   const [searchInput, setSearchInput] = useState('');
   const { owner, title } = useDebounce({ owner: profile?.id, title: searchInput }, 250);
@@ -41,9 +47,10 @@ export default function SelectAuctionProductDialog({ children }: Props) {
     error
   } = useProducts({ owner, title });
 
+  const { isOpen } = useSelectAuctionProductDialog();
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center">Select Product</DialogTitle>

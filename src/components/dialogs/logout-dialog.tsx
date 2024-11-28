@@ -1,4 +1,7 @@
+'use client';
+
 import { useLogout } from '@/mutations/use-logout';
+import { useProfile } from '@/queries/use-profile';
 import { Button } from '@/ui/button';
 import {
   Dialog,
@@ -7,21 +10,24 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@/ui/dialog';
-import React from 'react';
+import { createStore } from '@jodd/snap';
 
-type Props = {
-  children: React.ReactNode;
-};
+const useLogoutDialog = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
 
-export default function LogoutDialog({ children }: Props) {
+const onOpenChange = (isOpen: boolean) => useLogoutDialog.setState({ isOpen });
+export const openLogoutDialog = () => onOpenChange(true);
+export const closeLogoutDialog = () => onOpenChange(false);
+
+export default function LogoutDialog() {
+  const { data: profile } = useProfile();
   const { mutate: logout, isPending } = useLogout();
+  const { isOpen } = useLogoutDialog();
+  if (!profile) return null;
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>

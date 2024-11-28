@@ -17,7 +17,7 @@ textarea:focus {
 }
 
 * {
-  /* scroll-behavior: smooth; */
+  scroll-behavior: smooth;
 }
 
 @layer base {

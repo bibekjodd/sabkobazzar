@@ -1,7 +1,9 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import { useProfile } from '@/queries/use-profile';
+import { createStore } from '@jodd/snap';
 import { MailIcon, PhoneIcon } from 'lucide-react';
-import React from 'react';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -10,19 +12,27 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '../ui/dialog';
 import Avatar from '../utils/avatar';
-import UpdateProfileDialog from './update-profile-dialog';
+import { openUpdateProfileDialog } from './update-profile-dialog';
 
-export default function ProfileDialog({ children }: { children: React.ReactNode }) {
+const useProfileDialog = createStore<{
+  isOpen: boolean;
+}>(() => ({ isOpen: false }));
+
+const onOpenChange = (isOpen: boolean) => useProfileDialog.setState({ isOpen });
+export const openProfileDialog = () => onOpenChange(true);
+export const closeProfileDialog = () => onOpenChange(false);
+
+export default function ProfileDialog() {
   const { data: profile } = useProfile();
-  if (!profile) return;
+  const { isOpen } = useProfileDialog();
+
+  if (!profile) return null;
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
         className="text-indigo-100"
         onKeyDown={(e) => e.stopPropagation()}
@@ -56,9 +66,11 @@ export default function ProfileDialog({ children }: { children: React.ReactNode 
             <Button variant="text">Close</Button>
           </DialogClose>
 
-          <UpdateProfileDialog>
-            <Button variant="secondary">Update Profile</Button>
-          </UpdateProfileDialog>
+          <DialogClose asChild>
+            <Button onClick={openUpdateProfileDialog} variant="secondary">
+              Update Profile
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

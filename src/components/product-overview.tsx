@@ -1,12 +1,12 @@
 'use client';
 
-import { openLoginDialog } from '@/hooks/use-login-dialog';
 import { dummyProductImage, MILLIS } from '@/lib/constants';
 import { cn, formatPrice } from '@/lib/utils';
 import { useInterested } from '@/mutations/use-interested';
 import { useProduct } from '@/queries/use-product';
 import { useProfile } from '@/queries/use-profile';
 import { CheckCheckIcon } from 'lucide-react';
+import { openLoginDialog } from './dialogs/require-login-dialog';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';

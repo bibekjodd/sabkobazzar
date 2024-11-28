@@ -56,7 +56,7 @@ export default function AuctionsHistoryChart() {
   };
 
   return (
-    <FadeUp className="w-full flex-grow">
+    <FadeUp className="w-full scroll-m-20" id="auctions-history">
       <h3>Auctions history</h3>
       {error && (
         <p className="my-2 text-sm text-indigo-200/80">

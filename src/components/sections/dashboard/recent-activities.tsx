@@ -13,7 +13,7 @@ export default function RecentActivities() {
   const notifications = data?.pages[0].notifications.slice(0, 5);
 
   return (
-    <section className="-mx-4 mt-16 rounded-lg bg-indigo-950/10 py-6">
+    <section id="activities" className="-mx-4 mt-20 scroll-m-16 rounded-lg bg-indigo-950/10 py-6">
       <h3 className="px-6">
         <span>Recent Activities</span> <ActivityIcon className="ml-2 inline size-4" />
       </h3>

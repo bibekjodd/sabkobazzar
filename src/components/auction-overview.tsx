@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { openLoginDialog } from '@/hooks/use-login-dialog';
 import { dummyProductImage, MILLIS } from '@/lib/constants';
 import { prefetchProduct } from '@/lib/query-utils';
 import { canJoinAuction, canLeaveAuction, formatDate, formatPrice } from '@/lib/utils';
@@ -11,6 +10,7 @@ import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { ChevronsRightIcon, CopyIcon } from 'lucide-react';
 import JoinAuctionDialog from './dialogs/join-auction-dialog';
 import LeaveAuctionDialog from './dialogs/leave-auction.dialog';
+import { openLoginDialog } from './dialogs/require-login-dialog';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
 

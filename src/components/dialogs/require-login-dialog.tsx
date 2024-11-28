@@ -1,6 +1,5 @@
 'use client';
 
-import { useLoginDialog } from '@/hooks/use-login-dialog';
 import { redirectToLogin } from '@/lib/utils';
 import { Button } from '@/ui/button';
 import {
@@ -10,17 +9,23 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@/ui/dialog';
+import { createStore } from '@jodd/snap';
+
+const useLoginDialog = createStore<{ isOpen: boolean }>(() => ({
+  isOpen: false
+}));
+
+const onOpenChange = (isOpen: boolean) => useLoginDialog.setState({ isOpen });
+
+export const openLoginDialog = () => onOpenChange(true);
+export const closeLoginDialog = () => onOpenChange(false);
 
 export default function RequireLoginDialog() {
-  const isOpen = useLoginDialog((state) => state.isOpen);
+  const { isOpen } = useLoginDialog();
   return (
-    <Dialog open={isOpen} onOpenChange={useLoginDialog.getState().onOpenChange}>
-      <DialogTrigger asChild className="sr-only">
-        Login
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Login to continue</DialogTitle>

@@ -3,17 +3,12 @@ import { ProgressLink } from '@jodd/next-top-loading-bar';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BellIcon } from 'lucide-react';
+import { closeNotificationsDrawer } from '../drawers/notifications-drawer';
 import { Skeleton } from '../ui/skeleton';
 
 dayjs.extend(relativeTime);
 
-export function NotificationCard({
-  notification,
-  closeDrawer
-}: {
-  notification: UserNotification;
-  closeDrawer: () => unknown;
-}) {
+export function NotificationCard({ notification }: { notification: UserNotification }) {
   let link: string | null = null;
   if (notification.entity === 'products' && notification.params)
     link = `/products/${notification.params}`;
@@ -50,7 +45,7 @@ export function NotificationCard({
 
   if (link)
     return (
-      <ProgressLink href={link} onClick={closeDrawer}>
+      <ProgressLink href={link} onClick={closeNotificationsDrawer}>
         {element}
       </ProgressLink>
     );

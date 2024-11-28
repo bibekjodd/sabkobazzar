@@ -1,3 +1,5 @@
+'use client';
+
 import { dashboardLinks } from '@/lib/dashboard-links';
 import { cn } from '@/lib/utils';
 import { Button } from '@/ui/button';
@@ -8,21 +10,27 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger
+  DrawerTitle
 } from '@/ui/drawer';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
+import { createStore } from '@jodd/snap';
+import { WebhookIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import React, { useRef } from 'react';
+import AddProductDialog from '../dialogs/add-product-dialog';
+import { openSelectAuctionDialog } from '../dialogs/select-auction-product-dialog';
 import { logo } from '../utils/logo';
 
-export default function DashboardMenuDrawer({ children }: { children: React.ReactNode }) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+const useDashboardMenuDrawer = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
+const onOpenChange = (isOpen: boolean) => useDashboardMenuDrawer.setState({ isOpen });
+export const openDashbordMenuDrawer = () => onOpenChange(true);
+export const closeDashbordMenuDrawer = () => onOpenChange(false);
+
+export default function DashboardMenuDrawer() {
   const pathname = usePathname();
+  const { isOpen } = useDashboardMenuDrawer();
 
   return (
-    <Drawer direction="left">
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+    <Drawer direction="left" open={isOpen} onOpenChange={onOpenChange}>
       <DrawerContent className="mr-auto h-screen w-[calc(100%-32px)] rounded-l-none sm:w-96">
         <DrawerHeader>
           <DrawerTitle className="text-3xl">{logo}</DrawerTitle>
@@ -36,7 +44,7 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
               href={link.href}
               onClick={() => {
                 if (link.action) link.action();
-                closeButtonRef.current?.click();
+                closeDashbordMenuDrawer();
               }}
               className={cn(
                 'flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500',
@@ -48,10 +56,28 @@ export default function DashboardMenuDrawer({ children }: { children: React.Reac
               <span>{link.title}</span>
             </ProgressLink>
           ))}
+
+          <button
+            onClick={() => {
+              closeDashbordMenuDrawer();
+              openSelectAuctionDialog();
+            }}
+            className="flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500"
+          >
+            <WebhookIcon className="size-5" />
+            <span>Register Auction</span>
+          </button>
+
+          <AddProductDialog>
+            <button className="flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500">
+              <WebhookIcon className="size-5" />
+              <span>Add New Product</span>
+            </button>
+          </AddProductDialog>
         </nav>
 
         <DrawerFooter>
-          <DrawerClose asChild ref={closeButtonRef}>
+          <DrawerClose asChild>
             <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>

@@ -1,15 +1,30 @@
 'use client';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FadeUp } from '@/components/utils/animations';
 import Avatar from '@/components/utils/avatar';
+import { prefetchDashboardAuctions } from '@/lib/query-utils';
 import { formatPrice } from '@/lib/utils';
 import { useAuctions } from '@/queries/use-auctions';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import dayjs from 'dayjs';
-import { ChevronRightIcon, CircleAlertIcon, InfoIcon } from 'lucide-react';
+import {
+  ChevronRightIcon,
+  CircleAlertIcon,
+  EllipsisVerticalIcon,
+  HistoryIcon,
+  InfoIcon
+} from 'lucide-react';
 
 export default function RecentAuctions() {
   const { data: profile } = useProfile();
@@ -23,12 +38,16 @@ export default function RecentAuctions() {
     .slice(0, 4);
 
   return (
-    <FadeUp className="w-full self-stretch rounded-lg bg-indigo-900/10 p-6 2xl:w-[600px]">
+    <FadeUp
+      className="scroll-m-20 self-stretch rounded-lg bg-indigo-900/10 p-6 2xl:min-w-[400px]"
+      id="recent-auctions"
+    >
       <div className="flex items-center justify-between">
         <h3>Recent Auctions</h3>
         {recentAuctions.length !== 0 && (
           <ProgressLink
             href="/dashboard/auctions"
+            onClick={prefetchDashboardAuctions}
             className="flex items-center space-x-1 rounded-full border border-indigo-500/5 bg-indigo-200/5 px-2 py-1 text-xs hover:bg-indigo-200/10"
           >
             <span>See more</span>
@@ -60,27 +79,52 @@ export default function RecentAuctions() {
           ))}
 
         {recentAuctions.map((auction) => (
-          <div
-            key={auction.id}
-            className="border-b border-gray-400/15 py-4 last:border-none last:pb-0"
-          >
-            <p className="mb-2 text-xs text-indigo-100/75">
-              {dayjs(auction.startsAt).format('MMMM DD')}
-            </p>
-            <div key={auction.id} className="flex items-center gap-x-4">
-              <Avatar src={auction.winner?.image} />
-              <div>
-                <p className="text-sm">{auction.winner?.name}</p>
-                <p className="text-xs text-indigo-100/75">{auction.winner?.email}</p>
-              </div>
-
-              <p className="ml-auto w-fit text-sm font-medium xs:text-base">
-                {formatPrice(auction.finalBid || 0)}
-              </p>
-            </div>
-          </div>
+          <AuctionItem key={auction.id} auction={auction} />
         ))}
       </div>
     </FadeUp>
+  );
+}
+
+function AuctionItem({ auction }: { auction: Auction }) {
+  return (
+    <div className="border-b border-gray-400/15 py-4 last:border-none last:pb-0">
+      <div className="flex items-center justify-between">
+        <p className="mb-2 text-xs text-indigo-100/75">
+          {dayjs(auction.startsAt).format('MMMM DD')}
+        </p>
+
+        <DropdownMenu modal={true}>
+          <DropdownMenuTrigger asChild>
+            <button className="pl-2">
+              <EllipsisVerticalIcon className="size-3 text-indigo-100/75 hover:text-indigo-100" />
+            </button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent className="w-40 min-w-40 [&_svg]:size-4">
+            <DropdownMenuLabel>Auction</DropdownMenuLabel>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="w-full p-0 [&>svg]:hidden">
+                <button className="flex w-full items-center space-x-2 px-2 py-1.5">
+                  <HistoryIcon />
+                  <span>Bid History</span>
+                </button>
+              </DropdownMenuSubTrigger>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div key={auction.id} className="flex items-center gap-x-4">
+        <Avatar src={auction.winner?.image} />
+        <div>
+          <p className="text-sm">{auction.winner?.name}</p>
+          <p className="text-xs text-indigo-100/75">{auction.winner?.email}</p>
+        </div>
+
+        <p className="ml-auto w-fit text-sm font-medium xs:text-base">
+          {formatPrice(auction.finalBid || 0)}
+        </p>
+      </div>
+    </div>
   );
 }

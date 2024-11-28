@@ -14,7 +14,11 @@ export const prefetchProduct = (product: Product | string) => {
     return;
   }
 
-  if (queryClient.getQueryData(productKey(product))) return;
+  if (
+    queryClient.getQueryData(productKey(product)) ||
+    queryClient.isFetching({ queryKey: productKey(product) })
+  )
+    return;
   queryClient.prefetchQuery({
     queryKey: productKey(product),
     queryFn: ({ signal }) => fetchProduct({ productId: product, signal })
@@ -28,7 +32,11 @@ export const prefetchAuction = (auction: Auction | string) => {
     return;
   }
 
-  if (queryClient.getQueryData(auctionKey(auction))) return;
+  if (
+    queryClient.getQueryData(auctionKey(auction)) ||
+    queryClient.isFetching({ queryKey: auctionKey(auction) })
+  )
+    return;
   queryClient.prefetchQuery({
     queryKey: auctionKey(auction),
     queryFn: ({ signal }) => fetchAuction({ auctionId: auction, signal })
@@ -37,7 +45,11 @@ export const prefetchAuction = (auction: Auction | string) => {
 
 export const prefetchProducts = () => {
   const queryClient = getQueryClient();
-  if (queryClient.getQueryData(productsKey({}))) return;
+  if (
+    queryClient.getQueryData(productsKey({})) ||
+    queryClient.isFetching({ queryKey: productsKey({}) })
+  )
+    return;
   queryClient.prefetchInfiniteQuery({
     queryKey: productsKey({}),
     initialPageParam: undefined,
@@ -47,10 +59,16 @@ export const prefetchProducts = () => {
 
 export const prefetchDashboardData = () => {
   const queryClient = getQueryClient();
-  if (!queryClient.getQueryData(auctionsStatsKey))
+  if (
+    !queryClient.getQueryData(auctionsStatsKey) &&
+    !queryClient.isFetching({ queryKey: auctionsStatsKey })
+  )
     queryClient.prefetchQuery({ queryKey: auctionsStatsKey, queryFn: fetchAuctionsStats });
 
-  if (!queryClient.getQueryData(productsStatsKey))
+  if (
+    !queryClient.getQueryData(productsStatsKey) &&
+    !queryClient.isFetching({ queryKey: productsStatsKey })
+  )
     queryClient.prefetchQuery({ queryKey: productsStatsKey, queryFn: fetchProductsStats });
 };
 
@@ -59,7 +77,11 @@ export const prefetchDashboardAuctions = () => {
   const profile = queryClient.getQueryData<UserProfile>(profileKey);
   if (!profile) return;
 
-  if (queryClient.getQueryData(auctionsKey({ owner: profile.id }))) return;
+  if (
+    queryClient.getQueryData(auctionsKey({ owner: profile.id })) ||
+    queryClient.isFetching({ queryKey: auctionsKey({ owner: profile.id }) })
+  )
+    return;
   queryClient.prefetchInfiniteQuery({
     queryKey: auctionsKey({ owner: profile.id }),
     queryFn: ({ signal }) => fetchAuctions({ signal, cursor: undefined, owner: profile.id }),
@@ -72,7 +94,11 @@ export const prefetchDashboardProducts = () => {
   const profile = queryClient.getQueryData<UserProfile>(profileKey);
   if (!profile) return;
 
-  if (queryClient.getQueryData(productsKey({ owner: profile.id }))) return;
+  if (
+    queryClient.getQueryData(productsKey({ owner: profile.id })) ||
+    queryClient.isFetching({ queryKey: productsKey({ owner: profile.id }) })
+  )
+    return;
   queryClient.prefetchInfiniteQuery({
     queryKey: productsKey({ owner: profile.id }),
     queryFn: ({ signal }) => fetchProducts({ signal, cursor: undefined }),

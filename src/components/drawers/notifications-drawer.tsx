@@ -3,8 +3,9 @@
 import { useWindowSize } from '@/hooks/use-window-size';
 import { useReadNotifications } from '@/mutations/use-read-notifications';
 import { useNotifications } from '@/queries/use-notifications';
+import { createStore } from '@jodd/snap';
 import { AlertCircle } from 'lucide-react';
-import React, { useRef } from 'react';
+import React from 'react';
 import { NotificationCard, NotificationCardSkeleton } from '../cards/notification-card';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
@@ -15,14 +16,17 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger
+  DrawerTitle
 } from '../ui/drawer';
 import { ScrollArea } from '../ui/scroll-area';
 import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 
-export default function NotificationsDrawer({ children }: { children: React.ReactNode }) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+const useNotificationsDrawer = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
+const onOpenChange = (isOpen: boolean) => useNotificationsDrawer.setState({ isOpen });
+export const openNotificationsDrawer = () => onOpenChange(true);
+export const closeNotificationsDrawer = () => onOpenChange(false);
+
+export default function NotificationsDrawer() {
   const {
     data: notifications,
     isLoading,
@@ -32,19 +36,20 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
     isFetching
   } = useNotifications();
 
-  const closeDrawer = () => {
-    closeButtonRef.current?.click();
-  };
   const { mutate: readNotifications } = useReadNotifications();
   const { width: screenWidth } = useWindowSize();
+
+  const { isOpen } = useNotificationsDrawer();
+
   return (
     <Drawer
+      open={isOpen}
       direction={screenWidth < 768 ? 'bottom' : 'right'}
       onOpenChange={(isOpen) => {
+        onOpenChange(isOpen);
         if (isOpen) readNotifications();
       }}
     >
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent className="ml-auto flex h-screen w-full flex-col bg-background/50 filter backdrop-blur-3xl md:max-w-screen-xs">
         <DrawerHeader>
           <DrawerTitle className="text-center">Notifications</DrawerTitle>
@@ -68,11 +73,7 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
             {notifications?.pages.map((page, i) => (
               <React.Fragment key={i}>
                 {page.notifications.map((notification) => (
-                  <NotificationCard
-                    key={notification.id}
-                    notification={notification}
-                    closeDrawer={closeDrawer}
-                  />
+                  <NotificationCard key={notification.id} notification={notification} />
                 ))}
               </React.Fragment>
             ))}
@@ -86,7 +87,7 @@ export default function NotificationsDrawer({ children }: { children: React.Reac
         </ScrollArea>
 
         <DrawerFooter>
-          <DrawerClose asChild ref={closeButtonRef}>
+          <DrawerClose asChild>
             <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>

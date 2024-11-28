@@ -1,7 +1,6 @@
 'use client';
 
 import ManageAuctionDialog from '@/components/dialogs/manage-auction-dialog';
-import { openLoginDialog } from '@/hooks/use-login-dialog';
 import { dummyProductImage } from '@/lib/constants';
 import { canJoinAuction, canLeaveAuction, formatDate, isAuctionPending } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
@@ -10,6 +9,7 @@ import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { ChartNoAxesGanttIcon, ChevronsRight, InfoIcon } from 'lucide-react';
 import JoinAuctionDialog from '../dialogs/join-auction-dialog';
 import LeaveAuctionDialog from '../dialogs/leave-auction.dialog';
+import { openLoginDialog } from '../dialogs/require-login-dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';

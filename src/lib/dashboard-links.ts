@@ -1,11 +1,4 @@
-import {
-  EggFriedIcon,
-  LayoutGridIcon,
-  LucideIcon,
-  PackageIcon,
-  PackagePlusIcon,
-  WebhookIcon
-} from 'lucide-react';
+import { HomeIcon, LucideIcon, PackageIcon, WebhookIcon } from 'lucide-react';
 import {
   prefetchDashboardAuctions,
   prefetchDashboardData,
@@ -21,7 +14,7 @@ export const dashboardLinks: {
   {
     title: 'Dashboard',
     href: '/dashboard',
-    icon: LayoutGridIcon,
+    icon: HomeIcon,
     action: prefetchDashboardData
   },
   {
@@ -31,19 +24,9 @@ export const dashboardLinks: {
     action: prefetchDashboardAuctions
   },
   {
-    title: 'Register Auction',
-    href: '/dashboard/register-auction',
-    icon: EggFriedIcon
-  },
-  {
     title: 'Products',
     href: '/dashboard/products',
     icon: PackageIcon,
     action: prefetchDashboardProducts
-  },
-  {
-    title: 'Add new Product',
-    href: '/dashboard/add-new-product',
-    icon: PackagePlusIcon
   }
 ];

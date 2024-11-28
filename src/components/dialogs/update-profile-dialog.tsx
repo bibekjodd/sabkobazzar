@@ -1,10 +1,13 @@
+'use client';
+
 import { updateProfileSchema, UpdateProfileSchema } from '@/lib/form-schemas';
 import { imageToDataUri } from '@/lib/utils';
 import { useUpdateProfile } from '@/mutations/use-update-profile';
 import { useProfile } from '@/queries/use-profile';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { createStore } from '@jodd/snap';
 import { CheckCheckIcon, PhoneIcon, UserIcon } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
 import {
@@ -14,13 +17,21 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import Avatar from '../utils/avatar';
 
-export default function UpdateProfileDialog({ children }: { children: React.ReactNode }) {
+const useUpdateProfileDialog = createStore<{
+  isOpen: boolean;
+}>(() => ({ isOpen: false }));
+
+const onOpenChange = (isOpen: boolean) => useUpdateProfileDialog.setState({ isOpen });
+
+export const openUpdateProfileDialog = () => onOpenChange(true);
+export const closeUpdateProfileDialog = () => onOpenChange(false);
+
+export default function UpdateProfileDialog() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const imagePickerRef = useRef<HTMLInputElement>(null);
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -62,10 +73,10 @@ export default function UpdateProfileDialog({ children }: { children: React.Reac
     );
   });
 
+  const { isOpen } = useUpdateProfileDialog();
+  if (!profile) return null;
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center">Update Profile</DialogTitle>
