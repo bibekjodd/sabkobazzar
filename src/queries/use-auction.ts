@@ -1,6 +1,6 @@
 import { backendUrl } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
-import { extractErrorMessage } from '@/lib/utils';
+import { extractErrorMessage, isAuctionCompleted } from '@/lib/utils';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { useEffect } from 'react';
@@ -22,26 +22,17 @@ export const useAuction = (
 
   // refetch if the auction winner is not calculated
   useEffect(() => {
+    const isCompleted = query.data && isAuctionCompleted(query.data);
     if (
-      query.data?.isFinished &&
+      isCompleted &&
       !query.data?.isCancelled &&
       !query.data?.winner &&
       !query.data?.isUnbidded &&
       !query.isFetching
     ) {
-      getQueryClient().fetchQuery({
-        queryKey: auctionKey(auctionId),
-        queryFn: ({ signal }) => fetchAuction({ signal, auctionId })
-      });
+      getQueryClient().invalidateQueries({ queryKey: auctionKey(auctionId) });
     }
-  }, [
-    query.data?.isFinished,
-    query.data?.isCancelled,
-    query.data?.isUnbidded,
-    query.data?.winner,
-    auctionId,
-    query.isFetching
-  ]);
+  }, [query.data, auctionId, query.isFetching]);
 
   return query;
 };

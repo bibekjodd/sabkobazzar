@@ -14,10 +14,10 @@ export const useInterested = (productId: string) => {
     mutationFn: (interested: boolean) => updateInterested({ productId, interested }),
 
     onSuccess(_, interested) {
-      const product = queryClient.getQueryData<Product>(['product', productId]);
+      const product = queryClient.getQueryData<Product>(productKey(productId));
       if (!product) return;
       const updatedProduct: Product = { ...product, isInterested: interested };
-      queryClient.setQueryData<Product>(['product', productId], updatedProduct);
+      queryClient.setQueryData<Product>(productKey(productId), updatedProduct);
     },
     onError() {
       queryClient.invalidateQueries({ queryKey: productKey(productId) });

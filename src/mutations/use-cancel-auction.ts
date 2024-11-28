@@ -1,7 +1,7 @@
 import { backendUrl } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
-import { auctionsKey } from '@/queries/use-auctions';
+import { auctionKey } from '@/queries/use-auction';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -10,7 +10,6 @@ export const cancelAuctionKey = (auctionId: string) => ['cancel-auction', auctio
 
 export const useCancelAuction = (auctionId: string) => {
   const queryClient = getQueryClient();
-  const profile = queryClient.getQueryData<User>(['profile']);
 
   return useMutation({
     mutationKey: cancelAuctionKey(auctionId),
@@ -18,16 +17,15 @@ export const useCancelAuction = (auctionId: string) => {
 
     onSuccess() {
       toast.success('Auction cancelled successfully');
+      const auction = queryClient.getQueryData<Auction>(auctionKey(auctionId));
+      if (!auction) return;
+      const updatedAuction: Auction = { ...auction, isCancelled: true };
+      queryClient.setQueryData<Auction>(auctionKey(auctionId), updatedAuction);
     },
 
     onError(err) {
       toast.error(`Could not cancel auction! ${err.message}`);
-    },
-
-    onSettled() {
-      queryClient.invalidateQueries({
-        queryKey: auctionsKey({ owner: profile?.id })
-      });
+      queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     }
   });
 };

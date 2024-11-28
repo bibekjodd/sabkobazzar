@@ -30,7 +30,7 @@ export default function ManageAuctionsTable() {
         <Filter filters={filters} setFilters={setFilters} />
       </div>
       <ScrollArea className="pb-1">
-        <Table className="mt-4 border bg-background/10 filter backdrop-blur-lg">
+        <Table className="mt-4 filter backdrop-blur-lg">
           <Columns setFilters={setFilters} />
           <TableBody>
             {isLoading &&

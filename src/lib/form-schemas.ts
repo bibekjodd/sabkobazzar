@@ -45,7 +45,9 @@ export const registerAuctionSchema = z.object({
       .max(10, 'Lot number must be positive and should not exceed 10')
   ),
   condition: z.enum(['new', 'first-class', 'repairable']),
-  startsAt: z.string().datetime({ message: 'Invalid date' }),
+  startsAt: z
+    .string({ required_error: 'Please select auction date' })
+    .datetime({ message: 'Invalid date' }),
   minBid: z.preprocess(
     (val) => Number(val) || undefined,
     z

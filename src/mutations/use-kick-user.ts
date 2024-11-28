@@ -21,18 +21,18 @@ export const useKickUser = ({ auctionId, userId }: KeyOptions) => {
       queryClient.invalidateQueries({ queryKey: participantsKey(auctionId) });
     },
     onSuccess() {
-      const auction = queryClient.getQueryData<Auction>(['auction', auctionId]);
+      const auction = queryClient.getQueryData<Auction>(auctionKey(auctionId));
       if (auction) {
-        queryClient.setQueryData<Auction>(['auction', auctionId], {
+        queryClient.setQueryData<Auction>(auctionKey(auctionId), {
           ...auction,
           totalParticipants: auction.totalParticipants - 1
         });
       }
 
-      const participants = queryClient.getQueryData<User[]>(['participants', auctionId]);
+      const participants = queryClient.getQueryData<User[]>(participantsKey(auctionId));
       if (!participants) return;
       const updatedParticipants = participants.filter((participant) => participant.id !== userId);
-      queryClient.setQueryData<User[]>(['participants', auctionId], updatedParticipants);
+      queryClient.setQueryData<User[]>(participantsKey(auctionId), updatedParticipants);
     }
   });
 };

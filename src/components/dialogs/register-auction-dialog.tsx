@@ -2,16 +2,17 @@
 
 import { dummyProductImage, MILLIS, productConditions } from '@/lib/constants';
 import { registerAuctionSchema, RegisterAuctionSchema } from '@/lib/form-schemas';
-import { formatDate, imageToDataUri } from '@/lib/utils';
+import { imageToDataUri } from '@/lib/utils';
 import { registerAuctionKey, useRegisterAuction } from '@/mutations/use-register-auction';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AutoAnimate } from '@jodd/auto-animate';
 import { useIsMutating } from '@tanstack/react-query';
-import { ImageIcon, X } from 'lucide-react';
-import React, { useRef, useState } from 'react';
-import { Calendar } from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import dayjs from 'dayjs';
+import { CalendarIcon, ImageIcon, X } from 'lucide-react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
+import { Calendar } from '../ui/calendar';
 import { Checkbox } from '../ui/checkbox';
 import {
   Dialog,
@@ -25,49 +26,25 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { ScrollArea } from '../ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
 
-type CalendarDate = Date | null | [Date | null, Date | null];
 type Props = { children: React.ReactNode; product: Product };
 export default function RegisterAuctionDialog({ children, product }: Props) {
-  const [date, onChange] = useState<CalendarDate>(() => {
-    const date = new Date();
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-    return date;
-  });
+  const [date, setDate] = useState<Date>();
   const [hours, setHours] = useState(10);
   const [timeOfTheDay, setTimeOfTheDay] = useState<'am' | 'pm'>('am');
+  const fullDate = useMemo(() => {
+    if (!date) return undefined;
+    const fullDate = new Date(date);
+    fullDate.setHours(timeOfTheDay === 'am' ? hours : hours + 12);
+    return fullDate;
+  }, [date, hours, timeOfTheDay]);
+
   const [imageUri, setImageUri] = useState<string | null>(product.image || dummyProductImage);
   const imagePickerRef = useRef<HTMLInputElement>(null);
-
-  const calculateScheduledDate = ({
-    date,
-    hours,
-    timeOfTheDay
-  }: {
-    date: CalendarDate;
-    hours: number;
-    timeOfTheDay: 'am' | 'pm';
-  }) => {
-    const initialDate = new Date();
-    initialDate.setHours(0);
-    initialDate.setSeconds(0);
-    initialDate.setMinutes(0);
-    initialDate.setMilliseconds(0);
-
-    const auctionDate = new Date(date?.toString() || initialDate);
-    auctionDate.setHours(timeOfTheDay === 'am' ? hours : hours + 12);
-    auctionDate.setSeconds(0);
-    auctionDate.setMilliseconds(0);
-    return auctionDate.toISOString();
-  };
-
-  const scheduledDate = calculateScheduledDate({ date, hours, timeOfTheDay });
 
   const pickImage = async () => {
     if (!imagePickerRef.current?.files) return;
@@ -90,7 +67,6 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
     mode: 'onTouched',
     resolver: zodResolver(registerAuctionSchema),
     defaultValues: {
-      startsAt: new Date(date?.toString() || Date.now() + 6 * MILLIS.HOUR).toISOString(),
       minBid: 10000,
       minBidders: 2,
       maxBidders: 10,
@@ -185,6 +161,7 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
                 id="description"
                 placeholder="Auction description..."
                 rows={6}
+                className="scrollbar-thin"
               />
               {errors.description?.message && (
                 <p className="text-sm text-rose-500">{errors.description.message}</p>
@@ -196,73 +173,91 @@ export default function RegisterAuctionDialog({ children, product }: Props) {
               name="startsAt"
               render={({ field }) => (
                 <div className="flex flex-col space-y-3">
-                  <section className="flex w-full flex-col space-y-2">
-                    <Label htmlFor="calendar">Select auction date</Label>
-                    <Calendar
-                      view="month"
-                      className="!w-full !border-border !bg-transparent"
-                      value={date}
-                      onChange={(value) => {
-                        onChange(value);
-                        field.onChange(
-                          calculateScheduledDate({
-                            date: new Date(value?.toString() || Date.now()),
-                            hours,
-                            timeOfTheDay
-                          })
-                        );
-                      }}
-                      minDate={new Date(Date.now() + 3 * MILLIS.HOUR)}
-                      maxDate={new Date(Date.now() + MILLIS.MONTH)}
-                    />
-                  </section>
+                  <AutoAnimate className="flex w-full flex-col space-y-2">
+                    <Label htmlFor="calendar">Auction Date</Label>
 
-                  <div className="space-y-1.5">
-                    <Label>Select auction time</Label>
-                    <section className="flex items-center space-x-3">
-                      <Select
-                        value={hours.toString()}
-                        onValueChange={(value) => {
-                          const hours = Number(value) || 10;
-                          setHours(hours);
-                          field.onChange(calculateScheduledDate({ date, hours, timeOfTheDay }));
-                        }}
-                      >
-                        <SelectTrigger className="w-20">
-                          <SelectValue placeholder={hours} />
-                        </SelectTrigger>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className="flex items-center justify-start">
+                          <CalendarIcon className="mr-2 size-4" />
+                          {!fullDate && <span>Select</span>}
+                          {fullDate && dayjs(fullDate).format('dddd, MMMM DD, ha')}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="bg-background/40 filter backdrop-blur-3xl">
+                        <Calendar
+                          mode="single"
+                          fromDate={new Date(Date.now() + MILLIS.DAY * 2)}
+                          toDate={new Date(Date.now() + MILLIS.MONTH)}
+                          selected={date}
+                          onSelect={(date) => {
+                            setDate(date);
+                            if (!date) return field.onChange(undefined);
 
-                        <SelectContent>
-                          {new Array(12).fill('nothing').map((_, i) => (
-                            <SelectItem key={i} value={(i + 1).toString()}>
-                              {i + 1}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                            const fullDate = new Date(date);
+                            fullDate.setHours(timeOfTheDay === 'am' ? hours : hours + 12);
+                            field.onChange(fullDate.toISOString());
+                          }}
+                        />
 
-                      <Select
-                        value={timeOfTheDay}
-                        onValueChange={(value) => {
-                          const timeOfTheDay = value === 'am' ? 'am' : 'pm';
-                          setTimeOfTheDay(timeOfTheDay);
-                          field.onChange(calculateScheduledDate({ date, hours, timeOfTheDay }));
-                        }}
-                      >
-                        <SelectTrigger className="w-20">
-                          <SelectValue placeholder={timeOfTheDay} />
-                        </SelectTrigger>
+                        <div className="mt-2 space-y-1.5">
+                          <Label>Time</Label>
+                          <section className="flex items-center space-x-3">
+                            <Select
+                              value={hours.toString()}
+                              onValueChange={(value) => {
+                                const hours = Number(value) || 10;
+                                setHours(hours);
 
-                        <SelectContent>
-                          <SelectItem value="am">am</SelectItem>
-                          <SelectItem value="pm">pm</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </section>
-                  </div>
-                  <p className="text-sm italic text-gray-300">
-                    Schedule auction for: {formatDate(scheduledDate)}
-                  </p>
+                                if (!date) return;
+
+                                const fullDate = new Date(date);
+                                fullDate.setHours(timeOfTheDay === 'am' ? hours : hours + 12);
+                                field.onChange(fullDate.toISOString());
+                              }}
+                            >
+                              <SelectTrigger className="w-20">
+                                <SelectValue placeholder={hours} />
+                              </SelectTrigger>
+
+                              <SelectContent className="bg-background/40 filter backdrop-blur-3xl">
+                                {new Array(12).fill('nothing').map((_, i) => (
+                                  <SelectItem key={i} value={(i + 1).toString()}>
+                                    {i + 1}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+
+                            <Select
+                              value={timeOfTheDay}
+                              onValueChange={(value) => {
+                                const timeOfTheDay = value === 'am' ? 'am' : 'pm';
+                                setTimeOfTheDay(timeOfTheDay);
+                                if (!date) return;
+
+                                const fullDate = new Date(date);
+                                fullDate.setHours(timeOfTheDay === 'am' ? hours : hours + 12);
+                                field.onChange(fullDate.toISOString());
+                              }}
+                            >
+                              <SelectTrigger className="w-20">
+                                <SelectValue placeholder={timeOfTheDay} />
+                              </SelectTrigger>
+
+                              <SelectContent className="bg-background/40 filter backdrop-blur-3xl">
+                                <SelectItem value="am">am</SelectItem>
+                                <SelectItem value="pm">pm</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </section>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                    {errors.startsAt && (
+                      <p className="text-sm text-rose-500">{errors.startsAt.message}</p>
+                    )}
+                  </AutoAnimate>
                 </div>
               )}
             />

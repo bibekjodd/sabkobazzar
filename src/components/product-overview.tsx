@@ -1,23 +1,28 @@
 'use client';
 
+import { openLoginDialog } from '@/hooks/use-login-dialog';
 import { dummyProductImage, MILLIS } from '@/lib/constants';
 import { cn, formatPrice } from '@/lib/utils';
 import { useInterested } from '@/mutations/use-interested';
 import { useProduct } from '@/queries/use-product';
-import { CircleCheck } from 'lucide-react';
+import { useProfile } from '@/queries/use-profile';
+import { CheckCheckIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
 
 type Props = { product: Product };
 export default function ProductOverview({ product: productData }: Props) {
+  const { data: profile } = useProfile();
   const { data } = useProduct(productData.id, {
     initialData: productData,
     refetchInterval: MILLIS.MINUTE
   });
   const product = data || productData;
   const { mutate, isPending } = useInterested(product.id);
+
   const updateInterested = () => {
+    if (!profile) return;
     mutate(!product.isInterested);
   };
 
@@ -31,10 +36,10 @@ export default function ProductOverview({ product: productData }: Props) {
 
       <div className="flex flex-col text-sm text-indigo-200/80 lg:pl-10">
         <h4 className="text-2xl font-medium text-indigo-100">{product.title}</h4>
-        <h4 className="text-lg font-semibold text-indigo-100">Rs. {formatPrice(product.price)}</h4>
+        <h4 className="text-lg font-semibold text-indigo-100">{formatPrice(product.price)}</h4>
 
         <div className="mt-2 space-y-1">
-          <span className="">Owner - </span>
+          <span className="">Seller - </span>
           <div className="inline-flex items-center space-x-3">
             <p> {product.owner.name}</p>
             <Avatar src={product.owner.image} size="sm" />
@@ -52,10 +57,10 @@ export default function ProductOverview({ product: productData }: Props) {
           <Button
             disabled={isPending}
             loading={isPending}
-            onClick={updateInterested}
+            onClick={profile ? updateInterested : openLoginDialog}
             variant={product.isInterested ? 'outline' : 'secondary'}
             className={cn('w-full', !product.isInterested && 'bg-transparent')}
-            Icon={product.isInterested ? undefined : CircleCheck}
+            Icon={product.isInterested ? undefined : CheckCheckIcon}
           >
             {product.isInterested ? 'Remove from interested' : 'Add to interested'}
           </Button>

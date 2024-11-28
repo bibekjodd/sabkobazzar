@@ -66,7 +66,7 @@ export default function PlaceBid({ auctionId, minBid }: Props) {
                 'relative m-1 h-9 overflow-hidden rounded-md bg-gradient-to-b from-gray-500 to-gray-600/90 px-4 text-xs font-semibold text-background transition hover:brightness-125 active:scale-95 disabled:opacity-50 xs:text-sm'
               )}
             >
-              Rs {formatPrice(amount)}
+              {formatPrice(amount)}
             </button>
           ))}
         </div>

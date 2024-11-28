@@ -11,8 +11,8 @@ export default function Columns({ setFilters }: Props) {
   return (
     <TableHeader>
       <TableRow>
-        <TableHead>Banner</TableHead>
-        <TableHead>
+        <TableHead className="w-24">Banner</TableHead>
+        <TableHead className="min-w-52 max-w-72">
           <button
             className="flex items-center space-x-2"
             onClick={() =>
@@ -27,7 +27,20 @@ export default function Columns({ setFilters }: Props) {
           </button>
         </TableHead>
 
-        <TableHead>Schedule</TableHead>
+        <TableHead>
+          <button
+            className="flex items-center space-x-2"
+            onClick={() =>
+              setFilters((options) => ({
+                ...options,
+                sort: options?.sort === 'starts_at_asc' ? 'starts_at_desc' : 'starts_at_asc'
+              }))
+            }
+          >
+            <span>Schedule</span>
+            <ArrowUpDownIcon className="size-3.5" />
+          </button>
+        </TableHead>
 
         <TableHead>Status</TableHead>
 

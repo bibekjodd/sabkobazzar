@@ -16,13 +16,19 @@ export const useNotifications = () => {
 };
 
 type Options = { signal: AbortSignal; cursor: string | undefined };
-type Result = { notifications: UserNotification[]; cursor: string | undefined };
-const fetchNotifications = async ({ signal, cursor }: Options): Promise<Result> => {
+export type FetchNotificationsResult = {
+  notifications: UserNotification[];
+  cursor: string | undefined;
+};
+const fetchNotifications = async ({
+  signal,
+  cursor
+}: Options): Promise<FetchNotificationsResult> => {
   try {
     const url = new URL(`${backendUrl}/api/notifications`);
     if (cursor) url.searchParams.set('cursor', cursor);
 
-    const res = await axios.get<Result>(url.href, {
+    const res = await axios.get<FetchNotificationsResult>(url.href, {
       withCredentials: true,
       signal
     });

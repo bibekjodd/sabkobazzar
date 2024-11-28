@@ -42,7 +42,7 @@ type Auction = {
   finalBid: number | null;
   minBidders: number;
   maxBidders: number;
-  isFinished: boolean;
+  isCompleted: boolean;
   isCancelled: boolean;
   owner: User;
   product: Omit<Product, 'owner'>;

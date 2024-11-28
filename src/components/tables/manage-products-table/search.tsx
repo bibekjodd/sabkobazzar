@@ -18,10 +18,11 @@ export default function Search({ setFilters }: Props) {
   return (
     <div className="w-full">
       <Input
+        id="title"
         label="Title"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
-        placeholder="Auction title..."
+        placeholder="Product title..."
         className="w-full"
         IconRight={searchInput ? XIcon : undefined}
         iconRightAction={() => setSearchInput('')}

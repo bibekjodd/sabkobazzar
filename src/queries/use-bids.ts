@@ -10,11 +10,12 @@ export const useBids = (auctionId: string) => {
     queryFn: ({ signal, pageParam }) => fetchBids({ auctionId, cursor: pageParam, signal }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
-      return lastPage.at(lastPage.length - 1)?.at;
+      return lastPage.cursor;
     }
   });
 };
 
+export type FetchBidsResult = { cursor: string | undefined; bids: Bid[] };
 const fetchBids = async ({
   signal,
   auctionId,
@@ -23,15 +24,15 @@ const fetchBids = async ({
   signal: AbortSignal;
   auctionId: string;
   cursor: string | undefined;
-}): Promise<Bid[]> => {
+}): Promise<FetchBidsResult> => {
   try {
     const url = new URL(`${backendUrl}/api/auctions/${auctionId}/bids`);
     if (cursor) url.searchParams.set('cursor', cursor);
-    const res = await axios.get<{ bids: Bid[] }>(url.href, {
+    const res = await axios.get<FetchBidsResult>(url.href, {
       withCredentials: true,
       signal
     });
-    return res.data.bids;
+    return res.data;
   } catch (error) {
     throw new Error(extractErrorMessage(error));
   }

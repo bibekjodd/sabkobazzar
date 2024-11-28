@@ -25,7 +25,7 @@ export default function BidsHistory({ auctionId }: { auctionId: string }) {
     <section className="flex size-full flex-col space-y-2 overflow-y-auto scrollbar-hide">
       {bids?.pages.map((page, i) => (
         <React.Fragment key={i}>
-          {page.map((bid) => (
+          {page.bids.map((bid) => (
             <BidItem key={bid.id} bid={bid} />
           ))}
         </React.Fragment>

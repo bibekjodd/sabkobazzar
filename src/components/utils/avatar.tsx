@@ -44,11 +44,11 @@ export default function Avatar({
       <div
         className={cn(
           {
-            'size-3': size === 'xs',
-            'size-5': size === 'sm',
-            'size-7': size === 'md' || !size,
-            'size-9': size === 'lg',
-            'size-11': size === 'xl',
+            'size-4': size === 'xs',
+            'size-6': size === 'sm',
+            'size-8': size === 'md' || !size,
+            'size-10': size === 'lg',
+            'size-12': size === 'xl',
             'size-14': size === '2xl'
           },
           className

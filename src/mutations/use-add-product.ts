@@ -2,7 +2,9 @@ import { backendUrl } from '@/lib/constants';
 import { AddProductSchema } from '@/lib/form-schemas';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
+import { productKey } from '@/queries/use-product';
 import { productsKey } from '@/queries/use-products';
+import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -18,8 +20,8 @@ export const useAddProduct = () => {
 
     onSuccess(product) {
       toast.success('Added new product successfully');
-      queryClient.setQueryData<Product>(['product', product.id], { ...product });
-      const profile = queryClient.getQueryData<UserProfile>(['profile']);
+      queryClient.setQueryData<Product>(productKey(product.id), { ...product });
+      const profile = queryClient.getQueryData<UserProfile>(profileKey);
       queryClient.invalidateQueries({ queryKey: productsKey({ owner: profile?.id }) });
     },
     onError(err) {

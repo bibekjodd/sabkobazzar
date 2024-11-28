@@ -1,5 +1,5 @@
-import { Button } from '../ui/button';
-import { FadeDown } from '../utils/animations';
+import { Button } from '../../ui/button';
+import { FadeDown } from '../../utils/animations';
 
 export default function CallUs() {
   return (

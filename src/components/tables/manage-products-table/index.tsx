@@ -29,7 +29,7 @@ export default function ManageProductsTable() {
       </div>
 
       <ScrollArea className="pb-1">
-        <Table className="mt-4 border">
+        <Table className="mt-4 filter backdrop-blur-lg">
           <Columns setFilters={setFilters} />
           <TableBody>
             {isLoading &&

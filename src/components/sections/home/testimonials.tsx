@@ -4,8 +4,8 @@ import { dummyUserImage } from '@/lib/constants';
 import { isShallowEqual } from '@/lib/utils';
 import { Asterisk } from 'lucide-react';
 import { useState } from 'react';
-import { FadeDown, FadeUp } from '../utils/animations';
-import Avatar from '../utils/avatar';
+import { FadeDown, FadeUp } from '../../utils/animations';
+import Avatar from '../../utils/avatar';
 
 export default function Testimonials() {
   return (

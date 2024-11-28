@@ -21,7 +21,7 @@ export const useUpdateProduct = (productId: string) => {
 
     onSuccess(product) {
       toast.success('Updated product successfully....');
-      queryClient.setQueryData<Product>(['product', product.id], { ...product });
+      queryClient.setQueryData<Product>(productKey(product.id), { ...product });
     },
     onError(err) {
       toast.error(`Could not update product! ${err.message}`);

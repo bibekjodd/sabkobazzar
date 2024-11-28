@@ -1,6 +1,6 @@
-import { getQueryClient } from '@/lib/query-client';
 import { formatPrice } from '@/lib/utils';
 import { useBidsSnapshot } from '@/queries/use-bids-snapshot';
+import { useProfile } from '@/queries/use-profile';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { Button } from '../ui/button';
 import {
@@ -20,8 +20,7 @@ type Props = { auctionId: string };
 export default function BidsSnapshot({ auctionId }: Props) {
   const { data: bids } = useBidsSnapshot(auctionId);
   const [parentRef] = useAutoAnimate({ duration: 300 });
-  const queryClient = getQueryClient();
-  const profile = queryClient.getQueryData<UserProfile>(['profile']);
+  const { data: profile } = useProfile();
 
   return (
     <section className="w-full text-indigo-200">
@@ -45,7 +44,7 @@ export default function BidsSnapshot({ auctionId }: Props) {
                       <span>{bid.bidder.name}</span>
                     </div>
                   </TableCell>
-                  <TableCell>{formatPrice(bid.amount)}</TableCell>
+                  <TableCell>{formatPrice(bid.amount, false)}</TableCell>
                 </TableRow>
               );
             })}

@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { backendUrl, MILLIS } from './constants';
+import { MILLIS, backendUrl } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,16 +20,14 @@ export const extractErrorMessage = (error: unknown): string => {
   return 'Unknown error occurred!';
 };
 
-export const wait = async (time = 1000) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('okay');
-    }, time);
-  });
-};
+export const wait = async (delay = 1000) => new Promise((res) => setTimeout(res, delay));
 
-export const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(price);
+export const formatPrice = (price: number, prefix = true): string => {
+  const formattedPrice = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(
+    price
+  );
+  if (prefix) return 'Rs. ' + formattedPrice;
+  return formattedPrice;
 };
 
 export const getSearchString = (searchParameters: Record<string, unknown>): string => {
@@ -81,14 +79,16 @@ export const formatDate = (value: string | Date | number) => {
 
 export const isAuctionPending = (auction: Auction): boolean => {
   return (
-    !auction.isCancelled && !auction.isFinished && Date.now() < new Date(auction.startsAt).getTime()
+    !auction.isCancelled &&
+    !auction.isCompleted &&
+    Date.now() < new Date(auction.startsAt).getTime()
   );
 };
 
 export const isAuctionLive = (auction: Auction): boolean => {
   return (
     !auction.isCancelled &&
-    !auction.isFinished &&
+    !auction.isCompleted &&
     Date.now() >= new Date(auction.startsAt).getTime() &&
     Date.now() < new Date(auction.startsAt).getTime() + MILLIS.HOUR
   );
@@ -97,13 +97,13 @@ export const isAuctionLive = (auction: Auction): boolean => {
 export const isAuctionReady = (auction: Auction): boolean => {
   return (
     !auction.isCancelled &&
-    !auction.isFinished &&
+    !auction.isCompleted &&
     new Date(auction.startsAt).getTime() - Date.now() < MILLIS.MINUTE
   );
 };
 
-export const isAuctionFinished = (auction: Auction): boolean => {
-  return !auction.isCancelled && Date.now() >= new Date(auction.startsAt).getTime() + MILLIS.HOUR;
+export const isAuctionCompleted = (auction: Auction): boolean => {
+  return !auction.isCancelled && new Date().toISOString() > auction.endsAt;
 };
 
 export const canJoinAuction = ({
@@ -115,7 +115,7 @@ export const canJoinAuction = ({
 }): boolean => {
   return !!(
     !auction.isCancelled &&
-    !auction.isFinished &&
+    !auction.isCompleted &&
     Date.now() < new Date(auction.startsAt).getTime() &&
     userId !== auction.ownerId &&
     (auction.isInviteOnly
@@ -131,14 +131,14 @@ export const canCancelAuction = ({
   auction: Auction;
   userId: string;
 }): boolean => {
-  return userId === auction.ownerId && !auction.isCancelled && !auction.isFinished;
+  return userId === auction.ownerId && !auction.isCancelled && !auction.isCompleted;
 };
 
 export const canLeaveAuction = ({ auction }: { auction: Auction }): boolean => {
   return (
     auction.participationStatus === 'joined' &&
     !auction.isCancelled &&
-    !auction.isFinished &&
+    !auction.isCompleted &&
     Date.now() + 3 * MILLIS.HOUR < new Date(auction.startsAt).getTime()
   );
 };

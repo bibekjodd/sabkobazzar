@@ -1,6 +1,7 @@
 import { backendUrl } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
+import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -12,7 +13,7 @@ export const useLogout = () => {
     mutationKey: logoutKey,
     mutationFn: logout,
     onSuccess() {
-      queryClient.setQueryData(['profile'], null);
+      queryClient.setQueryData(profileKey, null);
       queryClient.clear();
     }
   });

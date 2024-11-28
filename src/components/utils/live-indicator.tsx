@@ -13,7 +13,7 @@ type LiveIndicator = {
 
 export default function LiveIndicator() {
   const [show, setShow] = useState(false);
-  const { data: upcomingAuctions } = useAuctions();
+  const { data: upcomingAuctions } = useAuctions({ status: 'pending' });
   const totalUpcomingAuctions =
     upcomingAuctions?.pages.map((page) => page.auctions).at(0)?.length || 0;
 

@@ -1,9 +1,8 @@
 'use client';
 
 import { logo } from '@/components/utils/logo';
-import { getQueryClient } from '@/lib/query-client';
+import { prefetchProducts } from '@/lib/query-utils';
 import { redirectToLogin } from '@/lib/utils';
-import { fetchProducts, productsKey } from '@/queries/use-products';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink, useLoadingBar } from '@jodd/next-top-loading-bar';
 import { LogIn, SearchIcon, X } from 'lucide-react';
@@ -109,16 +108,6 @@ function NavItems() {
     { title: 'Testimonials', href: '/#testimonials' },
     { title: 'Explore Products', href: '/products' }
   ];
-
-  const queryClient = getQueryClient();
-  const prefetchProducts = () => {
-    if (queryClient.getQueryData(productsKey({}))) return;
-    queryClient.prefetchInfiniteQuery({
-      queryKey: productsKey({}),
-      initialPageParam: undefined,
-      queryFn: ({ signal, pageParam }) => fetchProducts({ cursor: pageParam, signal })
-    });
-  };
 
   return (
     <div className="ml-auto mr-5 hidden w-fit items-center justify-center space-x-5 md:flex lg:mr-7 lg:space-x-7">

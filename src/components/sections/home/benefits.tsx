@@ -6,7 +6,7 @@ import {
   ShieldCheckIcon,
   Signpost
 } from 'lucide-react';
-import { FadeDown, FadeUp } from '../utils/animations';
+import { FadeDown, FadeUp } from '../../utils/animations';
 
 export default function Benefits() {
   return (

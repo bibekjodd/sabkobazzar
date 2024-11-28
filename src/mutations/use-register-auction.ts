@@ -2,7 +2,9 @@ import { backendUrl } from '@/lib/constants';
 import { RegisterAuctionSchema } from '@/lib/form-schemas';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
+import { auctionKey } from '@/queries/use-auction';
 import { auctionsKey } from '@/queries/use-auctions';
+import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -17,13 +19,13 @@ export const useRegisterAuction = () => {
 
     onSuccess(auction) {
       toast.success('Auction registered successfully');
-      queryClient.setQueryData<Auction>(['auction'], auction);
+      queryClient.setQueryData<Auction>(auctionKey(auction.id), auction);
     },
     onError(err) {
       toast.error(`Could not register auction! ${err.message}`);
     },
     onSettled() {
-      const profile = queryClient.getQueryData<User>(['profile']);
+      const profile = queryClient.getQueryData<User>(profileKey);
       queryClient.invalidateQueries({
         queryKey: auctionsKey({ owner: profile?.id })
       });

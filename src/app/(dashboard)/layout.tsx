@@ -16,6 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <DashboardHeader />
       <DashboardSidebar />
+      <div className="fixed left-64 top-0 z-50 h-screen w-[1px] bg-gray-400/10" />
       <div className="lg:pl-64">{children}</div>
     </>
   );

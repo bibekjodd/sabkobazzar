@@ -120,7 +120,7 @@ export default function FilterProducts({ searchParams }: { searchParams: SearchP
       <section className="flex flex-col space-y-4">
         <Label className="flex items-center justify-between font-medium">
           <span>Price</span>
-          {`> ${formatPrice(Number(filterOptions.pricegte) || 5000)}`}
+          {`> ${formatPrice(Number(filterOptions.pricegte) || 5000, false)}`}
         </Label>
 
         <Slider

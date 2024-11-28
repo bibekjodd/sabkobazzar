@@ -60,7 +60,7 @@ export default function SelectAuctionProductDialog({ children }: Props) {
             onChange={(e) => setSearchInput(e.target.value)}
           />
 
-          <ScrollArea className="flex max-h-96 flex-grow flex-col overflow-y-auto">
+          <ScrollArea className="flex max-h-96 flex-grow flex-col overflow-y-auto pt-2">
             <AutoAnimate className="flex flex-col space-y-3 px-1 py-3">
               {error && (
                 <Alert variant="destructive">
@@ -108,17 +108,17 @@ export default function SelectAuctionProductDialog({ children }: Props) {
 
 function ProductResultItem({ product }: { product: Product }) {
   return (
-    <div className="rounded-lg bg-indigo-950/20 hover:bg-indigo-950/40">
+    <div className="rounded-lg bg-gray-900/50 hover:bg-gray-900">
       <div className="flex">
         <img
           src={product.image || dummyProductImage}
-          className="aspect-video w-40 object-contain"
+          className="aspect-video w-20 object-contain"
           alt="product image"
         />
         <div className="flex w-full flex-col justify-between px-4 py-2">
           <span className="line-clamp-2 text-sm">{product.title}</span>
           <RegisterAuctionDialog product={product}>
-            <Button className="mt-4 block w-full" size="sm" variant="secondary">
+            <Button className="mt-2 block w-full" size="sm" variant="secondary">
               Select
             </Button>
           </RegisterAuctionDialog>

@@ -32,7 +32,8 @@ type Props = {
 
 const auctionStatuses = [
   { title: 'Pending', value: 'pending' },
-  { title: 'Finished', value: 'finished' },
+  { title: 'Live', value: 'live' },
+  { title: 'Completed', value: 'completed' },
   { title: 'Cancelled', value: 'cancelled' }
 ];
 

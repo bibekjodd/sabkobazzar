@@ -1,8 +1,11 @@
 import ManageAuctionDialog from '@/components/dialogs/manage-auction-dialog';
 import { TableCell, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { dummyProductImage, productConditions } from '@/lib/constants';
-import { cn, formatDate, formatPrice } from '@/lib/utils';
+import { cn, formatPrice, isAuctionCompleted, isAuctionLive, isAuctionPending } from '@/lib/utils';
+import { useAuction } from '@/queries/use-auction';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
+import dayjs from 'dayjs';
 import {
   CheckCheckIcon,
   CircleCheckBigIcon,
@@ -10,11 +13,18 @@ import {
   CircleGaugeIcon,
   CircleOffIcon,
   Clock4Icon,
-  KanbanIcon
+  KanbanIcon,
+  LockIcon,
+  RadioIcon
 } from 'lucide-react';
 
-export default function Row({ auction }: { auction: Auction }) {
+export default function Row({ auction: auctionData }: { auction: Auction }) {
+  const { data } = useAuction(auctionData.id, { initialData: auctionData });
+  const auction = data || auctionData;
   const condition = productConditions.find((item) => item.value === auction.condition)?.title;
+  const isLive = isAuctionLive(auction);
+  const isPending = isAuctionPending(auction);
+  const isCompleted = isAuctionCompleted(auction);
 
   return (
     <TableRow key={auction.id} className="h-16">
@@ -28,18 +38,43 @@ export default function Row({ auction }: { auction: Auction }) {
         </ProgressLink>
       </TableCell>
       <TableCell className="min-w-52 max-w-72">
-        <ProgressLink href={`/auctions/${auction.id}`} className="line-clamp-1 hover:underline">
-          {auction.title}
-        </ProgressLink>
+        <TooltipProvider delayDuration={500}>
+          <Tooltip>
+            <TooltipTrigger>
+              <ProgressLink
+                href={`/auctions/${auction.id}`}
+                className="line-clamp-1 hover:underline"
+              >
+                {auction.isInviteOnly && (
+                  <LockIcon className="mr-1.5 inline size-3.5 -translate-y-0.5" />
+                )}
+                <span>{auction.title}</span>
+              </ProgressLink>
+            </TooltipTrigger>
+            {auction.isInviteOnly && (
+              <TooltipContent>
+                <p>This auction is private and only invited members can join</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </TableCell>
 
-      <TableCell className="min-w-44">{formatDate(auction.startsAt)}</TableCell>
+      <TableCell className="whitespace-nowrap">
+        {dayjs(auction.startsAt).format('MMMM DD, ha')}
+      </TableCell>
 
       <TableCell>
-        {!auction.isFinished && !auction.isCancelled && (
+        {isPending && (
           <div className="flex items-center space-x-2 text-purple-500">
             <Clock4Icon className="size-3.5" />
             <span>Pending</span>
+          </div>
+        )}
+        {isLive && (
+          <div className="flex items-center space-x-2 text-fuchsia-500">
+            <RadioIcon className="size-3.5" />
+            <span>Live</span>
           </div>
         )}
         {auction.isCancelled && (
@@ -48,7 +83,7 @@ export default function Row({ auction }: { auction: Auction }) {
             <span>Cancelled</span>
           </div>
         )}
-        {auction.isFinished && (
+        {isCompleted && (
           <div className="flex items-center space-x-2 text-green-500">
             <CheckCheckIcon className="size-3.5" />
             <span>Completed</span>
@@ -68,11 +103,11 @@ export default function Row({ auction }: { auction: Auction }) {
           {auction.condition === 'first-class' && <CircleGaugeIcon className="size-3.5" />}
           {auction.condition === 'repairable' && <CircleDotDashedIcon className="size-3.5" />}
 
-          <span>{condition}</span>
+          <span className="text-nowrap">{condition}</span>
         </div>
       </TableCell>
-      <TableCell>
-        {auction.finalBid && 'Rs ' + formatPrice(auction.finalBid)}
+      <TableCell className="text-nowrap">
+        {auction.finalBid && formatPrice(auction.finalBid)}
         {!auction.finalBid && '-'}
       </TableCell>
 

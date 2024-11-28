@@ -30,11 +30,17 @@ type Options = KeyOptions & {
   cursor: string | undefined;
   signal: AbortSignal | undefined;
 };
-type Result = { cursor: string | undefined; products: Product[] };
-export const fetchProducts = async ({ signal, ...options }: Options): Promise<Result> => {
+export type FetchProductsResult = { cursor: string | undefined; products: Product[] };
+export const fetchProducts = async ({
+  signal,
+  ...options
+}: Options): Promise<FetchProductsResult> => {
   try {
     const url = new URL(`${backendUrl}/api/products${getSearchString(options)}`);
-    const { data } = await axios.get<Result>(url.href, { withCredentials: true, signal });
+    const { data } = await axios.get<FetchProductsResult>(url.href, {
+      withCredentials: true,
+      signal
+    });
     return data;
   } catch (error) {
     throw new Error(extractErrorMessage(error));

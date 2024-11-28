@@ -41,7 +41,7 @@ export default function WinningScreen({ auction }: { auction: Auction }) {
     <div className="">
       <div className="fixed inset-0 z-40 grid place-items-center overflow-hidden bg-background/50 p-6 filter backdrop-blur-md">
         <div className="max-w-screen-sm text-balance text-center text-5xl font-semibold text-purple-600 [text-shadow:0_0_10px_#9333ea]">
-          {auction.winner.name} won the auction with the bid of Rs {formatPrice(auction.finalBid!)}
+          {auction.winner.name} won the auction with the bid of {formatPrice(auction.finalBid!)}
         </div>
       </div>
       <Confetti

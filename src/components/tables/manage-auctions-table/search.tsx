@@ -18,6 +18,7 @@ export default function Search({ setFilters }: Props) {
   return (
     <div className="w-full">
       <Input
+        id="title"
         label="Title"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}

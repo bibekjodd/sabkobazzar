@@ -1,3 +1,4 @@
+import { prefetchDashboardData } from '@/lib/query-utils';
 import { cn } from '@/lib/utils';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressButton } from '@jodd/next-top-loading-bar';
@@ -57,7 +58,11 @@ export default function ProfileDropdown({ children }: { children: React.ReactNod
         </DropdownMenuSub>
 
         <DropdownMenuItem asChild>
-          <ProgressButton href="/dashboard" className="flex w-full cursor-pointer items-center">
+          <ProgressButton
+            href="/dashboard"
+            onClick={prefetchDashboardData}
+            className="flex w-full cursor-pointer items-center"
+          >
             <LayoutGrid className="size-3.5" />
             <span>Dashboard</span>
           </ProgressButton>

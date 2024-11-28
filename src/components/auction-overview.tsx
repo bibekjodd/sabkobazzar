@@ -1,18 +1,14 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { openLoginDialog } from '@/hooks/use-login-dialog';
 import { dummyProductImage, MILLIS } from '@/lib/constants';
-import {
-  canJoinAuction,
-  canLeaveAuction,
-  formatDate,
-  formatPrice,
-  redirectToLogin
-} from '@/lib/utils';
+import { prefetchProduct } from '@/lib/query-utils';
+import { canJoinAuction, canLeaveAuction, formatDate, formatPrice } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import { CopyIcon } from 'lucide-react';
+import { ChevronsRightIcon, CopyIcon } from 'lucide-react';
 import JoinAuctionDialog from './dialogs/join-auction-dialog';
 import LeaveAuctionDialog from './dialogs/leave-auction.dialog';
 import { Skeleton } from './ui/skeleton';
@@ -94,9 +90,12 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
 
           <div className="mt-auto flex flex-col space-y-2 pt-7">
             {showProductLinkButton && (
-              <ProgressLink href={`/products/${auction.productId}`}>
-                <Button variant="secondary" className="w-full">
-                  See more about product
+              <ProgressLink
+                href={`/products/${auction.productId}`}
+                onClick={() => prefetchProduct({ ...auction.product, owner: auction.owner })}
+              >
+                <Button variant="secondary" className="w-full" Icon={ChevronsRightIcon}>
+                  See Product Details
                 </Button>
               </ProgressLink>
             )}
@@ -107,7 +106,7 @@ export default function AuctionOverview({ auction: auctionData, showProductLinkB
                   <Button>Join Auction</Button>
                 </JoinAuctionDialog>
               ) : (
-                <Button onClick={redirectToLogin}>Join Auction</Button>
+                <Button onClick={openLoginDialog}>Join Auction</Button>
               ))}
             {canUserLeaveAuction && (
               <LeaveAuctionDialog auctionId={auction.id}>

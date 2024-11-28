@@ -3,6 +3,8 @@ import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { notificationsKey } from '@/queries/use-notifications';
+import { participantsKey } from '@/queries/use-participants';
+import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -19,22 +21,22 @@ export const useLeaveAuction = (auctionId: string) => {
     onSuccess() {
       toast.success('Left auction successfully');
       queryClient.invalidateQueries({ queryKey: notificationsKey });
-      const auction = queryClient.getQueryData<Auction>(['auction', auctionId]);
+      const auction = queryClient.getQueryData<Auction>(auctionKey(auctionId));
       if (auction) {
-        queryClient.setQueryData<Auction>(['auction', auction.id], {
+        queryClient.setQueryData<Auction>(auctionKey(auction.id), {
           ...auction,
           participationStatus: null,
           totalParticipants: auction.totalParticipants - 1
         });
       }
 
-      const profile = queryClient.getQueryData<UserProfile>(['profile']);
-      const participants = queryClient.getQueryData<User[]>(['participants', auctionId]);
+      const profile = queryClient.getQueryData<UserProfile>(profileKey);
+      const participants = queryClient.getQueryData<User[]>(participantsKey(auctionId));
       if (!participants) return;
       const updatedParticipants: User[] = participants.filter(
         (participant) => participant.id !== profile?.id
       );
-      queryClient.setQueryData<User[]>(['participants', auctionId], updatedParticipants);
+      queryClient.setQueryData<User[]>(participantsKey(auctionId), updatedParticipants);
     },
 
     onError(err) {

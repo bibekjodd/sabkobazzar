@@ -2,24 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.react-calendar__navigation__arrow,
-.react-calendar__navigation__label,
-.react-calendar__tile {
-  background-color: black !important;
-}
-.react-calendar__navigation__arrow:hover,
-.react-calendar__navigation__label:hover,
-.react-calendar__tile:hover,
-.react-calendar__tile--active {
-  background-color: #0284c7 !important;
-}
-
-.react-calendar__tile:disabled {
-  background-color: gray !important;
-  color: black !important;
-  opacity: 0.5;
-}
-
 input,
 textarea {
   outline: 2px solid transparent;

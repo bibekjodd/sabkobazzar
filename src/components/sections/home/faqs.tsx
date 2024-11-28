@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { Asterisk } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
-import { FadeDown, FadeUp } from '../utils/animations';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../ui/accordion';
+import { FadeDown, FadeUp } from '../../utils/animations';
 
 export default function Faqs() {
   return (

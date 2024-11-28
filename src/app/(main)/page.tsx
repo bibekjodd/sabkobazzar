@@ -1,9 +1,9 @@
-import Benefits from '@/components/sections/benefits';
-import CallUs from '@/components/sections/call-us';
-import Faqs from '@/components/sections/faqs';
-import Hero from '@/components/sections/hero';
-import HowItWorks from '@/components/sections/how-it-works';
-import Testimonials from '@/components/sections/testimonials';
+import Benefits from '@/components/sections/home/benefits';
+import CallUs from '@/components/sections/home/call-us';
+import Faqs from '@/components/sections/home/faqs';
+import Hero from '@/components/sections/home/hero';
+import HowItWorks from '@/components/sections/home/how-it-works';
+import Testimonials from '@/components/sections/home/testimonials';
 import LiveIndicator from '@/components/utils/live-indicator';
 
 export default function page() {

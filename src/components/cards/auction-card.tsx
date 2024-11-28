@@ -1,14 +1,9 @@
 'use client';
 
 import ManageAuctionDialog from '@/components/dialogs/manage-auction-dialog';
+import { openLoginDialog } from '@/hooks/use-login-dialog';
 import { dummyProductImage } from '@/lib/constants';
-import {
-  canJoinAuction,
-  canLeaveAuction,
-  formatDate,
-  isAuctionPending,
-  redirectToLogin
-} from '@/lib/utils';
+import { canJoinAuction, canLeaveAuction, formatDate, isAuctionPending } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
@@ -94,7 +89,7 @@ export default function AuctionCard({
               </Button>
             </JoinAuctionDialog>
           ) : (
-            <Button variant="secondary" className="w-full" onClick={redirectToLogin}>
+            <Button variant="secondary" className="w-full" onClick={openLoginDialog}>
               Join Auction
             </Button>
           ))}

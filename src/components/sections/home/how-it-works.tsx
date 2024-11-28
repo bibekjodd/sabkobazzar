@@ -1,7 +1,7 @@
 import { dummyUserImage } from '@/lib/constants';
 import { Asterisk, CircleCheckIcon, Clock4, PartyPopper, Signpost, Stars } from 'lucide-react';
-import { FadeDown, FadeUp } from '../utils/animations';
-import Avatar from '../utils/avatar';
+import { FadeDown, FadeUp } from '../../utils/animations';
+import Avatar from '../../utils/avatar';
 
 export default function HowItWorks() {
   return (

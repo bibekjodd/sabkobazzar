@@ -10,7 +10,7 @@ export type KeyOptions = Partial<{
   limit: number;
   sort: 'title_asc' | 'title_desc' | 'starts_at_asc' | 'starts_at_desc' | 'bid_asc' | 'bid_desc';
   condition: Auction['condition'] | 'all';
-  status: 'pending' | 'finished' | 'cancelled' | 'all';
+  status: 'pending' | 'live' | 'completed' | 'cancelled' | 'all';
   from: string;
   to: string;
   inviteOnly: boolean;
@@ -48,8 +48,11 @@ type Options = KeyOptions & {
   signal: AbortSignal;
 };
 
-type Result = { cursor: string | undefined; auctions: Auction[] };
-export const fetchAuctions = async ({ signal, ...query }: Options): Promise<Result> => {
+export type FetchAuctionsResult = { cursor: string | undefined; auctions: Auction[] };
+export const fetchAuctions = async ({
+  signal,
+  ...query
+}: Options): Promise<FetchAuctionsResult> => {
   try {
     const url = new URL(`${backendUrl}/api/auctions`);
 
@@ -57,7 +60,7 @@ export const fetchAuctions = async ({ signal, ...query }: Options): Promise<Resu
       if (value) url.searchParams.set(key, String(value));
     }
 
-    const { data } = await axios.get<Result>(url.href, {
+    const { data } = await axios.get<FetchAuctionsResult>(url.href, {
       signal,
       withCredentials: true
     });

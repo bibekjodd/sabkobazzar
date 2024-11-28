@@ -6,20 +6,12 @@ import { cn } from '@/lib/utils';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { LogOut } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { logo } from '../utils/logo';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
   return (
-    <aside className="fixed left-0 top-0 z-50 hidden h-screen min-h-screen w-64 flex-col overflow-y-auto border-r pb-3 text-sm font-medium lg:flex">
-      {graphics}
-      <div className="flex min-h-16 items-center">
-        <ProgressLink href="/" className="px-5 text-[28px] font-semibold">
-          {logo}
-        </ProgressLink>
-      </div>
-
-      <nav className="mt-5 flex h-full flex-grow flex-col">
+    <aside className="fixed left-0 top-16 z-50 hidden h-[calc(100vh-64px)] w-64 flex-col overflow-y-auto pb-3 text-sm lg:flex">
+      <nav className="flex h-full flex-grow flex-col">
         {dashboardLinks.map((link) => (
           <ProgressLink
             key={link.title}
@@ -48,9 +40,3 @@ export default function DashboardSidebar() {
     </aside>
   );
 }
-
-const graphics = (
-  <>
-    <div className="fixed left-0 top-0 -z-10 hidden h-full w-64 bg-gradient-to-br from-sky-900/30 to-fuchsia-900/10 blur-3xl filter lg:block" />
-  </>
-);
