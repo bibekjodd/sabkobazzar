@@ -19,7 +19,6 @@ import {
   WebhookIcon
 } from 'lucide-react';
 import { useEffect } from 'react';
-import { openSelectAuctionDialog } from './dialogs/select-auction-product-dialog';
 import { DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 
 const useSearchDashboard = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
@@ -83,13 +82,6 @@ export default function SearchDashboard() {
             </CommandItem>
           </ProgressLink>
 
-          <ProgressLink href="/dashboard/products" onClick={closeSearchDashboard}>
-            <CommandItem>
-              <PackageIcon />
-              <span>Manage products</span>
-            </CommandItem>
-          </ProgressLink>
-
           <ProgressLink href="/dashboard#recent-auctions" onClick={closeSearchDashboard}>
             <CommandItem>
               <PackageIcon />
@@ -100,8 +92,8 @@ export default function SearchDashboard() {
           <button
             className="w-full"
             onClick={() => {
+              // todo
               closeSearchDashboard();
-              openSelectAuctionDialog();
             }}
           >
             <CommandItem>

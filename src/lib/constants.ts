@@ -4,11 +4,10 @@ import {
   ArrowUpAzIcon,
   ArrowUpNarrowWideIcon,
   BadgeMinusIcon,
-  BoxIcon,
+  BanIcon,
   CircleMinusIcon,
   EggFriedIcon,
   LucideIcon,
-  RouteOffIcon,
   UserIcon,
   UserPlusIcon,
   WebhookIcon
@@ -17,7 +16,7 @@ import {
 export const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const dummyUserImage = 'https://avatars.githubusercontent.com/u/110604197?v=4';
-export const dummyProductImage =
+export const dummyAuctionBanner =
   'https://cdn.sanity.io/images/tlr8oxjg/production/7b7f05720074a848850e0705779306c27da5a6cf-1065x597.png?w=3840&q=100&fit=clip&auto=format';
 
 export const productsCategories: { title: string; value: string }[] = [
@@ -27,10 +26,17 @@ export const productsCategories: { title: string; value: string }[] = [
   { title: 'Others', value: 'others' }
 ] as const;
 
-export const productConditions = [
+export const auctionProductConditions = [
   { title: 'New', value: 'new' },
   { title: 'First Class', value: 'first-class' },
   { title: 'Repariable', value: 'repairable' }
+] as const;
+
+export const auctionStatuses = [
+  { title: 'Pending', value: 'pending' },
+  { title: 'Live', value: 'live' },
+  { title: 'Completed', value: 'completed' },
+  { title: 'Cancelled', value: 'cancelled' }
 ] as const;
 
 export const productsResultSortOptions = [
@@ -81,12 +87,11 @@ type NotificationMapItem = {
 };
 export const NOTIFICATION_MAP: Record<string, NotificationMapItem | undefined> = {
   'users-': { Icon: UserIcon, severity: 'neutral' },
-  'products-': { Icon: BoxIcon, severity: 'neutral' },
   'auctions-': { Icon: WebhookIcon, severity: 'neutral' },
   'auctions-register': { Icon: EggFriedIcon, severity: 'success' },
   'auctions-join': { Icon: EggFriedIcon, severity: 'success' },
   'auctions-invite': { Icon: UserPlusIcon, severity: 'acknowledge' },
   'auctions-leave': { Icon: BadgeMinusIcon, severity: 'info' },
   'auctions-kick': { Icon: CircleMinusIcon, severity: 'critical' },
-  'auctions-cancel': { Icon: RouteOffIcon, severity: 'info' }
+  'auctions-cancel': { Icon: BanIcon, severity: 'critical' }
 };

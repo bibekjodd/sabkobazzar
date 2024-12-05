@@ -20,7 +20,12 @@ import InfiniteScrollObserver from '../utils/infinite-scroll-observer';
 dayjs.extend(relativeTime);
 
 export default function BidsHistory({ auctionId }: { auctionId: string }) {
-  const { data: bids, hasNextPage, isFetching, fetchNextPage } = useBids(auctionId);
+  const {
+    data: bids,
+    hasNextPage,
+    isFetching,
+    fetchNextPage
+  } = useBids({ auctionId, sort: 'desc' });
   return (
     <section className="flex size-full flex-col space-y-2 overflow-y-auto scrollbar-hide">
       {bids?.pages.map((page, i) => (

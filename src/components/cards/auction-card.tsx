@@ -1,7 +1,7 @@
 'use client';
 
 import ManageAuctionDialog from '@/components/dialogs/manage-auction-dialog';
-import { dummyProductImage } from '@/lib/constants';
+import { dummyAuctionBanner } from '@/lib/constants';
 import { canJoinAuction, canLeaveAuction, formatDate, isAuctionPending } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
@@ -46,7 +46,7 @@ export default function AuctionCard({
 
       <ProgressLink href={auctionLink}>
         <img
-          src={auction.banner || auction.product.image || dummyProductImage}
+          src={auction.banner || dummyAuctionBanner}
           alt="banner image"
           className="aspect-video w-full rounded-lg object-contain p-0.5"
         />
@@ -54,7 +54,7 @@ export default function AuctionCard({
 
       <div className="mt-2.5 px-4">
         <h3 className="mb-1 line-clamp-2 text-xl">{auction.title}</h3>
-        <p className="text-sm text-gray-400">Scheduled for {formatDate(auction.startsAt)}</p>
+        <p className="text-sm text-indigo-200/80">Scheduled for {formatDate(auction.startsAt)}</p>
         {canShowInviteOnlyInfo && (
           <p className="mt-1 text-sm text-gray-400/80">
             <TooltipProvider delayDuration={300}>

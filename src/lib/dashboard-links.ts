@@ -1,9 +1,5 @@
-import { HomeIcon, LucideIcon, PackageIcon, WebhookIcon } from 'lucide-react';
-import {
-  prefetchDashboardAuctions,
-  prefetchDashboardData,
-  prefetchDashboardProducts
-} from './query-utils';
+import { HomeIcon, LucideIcon, WebhookIcon } from 'lucide-react';
+import { prefetchDashboardAuctions, prefetchDashboardData } from './query-utils';
 
 export const dashboardLinks: {
   title: string;
@@ -22,11 +18,5 @@ export const dashboardLinks: {
     href: '/dashboard/auctions',
     icon: WebhookIcon,
     action: prefetchDashboardAuctions
-  },
-  {
-    title: 'Products',
-    href: '/dashboard/products',
-    icon: PackageIcon,
-    action: prefetchDashboardProducts
   }
 ];

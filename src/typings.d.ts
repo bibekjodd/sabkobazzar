@@ -13,27 +13,17 @@ type UserProfile = User & {
   totalUnreadNotifications: number;
 };
 
-type Product = {
-  id: string;
-  title: string;
-  image: string | null;
-  category: 'electronics' | 'realestate' | 'art' | 'others';
-  description: string | null;
-  ownerId: string;
-  price: number;
-  addedAt: string;
-  owner: User;
-  isInterested: boolean;
-};
-
 type Auction = {
   id: string;
-  productId: string;
   banner: string | null;
   ownerId: string;
   winnerId: string | null;
   title: string;
   description: string | null;
+  productTitle: string;
+  category: 'arts' | 'electronics' | 'realestate' | 'others';
+  productImages: string[] | null;
+  brand: string | null;
   lot: number;
   condition: 'new' | 'first-class' | 'repairable';
   startsAt: string;
@@ -45,8 +35,8 @@ type Auction = {
   isCompleted: boolean;
   isCancelled: boolean;
   owner: User;
-  product: Omit<Product, 'owner'>;
   isInviteOnly: boolean;
+  isInterested: boolean;
   participationStatus: ParticipationStatus;
   totalParticipants: number;
 } & ({ winner: null; isUnbidded: true } | { winner: User; isUnbidded: false });

@@ -16,9 +16,8 @@ import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { createStore } from '@jodd/snap';
 import { WebhookIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import AddProductDialog from '../dialogs/add-product-dialog';
-import { openSelectAuctionDialog } from '../dialogs/select-auction-product-dialog';
 import { logo } from '../utils/logo';
+import { openRegisterAuctionDrawer } from './register-auction-drawer';
 
 const useDashboardMenuDrawer = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
 const onOpenChange = (isOpen: boolean) => useDashboardMenuDrawer.setState({ isOpen });
@@ -59,21 +58,14 @@ export default function DashboardMenuDrawer() {
 
           <button
             onClick={() => {
+              openRegisterAuctionDrawer();
               closeDashbordMenuDrawer();
-              openSelectAuctionDialog();
             }}
             className="flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500"
           >
             <WebhookIcon className="size-5" />
             <span>Register Auction</span>
           </button>
-
-          <AddProductDialog>
-            <button className="flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500">
-              <WebhookIcon className="size-5" />
-              <span>Add New Product</span>
-            </button>
-          </AddProductDialog>
         </nav>
 
         <DrawerFooter>

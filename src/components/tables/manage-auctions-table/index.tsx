@@ -29,6 +29,7 @@ export default function ManageAuctionsTable() {
         <Search setFilters={setFilters} />
         <Filter filters={filters} setFilters={setFilters} />
       </div>
+
       <ScrollArea className="pb-1">
         <Table className="mt-4 filter backdrop-blur-lg">
           <Columns setFilters={setFilters} />

@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { useDebounce } from '@/hooks/use-debounce';
 import { KeyOptions } from '@/queries/use-auctions';
-import { XIcon } from 'lucide-react';
+import { SearchIcon, XIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 type Props = {
@@ -26,6 +26,7 @@ export default function Search({ setFilters }: Props) {
         className="w-full"
         IconRight={searchInput ? XIcon : undefined}
         iconRightAction={() => setSearchInput('')}
+        IconLeft={SearchIcon}
       />
     </div>
   );

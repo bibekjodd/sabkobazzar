@@ -1,4 +1,4 @@
-import { socialLinks } from '@/lib/constants';
+import { backendUrl, socialLinks } from '@/lib/constants';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { logo } from '../utils/logo';
@@ -41,6 +41,14 @@ export default function Footer() {
             >
               Terms & Conditions
             </ProgressLink>
+            <a
+              href={`${backendUrl}/reference`}
+              className="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Api Reference
+            </a>
           </div>
         </div>
 

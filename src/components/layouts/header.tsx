@@ -1,9 +1,9 @@
 'use client';
 
 import { logo } from '@/components/utils/logo';
-import { prefetchProducts } from '@/lib/query-utils';
 import { redirectToLogin } from '@/lib/utils';
 import { useProfile } from '@/queries/use-profile';
+import { clearFilterAuctions } from '@/stores/use-filter-auctions';
 import { ProgressLink, useLoadingBar } from '@jodd/next-top-loading-bar';
 import { LogIn, SearchIcon, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -23,8 +23,8 @@ export default function Header() {
           {logo}
         </ProgressLink>
 
-        {pathname !== '/products' && <NavItems />}
-        {pathname === '/products' && (
+        {pathname !== '/auctions' && <NavItems />}
+        {pathname === '/auctions' && (
           <div className="mx-10 hidden w-full md:block lg:mx-20">
             <Suspense>
               <Search />
@@ -75,18 +75,20 @@ function Search() {
   const [searchInput, setSearchInput] = useState(searchParams.get('title') || '');
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const url = `/products${searchInput ? `?title=${searchInput}` : ''}`;
-    start(url);
+    const url = `/auctions${searchInput ? `?title=${searchInput}` : ''}`;
+    const canStart = start(url);
+    if (!canStart) return;
+    clearFilterAuctions();
     router.push(url);
   };
-  if (pathname !== '/products') return null;
+  if (pathname !== '/auctions') return null;
 
   return (
     <form onSubmit={onSubmit} className="relative w-full">
       <input
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
-        placeholder="Search products..."
+        placeholder="Search auctions..."
         className="h-11 w-full rounded-lg border border-indigo-200/20 px-3 pr-8 text-base text-gray-100 focus:border-2 focus:border-indigo-200/70 focus:outline-none"
       />
       {searchInput ? (
@@ -106,18 +108,13 @@ function NavItems() {
     { title: 'How it works', href: '/#how-it-works' },
     { title: 'Benefits', href: '/#benefits' },
     { title: 'Testimonials', href: '/#testimonials' },
-    { title: 'Explore Products', href: '/products' }
+    { title: 'FAQs', href: '/#faqs' }
   ];
 
   return (
     <div className="ml-auto mr-5 hidden w-fit items-center justify-center space-x-5 md:flex lg:mr-7 lg:space-x-7">
       {navLinks.map((item) => (
-        <ProgressLink
-          key={item.href}
-          href={item.href}
-          onClick={item.href === '/products' ? prefetchProducts : undefined}
-          className="hover:text-indigo-100"
-        >
+        <ProgressLink key={item.href} href={item.href} className="hover:text-indigo-100">
           {item.title}
         </ProgressLink>
       ))}

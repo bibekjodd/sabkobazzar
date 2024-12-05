@@ -35,7 +35,7 @@ export default function JoinAuctionDialog({ children, auctionId }: Props) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogTitle>Are you sure to join the auction?</DialogTitle>
           <DialogDescription className="hidden" />
         </DialogHeader>
 

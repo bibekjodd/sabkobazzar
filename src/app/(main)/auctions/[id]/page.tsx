@@ -17,15 +17,10 @@ export const dynamic = 'force-static';
 export default function Client() {
   const { id: auctionId } = useParams<{ id: string }>();
   const { data: auction, error, isLoading } = useAuction(auctionId);
-  const { data } = useAuctions();
   const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
   const isLive = useAuctionStore((state) => state.isLive);
   const isLivePrevious = useAuctionStore((state) => state.isLivePrevious);
 
-  const upcomingAuctions = data?.pages
-    .map((page) => page.auctions)
-    .flat(1)
-    .filter((auction) => auction.id !== auctionId);
   useEffect(() => {
     return () => {
       if (isLive) leaveLiveAuction();
@@ -69,28 +64,39 @@ export default function Client() {
       <div className="cont text-indigo-200">
         {auction && !showLive && (
           <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
-            <AuctionOverview auction={auction} showProductLinkButton />
+            <AuctionOverview auction={auction} />
           </div>
         )}
 
-        {upcomingAuctions?.at(0) && !isLive && (
-          <section className="relative z-10 scroll-m-20 pt-4" id="upcoming-auctions">
-            <h3 className="flex items-center space-x-2 px-2 text-2xl font-semibold xs:text-3xl sm:text-4xl md:justify-center">
-              <span className="">Explore more auctions</span>
-              <ActivityIcon className="size-6 text-purple-600 xs:size-7 sm:size-8" />
-            </h3>
-
-            <div className="mt-5 flex flex-wrap justify-center md:mt-7">
-              {upcomingAuctions.slice(0, 6).map((auction) => (
-                <div key={auction.id} className="mb-7 w-full md:w-1/2 md:p-4 xl:w-1/3">
-                  <AuctionCard auction={auction} />
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        {!isLive && auction && <MoreAuctions currentAuction={auction} />}
       </div>
     </main>
+  );
+}
+
+function MoreAuctions({ currentAuction }: { currentAuction: Auction }) {
+  const { data } = useAuctions({});
+
+  const auctions = (data?.pages || [])
+    .map((page) => page.auctions)
+    .flat(1)
+    .filter((auction) => auction.id !== currentAuction.id);
+
+  return (
+    <section className="relative z-10 scroll-m-20 pt-16" id="upcoming-auctions">
+      <h3 className="flex items-center space-x-2 px-2 text-2xl font-medium xs:text-3xl">
+        <span className="">Explore more auctions</span>
+        <ActivityIcon className="size-6 text-purple-600 xs:size-7" />
+      </h3>
+
+      <div className="mt-4 flex flex-wrap">
+        {auctions.slice(0, 6).map((auction) => (
+          <div key={auction.id} className="mb-7 w-full md:w-1/2 md:p-4 xl:w-1/3">
+            <AuctionCard auction={auction} />
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 

@@ -32,6 +32,13 @@ export const openUpdateProfileDialog = () => onOpenChange(true);
 export const closeUpdateProfileDialog = () => onOpenChange(false);
 
 export default function UpdateProfileDialog() {
+  const { data: profile } = useProfile();
+  if (!profile) return null;
+  return <BaseDialog />;
+}
+
+function BaseDialog() {
+  const { isOpen } = useUpdateProfileDialog();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const imagePickerRef = useRef<HTMLInputElement>(null);
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -72,9 +79,6 @@ export default function UpdateProfileDialog() {
       }
     );
   });
-
-  const { isOpen } = useUpdateProfileDialog();
-  if (!profile) return null;
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -82,11 +86,10 @@ export default function UpdateProfileDialog() {
           <DialogTitle className="text-center">Update Profile</DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only" />
-
-        <form onSubmit={onSubmit} className="flex flex-col space-y-5">
+        <form onSubmit={onSubmit} className="flex flex-col space-y-6 py-4">
           <Input
             id="name"
-            label="Name"
+            label="Display Name"
             IconLeft={UserIcon}
             error={errors.name?.message}
             placeholder="Enter your name..."
@@ -116,7 +119,7 @@ export default function UpdateProfileDialog() {
           >
             <span>Display Picture</span>
 
-            <Avatar src={imageUri} />
+            <Avatar src={imageUri || profile?.image} />
 
             <input
               type="file"

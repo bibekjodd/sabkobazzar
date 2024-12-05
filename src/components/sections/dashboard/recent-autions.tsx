@@ -1,5 +1,7 @@
 'use client';
 
+import UserHoverCard from '@/components/cards/user-hover-card';
+import { openAuctionDetailsDrawer } from '@/components/drawers/auction-details-drawer';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   DropdownMenu,
@@ -14,15 +16,16 @@ import { FadeUp } from '@/components/utils/animations';
 import Avatar from '@/components/utils/avatar';
 import { prefetchDashboardAuctions } from '@/lib/query-utils';
 import { formatPrice } from '@/lib/utils';
+import { useAuction } from '@/queries/use-auction';
 import { useAuctions } from '@/queries/use-auctions';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import dayjs from 'dayjs';
 import {
+  ChartNoAxesGanttIcon,
   ChevronRightIcon,
   CircleAlertIcon,
   EllipsisVerticalIcon,
-  HistoryIcon,
   InfoIcon
 } from 'lucide-react';
 
@@ -86,7 +89,10 @@ export default function RecentAuctions() {
   );
 }
 
-function AuctionItem({ auction }: { auction: Auction }) {
+function AuctionItem({ auction: initialData }: { auction: Auction }) {
+  const { data } = useAuction(initialData.id, { initialData });
+  const auction = data || initialData;
+
   return (
     <div className="border-b border-gray-400/15 py-4 last:border-none last:pb-0">
       <div className="flex items-center justify-between">
@@ -94,7 +100,7 @@ function AuctionItem({ auction }: { auction: Auction }) {
           {dayjs(auction.startsAt).format('MMMM DD')}
         </p>
 
-        <DropdownMenu modal={true}>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <button className="pl-2">
               <EllipsisVerticalIcon className="size-3 text-indigo-100/75 hover:text-indigo-100" />
@@ -105,17 +111,28 @@ function AuctionItem({ auction }: { auction: Auction }) {
             <DropdownMenuLabel>Auction</DropdownMenuLabel>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className="w-full p-0 [&>svg]:hidden">
-                <button className="flex w-full items-center space-x-2 px-2 py-1.5">
-                  <HistoryIcon />
-                  <span>Bid History</span>
+                <button
+                  onClick={() => openAuctionDetailsDrawer(auction.id)}
+                  className="flex w-full items-center space-x-2 px-2 py-1.5"
+                >
+                  <ChartNoAxesGanttIcon />
+                  <span>See Result</span>
                 </button>
               </DropdownMenuSubTrigger>
             </DropdownMenuSub>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       <div key={auction.id} className="flex items-center gap-x-4">
-        <Avatar src={auction.winner?.image} />
+        {auction.winner ? (
+          <UserHoverCard user={auction.winner}>
+            <Avatar src={auction.winner.image} />
+          </UserHoverCard>
+        ) : (
+          <Avatar src={undefined} />
+        )}
+
         <div>
           <p className="text-sm">{auction.winner?.name}</p>
           <p className="text-xs text-indigo-100/75">{auction.winner?.email}</p>

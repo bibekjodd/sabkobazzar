@@ -33,13 +33,32 @@ export const useRegisterAuction = () => {
   });
 };
 
-type Options = { productId: string; image: string | File | undefined } & RegisterAuctionSchema;
-const registerAuction = async ({ productId, image, ...data }: Options): Promise<Auction> => {
+type Options = {
+  bannerImage: string | File | undefined;
+  productImages: string[] | (File | undefined)[] | null;
+} & RegisterAuctionSchema;
+const registerAuction = async ({
+  bannerImage,
+  productImages,
+  ...data
+}: Options): Promise<Auction> => {
   try {
-    const imageUrl = image instanceof File ? await uploadImage(image) : undefined;
+    const bannerImageUrlPromise =
+      bannerImage instanceof File ? uploadImage(bannerImage) : undefined;
+
+    const productImagesUrlsPromise: Promise<string>[] = [];
+    for (const image of productImages || []) {
+      if (image instanceof File) productImagesUrlsPromise.push(uploadImage(image));
+    }
+
+    const [bannerImageUrl, ...productImagesUrls] = await Promise.all([
+      bannerImageUrlPromise,
+      ...productImagesUrlsPromise
+    ]);
+
     const res = await axios.post<{ auction: Auction }>(
-      `${backendUrl}/api/auctions/${productId}`,
-      { ...data, banner: imageUrl || image },
+      `${backendUrl}/api/auctions`,
+      { ...data, banner: bannerImageUrl || bannerImage, productImages: productImagesUrls },
       { withCredentials: true }
     );
     return res.data.auction;

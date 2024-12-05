@@ -12,31 +12,25 @@ export const updateProfileSchema = z.object({
 export type UpdateProfileSchema = z.infer<typeof updateProfileSchema>;
 
 const categorySchema = z.enum(['electronics', 'realestate', 'arts', 'others']);
-export const addProductSchema = z.object({
-  title: z
-    .string({ required_error: 'Title is required' })
-    .min(1, 'Title is required')
-    .max(200, 'Too long title'),
-  category: categorySchema,
-  description: z.string().min(1, 'Description is required').max(500, 'Too long description'),
-  price: z.preprocess(
-    (val) => Number(val) || undefined,
-    z
-      .number({ required_error: 'Price is required', invalid_type_error: 'Price is required' })
-      .min(10_000, 'Price must be at least 10,000')
-      .transform((price) => Math.ceil(price))
-  )
-});
-export type AddProductSchema = z.infer<typeof addProductSchema>;
 
 export const registerAuctionSchema = z.object({
   title: z
     .string({ required_error: 'Title is required' })
     .min(10, 'Too short title')
     .max(200, 'Too long title'),
+  productTitle: z
+    .string({ required_error: 'Product title is required' })
+    .min(10, 'Too short product title')
+    .max(200, 'Too long product title'),
+  category: categorySchema.transform((val) => val || undefined).optional(),
   description: z
     .string({ required_error: 'Description is required' })
-    .max(500, 'Too long description'),
+    .max(1000, 'Too long description'),
+  brand: z
+    .string()
+    .max(50, 'Too long brand name')
+    .transform((val) => val || undefined)
+    .optional(),
   lot: z.preprocess(
     (val) => Number(val) || undefined,
     z

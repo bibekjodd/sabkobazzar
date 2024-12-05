@@ -14,7 +14,7 @@ export default function InfiniteScrollObserver({
   hasNextPage,
   isFetching,
   className,
-  showLoader
+  showLoader = true
 }: Props) {
   const observerRef = useRef<HTMLSpanElement | null>(null);
 

@@ -5,7 +5,7 @@ import { useReadNotifications } from '@/mutations/use-read-notifications';
 import { useNotifications } from '@/queries/use-notifications';
 import { createStore } from '@jodd/snap';
 import { AlertCircle } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NotificationCard, NotificationCardSkeleton } from '../cards/notification-card';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
@@ -41,14 +41,15 @@ export default function NotificationsDrawer() {
 
   const { isOpen } = useNotificationsDrawer();
 
+  useEffect(() => {
+    if (isOpen) readNotifications();
+  }, [isOpen, readNotifications]);
+
   return (
     <Drawer
       open={isOpen}
       direction={screenWidth < 768 ? 'bottom' : 'right'}
-      onOpenChange={(isOpen) => {
-        onOpenChange(isOpen);
-        if (isOpen) readNotifications();
-      }}
+      onOpenChange={onOpenChange}
     >
       <DrawerContent className="ml-auto flex h-screen w-full flex-col bg-background/50 filter backdrop-blur-3xl md:max-w-screen-xs">
         <DrawerHeader>

@@ -1,7 +1,10 @@
+import ImageDialog from '@/components/dialogs/image-dialog';
 import LogoutDialog from '@/components/dialogs/logout-dialog';
 import ProfileDialog from '@/components/dialogs/profile-dialog';
+import QrCodeDialog from '@/components/dialogs/qr-code-dialog';
 import RequireLoginDialog from '@/components/dialogs/require-login-dialog';
 import UpdateProfileDialog from '@/components/dialogs/update-profile-dialog';
+import AuctionDetailsDrawer from '@/components/drawers/auction-details-drawer';
 import NotificationsDrawer from '@/components/drawers/notifications-drawer';
 import QueryProvider from '@/providers/query-provider';
 import { LoadingBar } from '@jodd/next-top-loading-bar';
@@ -34,8 +37,11 @@ export default function RootLayout({
           <UpdateProfileDialog />
           <RequireLoginDialog />
           <LogoutDialog />
+          <QrCodeDialog />
+          <ImageDialog />
 
           <NotificationsDrawer />
+          <AuctionDetailsDrawer />
         </QueryProvider>
       </body>
     </html>

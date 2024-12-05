@@ -3,7 +3,6 @@ import { FetchBidsResult, bidsKey } from '@/queries/use-bids';
 import { bidsSnapshotKey } from '@/queries/use-bids-snapshot';
 import { FetchNotificationsResult, notificationsKey } from '@/queries/use-notifications';
 import { participantsKey } from '@/queries/use-participants';
-import { productKey } from '@/queries/use-product';
 import { profileKey } from '@/queries/use-profile';
 import { InfiniteData, QueryClient } from '@tanstack/react-query';
 import { BidResponse } from './events';
@@ -11,19 +10,24 @@ import { getQueryClient } from './query-client';
 
 export const onPlaceBid = ({ bid }: BidResponse) => {
   const queryClient = getQueryClient();
-  const bidsData = queryClient.getQueryData<InfiniteData<FetchBidsResult>>(bidsKey(bid.auctionId));
+  const bidsData = queryClient.getQueryData<InfiniteData<FetchBidsResult>>(
+    bidsKey({ auctionId: bid.auctionId })
+  );
   if (bidsData) {
     const bidExists = bidsData.pages[0].bids.find((currentBid) => currentBid.id === bid.id);
 
     if (!bidExists) {
       const updatedFirstPageBids: Bid[] = [bid, ...bidsData.pages[0].bids];
-      queryClient.setQueryData<InfiniteData<FetchBidsResult>>(bidsKey(bid.auctionId), {
-        ...bidsData,
-        pages: [
-          { cursor: bidsData.pages[0].cursor, bids: updatedFirstPageBids },
-          ...bidsData.pages.slice(1)
-        ]
-      });
+      queryClient.setQueryData<InfiniteData<FetchBidsResult>>(
+        bidsKey({ auctionId: bid.auctionId }),
+        {
+          ...bidsData,
+          pages: [
+            { cursor: bidsData.pages[0].cursor, bids: updatedFirstPageBids },
+            ...bidsData.pages.slice(1)
+          ]
+        }
+      );
     }
   }
 
@@ -32,7 +36,6 @@ export const onPlaceBid = ({ bid }: BidResponse) => {
   const updatedBidsSnapshot = bidsSnapshotData.filter(
     (currentBid) => currentBid.bidderId !== bid.bidderId
   );
-  updatedBidsSnapshot.unshift(bid);
   updatedBidsSnapshot.sort((a, b) => b.amount - a.amount);
   queryClient.setQueryData<Bid[]>(bidsSnapshotKey(bid.auctionId), updatedBidsSnapshot);
 };
@@ -80,9 +83,6 @@ export const onReceivedNotification = ({
     queryClient.invalidateQueries({ queryKey: auctionKey(notification.params) });
     if (notification.type === 'kick')
       queryClient.invalidateQueries({ queryKey: participantsKey(notification.params) });
-  }
-  if (notification.entity === 'products' && notification.params) {
-    queryClient.invalidateQueries({ queryKey: productKey(notification.params) });
   }
 
   const notificationsData =

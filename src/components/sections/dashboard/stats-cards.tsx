@@ -4,16 +4,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { FadeUp } from '@/components/utils/animations';
 import { formatPrice } from '@/lib/utils';
 import { useAuctionsStats } from '@/queries/use-auctions-stats';
-import { useProductsStats } from '@/queries/use-products-stats';
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
 export default function StatsCards() {
   return (
-    <div className="grid gap-x-4 gap-y-2 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-x-4 gap-y-2 md:grid-cols-2">
       <RevenueCard />
       <AuctionStatsCard />
-      <ProductInterestsCard />
+      {/* 
+      // todo
+       */}
+      {/* <ProductInterestsCard /> */}
     </div>
   );
 }
@@ -124,35 +126,6 @@ function AuctionStatsCard() {
           </div>
         </section>
       )}
-    </FadeUp>
-  );
-}
-
-function ProductInterestsCard() {
-  const { data: stats, isLoading } = useProductsStats();
-
-  const { currentMonthInterests, totalInterests } = useMemo(() => {
-    if (!stats) return { currentMonthInterests: 0, totalInterests: 0 };
-    const totalInterests = stats.reduce((prev, curr) => prev + curr.count, 0);
-    const currentMonthInterests =
-      stats.find((stat) => stat.date === new Date().toISOString().slice(0, 7))?.count || 0;
-    return { totalInterests, currentMonthInterests };
-  }, [stats]);
-
-  return (
-    <FadeUp className="md:col-span-2 xl:col-span-1">
-      {isLoading && <Skeleton className="h-32" />}
-      <section className="rounded-lg bg-indigo-900/10 p-6">
-        <h3 className="text-sm">Visitor Interests</h3>
-        <div className="mt-2">
-          <p className="text-2xl font-semibold">{currentMonthInterests || totalInterests}</p>
-          <p className="mt-1 text-xs text-indigo-200/80">
-            {currentMonthInterests !== 0 && 'Visitors showed interest on your products this month'}
-            {currentMonthInterests === 0 &&
-              'Visitors showed interest on your products from past year'}
-          </p>
-        </div>
-      </section>
     </FadeUp>
   );
 }

@@ -4,25 +4,32 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 export type KeyOptions = Partial<{
-  title: string;
-  owner: string;
-  product: string;
-  limit: number;
-  sort: 'title_asc' | 'title_desc' | 'starts_at_asc' | 'starts_at_desc' | 'bid_asc' | 'bid_desc';
-  condition: Auction['condition'] | 'all';
-  status: 'pending' | 'live' | 'completed' | 'cancelled' | 'all';
-  from: string;
-  to: string;
-  inviteOnly: boolean;
-  unbidded: boolean;
+  title: string | null;
+  owner: string | null;
+  limit: number | null;
+  category: 'arts' | 'realestate' | 'electronics' | 'others' | null;
+  sort:
+    | 'title_asc'
+    | 'title_desc'
+    | 'starts_at_asc'
+    | 'starts_at_desc'
+    | 'bid_asc'
+    | 'bid_desc'
+    | null;
+  condition: Auction['condition'] | 'all' | null;
+  status: 'pending' | 'live' | 'completed' | 'cancelled' | 'all' | null;
+  from: string | null;
+  to: string | null;
+  inviteOnly: boolean | null;
+  unbidded: boolean | null;
 }>;
 export const auctionsKey = (options?: KeyOptions) => [
   'auctions',
   {
     title: options?.title,
     owner: options?.owner,
-    product: options?.product,
     limit: options?.limit,
+    category: options?.category,
     sort: options?.sort,
     condition: options?.condition === 'all' ? undefined : options?.condition,
     status: options?.status === 'all' ? undefined : options?.status,

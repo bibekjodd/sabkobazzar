@@ -3,11 +3,23 @@ import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const bidsKey = (auctionId: string) => ['bids', auctionId];
-export const useBids = (auctionId: string) => {
+type KeyOptions = { auctionId: string } & Partial<{
+  sort: 'asc' | 'desc';
+  limit: number;
+}>;
+export const bidsKey = (options: KeyOptions) => [
+  'bids',
+  {
+    auctionId: options.auctionId,
+    limit: options.limit,
+    sort: options.sort || 'desc'
+  } satisfies KeyOptions
+];
+
+export const useBids = (options: KeyOptions) => {
   return useInfiniteQuery({
-    queryKey: bidsKey(auctionId),
-    queryFn: ({ signal, pageParam }) => fetchBids({ auctionId, cursor: pageParam, signal }),
+    queryKey: bidsKey(options),
+    queryFn: ({ signal, pageParam }) => fetchBids({ ...options, cursor: pageParam, signal }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
       return lastPage.cursor;
@@ -16,18 +28,19 @@ export const useBids = (auctionId: string) => {
 };
 
 export type FetchBidsResult = { cursor: string | undefined; bids: Bid[] };
+type Options = KeyOptions & { cursor: string | undefined; signal: AbortSignal };
 const fetchBids = async ({
   signal,
   auctionId,
-  cursor
-}: {
-  signal: AbortSignal;
-  auctionId: string;
-  cursor: string | undefined;
-}): Promise<FetchBidsResult> => {
+  cursor,
+  limit,
+  sort
+}: Options): Promise<FetchBidsResult> => {
   try {
     const url = new URL(`${backendUrl}/api/auctions/${auctionId}/bids`);
     if (cursor) url.searchParams.set('cursor', cursor);
+    if (sort) url.searchParams.set('sort', sort);
+    if (limit) url.searchParams.set('limit', limit.toString());
     const res = await axios.get<FetchBidsResult>(url.href, {
       withCredentials: true,
       signal

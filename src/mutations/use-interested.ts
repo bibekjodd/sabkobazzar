@@ -1,39 +1,39 @@
 import { backendUrl } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
-import { productKey } from '@/queries/use-product';
+import { auctionKey } from '@/queries/use-auction';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const interestedKey = (productId: string) => ['interested', productId];
+export const interestedKey = (auctionId: string) => ['interested', auctionId];
 
-export const useInterested = (productId: string) => {
+export const useInterested = (auctionId: string) => {
   const queryClient = getQueryClient();
   return useMutation({
-    mutationKey: interestedKey(productId),
-    mutationFn: (interested: boolean) => updateInterested({ productId, interested }),
+    mutationKey: interestedKey(auctionId),
+    mutationFn: (interested: boolean) => updateInterested({ auctionId, interested }),
 
     onSuccess(_, interested) {
-      const product = queryClient.getQueryData<Product>(productKey(productId));
-      if (!product) return;
-      const updatedProduct: Product = { ...product, isInterested: interested };
-      queryClient.setQueryData<Product>(productKey(productId), updatedProduct);
+      const auction = queryClient.getQueryData<Auction>(auctionKey(auctionId));
+      if (!auction) return;
+      const updatedAuction: Auction = { ...auction, isInterested: interested };
+      queryClient.setQueryData<Auction>(auctionKey(auctionId), updatedAuction);
     },
     onError() {
-      queryClient.invalidateQueries({ queryKey: productKey(productId) });
+      queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     }
   });
 };
 
 const updateInterested = async ({
   interested,
-  productId
+  auctionId
 }: {
   interested: boolean;
-  productId: string;
+  auctionId: string;
 }) => {
   try {
-    const url = `${backendUrl}/api/products/${productId}/interested`;
+    const url = `${backendUrl}/api/auctions/${auctionId}/interested`;
     if (interested) {
       return await axios.post(url, undefined, {
         withCredentials: true

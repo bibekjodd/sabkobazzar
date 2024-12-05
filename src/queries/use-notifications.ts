@@ -8,7 +8,8 @@ export const useNotifications = () => {
   return useInfiniteQuery({
     queryKey: notificationsKey,
     queryFn: ({ signal, pageParam }) => fetchNotifications({ signal, cursor: pageParam }),
-
+    staleTime: Infinity,
+    gcTime: Infinity,
     maxPages: 10,
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.cursor

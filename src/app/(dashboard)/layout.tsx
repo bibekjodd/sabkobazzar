@@ -1,8 +1,8 @@
 'use client';
 
 import DashboardBreadcrumbs from '@/components/dashboard-breadcrumbs';
-import SelectAuctionProductDialog from '@/components/dialogs/select-auction-product-dialog';
 import DashboardMenuDrawer from '@/components/drawers/dashboard-menu-drawer';
+import RegisterAuctionDialog from '@/components/drawers/register-auction-drawer';
 import DashboardHeader from '@/components/layouts/dashboard-header';
 import DashboardSidebar from '@/components/layouts/dashboard-sidebar';
 import SearchDashboard from '@/components/search-dashboard';
@@ -19,10 +19,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <DashboardHeader />
+      <div className="fixed left-64 top-0 z-50 hidden h-screen w-[1px] bg-gray-400/10 lg:block" />
       <div className="flex">
         <DashboardSidebar />
-        <div className="fixed left-64 top-0 z-50 hidden h-screen w-[1px] bg-gray-400/10 lg:block" />
-        <div className="w-full">
+        <div className="w-full lg:w-[calc(100%-256px)]">
           <div className="my-2 lg:hidden">
             <DashboardBreadcrumbs />
           </div>
@@ -32,7 +32,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <SearchDashboard />
       <DashboardMenuDrawer />
-      <SelectAuctionProductDialog />
+      <RegisterAuctionDialog />
     </>
   );
 }

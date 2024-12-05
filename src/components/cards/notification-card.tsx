@@ -1,21 +1,32 @@
 import { NOTIFICATION_MAP } from '@/lib/constants';
+import { getQueryClient } from '@/lib/query-client';
+import { cn } from '@/lib/utils';
+import { profileKey } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BellIcon } from 'lucide-react';
+import { useState } from 'react';
 import { closeNotificationsDrawer } from '../drawers/notifications-drawer';
 import { Skeleton } from '../ui/skeleton';
 
 dayjs.extend(relativeTime);
 
 export function NotificationCard({ notification }: { notification: UserNotification }) {
+  const [isNew] = useState(() => {
+    const queryClient = getQueryClient();
+    const profile = queryClient.getQueryData<UserProfile>(profileKey);
+    const isNew = notification.receivedAt > profile?.lastNotificationReadAt!;
+    return isNew;
+  });
+
   let link: string | null = null;
-  if (notification.entity === 'products' && notification.params)
-    link = `/products/${notification.params}`;
   if (notification.entity === 'auctions' && notification.params)
     link = `/auctions/${notification.params}`;
 
-  const { Icon } = NOTIFICATION_MAP[`${notification.entity}-${notification.type || ''}`] || {
+  const { Icon, severity } = NOTIFICATION_MAP[
+    `${notification.entity}-${notification.type || ''}`
+  ] || {
     Icon: BellIcon,
     severity: 'neutral'
   };
@@ -29,12 +40,29 @@ export function NotificationCard({ notification }: { notification: UserNotificat
       <div className="absolute inset-0 -z-20 rounded-xl border-2 border-gray-400/10 [mask-image:linear-gradient(to_top,black,transparent)]" />
 
       <section className="relative flex space-x-3 p-3">
-        <div className="size-fit translate-y-0.5 rounded-full bg-indigo-300/10 p-2">
+        <div
+          className={cn('size-fit translate-y-0.5 rounded-full p-2', {
+            'bg-indigo-300/10 text-indigo-100': severity === 'neutral',
+            'bg-yellow-300/10 text-yellow-500': severity === 'warning',
+            'bg-rose-300/10 text-rose-500': severity === 'critical',
+            'bg-emerald-300/10 text-emerald-500': severity === 'success',
+            'bg-sky-300/10 text-sky-500': severity === 'info',
+            'bg-purple-300/10 text-purple-500': severity === 'acknowledge'
+          })}
+        >
           <Icon className="size-5" />
         </div>
         <div className="flex flex-col">
-          <span className="font-medium">{notification.title}</span>
-          <span className="mt-0.5 text-sm text-gray-400">{notification.description}</span>
+          <div>
+            <span className="font-medium">{notification.title}</span>
+            {isNew && (
+              <span className="ml-2 w-fit rounded-full bg-purple-500/20 px-2 py-0.5 text-xs text-purple-500">
+                New
+              </span>
+            )}
+          </div>
+
+          <span className="mt-0.5 text-sm text-indigo-100/80">{notification.description}</span>
           <span className="mt-2 text-xs text-gray-500">
             {dayjs(notification.receivedAt).fromNow()}
           </span>
