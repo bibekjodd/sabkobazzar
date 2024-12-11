@@ -74,3 +74,23 @@ export const registerAuctionSchema = z.object({
   isInviteOnly: z.boolean().default(false)
 });
 export type RegisterAuctionSchema = z.infer<typeof registerAuctionSchema>;
+
+export const postFeedbackSchema = z.object({
+  title: z
+    .string({ required_error: 'Title is required' })
+    .min(1, 'Title is required')
+    .max(100, 'Too long feedback title')
+    .trim(),
+  text: z
+    .string({ required_error: 'Feedback text is required' })
+    .min(1, 'Remarks is required')
+    .max(200, 'Too long feedback text'),
+  rating: z.preprocess(
+    (val) => Number(val),
+    z
+      .number({ required_error: 'Rating is required', invalid_type_error: 'Rating is required' })
+      .min(1)
+      .max(5)
+  )
+});
+export type PostFeedbackSchema = z.infer<typeof postFeedbackSchema>;

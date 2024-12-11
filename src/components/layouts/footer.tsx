@@ -1,12 +1,13 @@
 import { backendUrl, socialLinks } from '@/lib/constants';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, MessageCircleDashedIcon, Phone } from 'lucide-react';
+import { openPostFeedbackDialog } from '../dialogs/post-feedback-dialog';
 import { logo } from '../utils/logo';
 
 export default function Footer() {
   return (
     <div className="relative z-10 overflow-hidden py-10 font-normal text-indigo-200/90 filter backdrop-blur-3xl">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-violet-950/5" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-violet-950/20" />
       <footer className="cont grid md:grid-cols-2 2xl:grid-cols-4">
         <div className="mb-10 2xl:mb-0">
           <h3 className="text-3xl">{logo}</h3>
@@ -15,11 +16,14 @@ export default function Footer() {
 
         <div className="mb-10 flex flex-col space-y-2 2xl:mb-0">
           <h3 className="pb-1 text-xl">Contact</h3>
-          <a href="tel:+9779820256741" className="flex items-center space-x-2">
+          <a href="tel:+9779820256741" className="flex items-center space-x-2 hover:underline">
             <Phone className="size-4" />
             <p>+977 9820256741</p>
           </a>
-          <a href="mailto:sabkobazzar@gmail.com" className="flex items-center space-x-2">
+          <a
+            href="mailto:sabkobazzar@gmail.com"
+            className="flex items-center space-x-2 hover:underline"
+          >
             <Mail className="size-4" />
             <p>sabkobazzar@gmail.com</p>
           </a>
@@ -65,6 +69,18 @@ export default function Footer() {
                 alt={`${link.title} logo`}
               />
             ))}
+          </div>
+
+          <div>
+            <button
+              onClick={openPostFeedbackDialog}
+              className="relative z-10 flex items-center space-x-2 rounded-md border border-violet-400/70 px-4 py-2 text-sm"
+            >
+              <span>Send Feedback</span>
+              <MessageCircleDashedIcon className="size-4" />
+              <div className="absolute left-0 -z-10 h-full w-1/3 bg-violet-500/60 mix-blend-multiply blur-3xl filter" />
+              <div className="absolute right-0 -z-10 h-full w-1/3 bg-violet-500/60 mix-blend-multiply blur-3xl filter" />
+            </button>
           </div>
         </div>
       </footer>
