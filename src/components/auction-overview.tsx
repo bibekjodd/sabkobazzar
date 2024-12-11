@@ -23,6 +23,7 @@ import {
   CopyIcon,
   LogOutIcon,
   ReceiptTextIcon,
+  TicketPlusIcon,
   UserRoundIcon,
   UsersRoundIcon,
   VoteIcon
@@ -72,6 +73,8 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
             <img
               key={tempActiveImage || activeImage}
               src={tempActiveImage || activeImage}
+              loading="lazy"
+              decoding="async"
               alt="auction banner"
               className="my-auto aspect-video w-full object-contain"
             />
@@ -90,7 +93,13 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
                   }
                 )}
               >
-                <img src={image} alt="product image" className="max-h-20 object-contain" />
+                <img
+                  src={image}
+                  loading="lazy"
+                  decoding="async"
+                  alt="product image"
+                  className="max-h-20 object-contain"
+                />
               </button>
             ))}
           </div>
@@ -160,7 +169,7 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
             {canUserJoinAuction &&
               (profile ? (
                 <JoinAuctionDialog auctionId={auction.id}>
-                  <Button>Join Auction</Button>
+                  <Button Icon={TicketPlusIcon}>Join Auction</Button>
                 </JoinAuctionDialog>
               ) : (
                 <Button onClick={openLoginDialog}>Join Auction</Button>

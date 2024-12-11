@@ -44,6 +44,9 @@ export const useAuctions = (options?: KeyOptions) => {
   return useInfiniteQuery({
     queryKey: auctionsKey(options),
     queryFn: ({ pageParam, signal }) => fetchAuctions({ cursor: pageParam, signal, ...options }),
+    select: (data) => {
+      return data.pages.map((page) => page.auctions).flat(1);
+    },
 
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.cursor
@@ -62,7 +65,6 @@ export const fetchAuctions = async ({
 }: Options): Promise<FetchAuctionsResult> => {
   try {
     const url = new URL(`${backendUrl}/api/auctions`);
-
     for (const [key, value] of Object.entries(query)) {
       if (value) url.searchParams.set(key, String(value));
     }

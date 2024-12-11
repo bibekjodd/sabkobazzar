@@ -85,19 +85,18 @@ function Search() {
 
   return (
     <form onSubmit={onSubmit} className="relative w-full">
+      <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-500" />
       <input
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         placeholder="Search auctions..."
-        className="h-11 w-full rounded-lg border border-indigo-200/20 px-3 pr-8 text-base text-gray-100 focus:border-2 focus:border-indigo-200/70 focus:outline-none"
+        className="h-11 w-full rounded-lg border-2 border-indigo-200/20 pl-9 pr-8 text-base text-gray-100 focus:border-2 focus:border-indigo-200/70 focus:outline-none"
       />
-      {searchInput ? (
+      {searchInput && (
         <X
           onClick={() => setSearchInput('')}
           className="absolute right-3 top-1/2 size-4 -translate-y-1/2 cursor-pointer text-gray-500"
         />
-      ) : (
-        <SearchIcon className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-gray-500" />
       )}
     </form>
   );

@@ -19,6 +19,7 @@ import {
   WebhookIcon
 } from 'lucide-react';
 import { useEffect } from 'react';
+import { openRegisterAuctionDrawer } from './drawers/register-auction-drawer';
 import { DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 
 const useSearchDashboard = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
@@ -92,8 +93,8 @@ export default function SearchDashboard() {
           <button
             className="w-full"
             onClick={() => {
-              // todo
               closeSearchDashboard();
+              openRegisterAuctionDrawer();
             }}
           >
             <CommandItem>

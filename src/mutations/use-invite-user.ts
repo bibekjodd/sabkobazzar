@@ -18,18 +18,14 @@ export const useInviteUser = (options: KeyOptions) => {
     mutationFn: () => inviteUser(options),
 
     onError(err) {
-      toast.error(`Could not invite user to the auction! ${err.message}`);
+      toast.error(`Could not invite user to the auction! ${extractErrorMessage(err)}`);
       queryClient.invalidateQueries({ queryKey: auctionKey(options.auctionId) });
     }
   });
 };
 
 const inviteUser = async ({ userId, auctionId }: KeyOptions) => {
-  try {
-    return await axios.put(`${backendUrl}/api/auctions/${auctionId}/invite/${userId}`, undefined, {
-      withCredentials: true
-    });
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  return await axios.put(`${backendUrl}/api/auctions/${auctionId}/invite/${userId}`, undefined, {
+    withCredentials: true
+  });
 };

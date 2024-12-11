@@ -1,5 +1,4 @@
 import { backendUrl, MILLIS } from '@/lib/constants';
-import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -23,16 +22,12 @@ export const useSearchInvite = ({ auctionId, q }: KeyOptions) => {
 type Result = User & { status: ParticipationStatus };
 type Options = { signal: AbortSignal; q: string; auctionId: string; page: number | undefined };
 const searchInvite = async ({ signal, q, auctionId, page }: Options): Promise<Result[]> => {
-  try {
-    const url = new URL(`${backendUrl}/api/auctions/${auctionId}/search-invite`);
-    url.searchParams.set('q', q);
-    if (page) url.searchParams.set('page', page.toString());
-    const res = await axios.get<{ users: Result[] }>(url.href, {
-      withCredentials: true,
-      signal
-    });
-    return res.data.users;
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  const url = new URL(`${backendUrl}/api/auctions/${auctionId}/search-invite`);
+  url.searchParams.set('q', q);
+  if (page) url.searchParams.set('page', page.toString());
+  const res = await axios.get<{ users: Result[] }>(url.href, {
+    withCredentials: true,
+    signal
+  });
+  return res.data.users;
 };

@@ -33,6 +33,8 @@ export function Overview({ auction }: { auction: Auction }) {
       <img
         src={auction.banner || dummyAuctionBanner}
         alt="banner image"
+        loading="lazy"
+        decoding="async"
         className="aspect-video w-full object-cover"
       />
 
@@ -117,6 +119,8 @@ export function Overview({ auction }: { auction: Auction }) {
                     onClick={() => openImageDialog(image)}
                     src={image}
                     key={image}
+                    loading="lazy"
+                    decoding="async"
                     alt="product image"
                     className="max-w-1/3 h-full max-h-24 w-fit cursor-pointer object-contain"
                   />

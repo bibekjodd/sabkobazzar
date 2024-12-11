@@ -16,7 +16,7 @@ export function NotificationCard({ notification }: { notification: UserNotificat
   const [isNew] = useState(() => {
     const queryClient = getQueryClient();
     const profile = queryClient.getQueryData<UserProfile>(profileKey);
-    const isNew = notification.receivedAt > profile?.lastNotificationReadAt!;
+    const isNew = notification.createdAt > profile?.lastNotificationReadAt!;
     return isNew;
   });
 
@@ -64,7 +64,7 @@ export function NotificationCard({ notification }: { notification: UserNotificat
 
           <span className="mt-0.5 text-sm text-indigo-100/80">{notification.description}</span>
           <span className="mt-2 text-xs text-gray-500">
-            {dayjs(notification.receivedAt).fromNow()}
+            {dayjs(notification.createdAt).fromNow()}
           </span>
         </div>
       </section>

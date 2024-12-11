@@ -40,7 +40,7 @@ export const useLeaveAuction = (auctionId: string) => {
     },
 
     onError(err) {
-      toast.error(`Could not leave auction! ${err.message}`);
+      toast.error(`Could not leave auction! ${extractErrorMessage(err)}`);
     },
 
     onSettled() {
@@ -50,15 +50,11 @@ export const useLeaveAuction = (auctionId: string) => {
 };
 
 const leaveAuction = async (auctionId: string) => {
-  try {
-    await axios.put<{ auction: Auction }>(
-      `${backendUrl}/api/auctions/${auctionId}/leave`,
-      undefined,
-      {
-        withCredentials: true
-      }
-    );
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  await axios.put<{ auction: Auction }>(
+    `${backendUrl}/api/auctions/${auctionId}/leave`,
+    undefined,
+    {
+      withCredentials: true
+    }
+  );
 };

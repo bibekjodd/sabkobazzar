@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  MILLIS,
-  auctionProductConditions,
-  dummyAuctionBanner,
-  productsCategories
-} from '@/lib/constants';
+import { MILLIS, auctionProductConditions, productsCategories } from '@/lib/constants';
 import { RegisterAuctionSchema, registerAuctionSchema } from '@/lib/form-schemas';
 import { formatPrice, imageToDataUri } from '@/lib/utils';
 import { registerAuctionKey, useRegisterAuction } from '@/mutations/use-register-auction';
@@ -53,7 +48,7 @@ export default function RegisterAuctionDrawer() {
     return fullDate;
   }, [date, hours, timeOfTheDay]);
 
-  const [bannerImageUri, setBannerImageUri] = useState<string | null>(dummyAuctionBanner);
+  const [bannerImageUri, setBannerImageUri] = useState<string | null>(null);
   const bannerImagePickerRef = useRef<HTMLInputElement>(null);
   const [productImagesUris, setProductImagesUris] = useState<string[]>([]);
   const productImagesPickerRef = useRef<HTMLInputElement>(null);
@@ -194,6 +189,8 @@ export default function RegisterAuctionDrawer() {
                   {bannerImageUri && (
                     <img
                       src={bannerImageUri}
+                      loading="lazy"
+                      decoding="async"
                       alt="selected image"
                       className="aspect-video w-full rounded-lg object-contain"
                     />
@@ -239,7 +236,7 @@ export default function RegisterAuctionDrawer() {
                   }
                   className="relative grid aspect-[48/9] place-items-center rounded-lg border border-dashed"
                 >
-                  {bannerImageUri && (
+                  {productImagesUris.length !== 0 && (
                     <div
                       onClick={unpickProductImages}
                       className="absolute right-1 top-1 cursor-pointer rounded-full bg-primary/90 p-1 text-black"
@@ -260,9 +257,14 @@ export default function RegisterAuctionDrawer() {
                   {productImagesUris.length === 0 && (
                     <div className="flex flex-col items-center">
                       <ImageIcon className="size-8" />
-                      <p className="p-4 text-sm">
-                        Provide 16:9 aspect ratio image for better compatibility
-                      </p>
+                      <div className="p-4">
+                        <p className="text-sm">
+                          Provide 16:9 aspect ratio image for better compatibility
+                        </p>
+                        <p className="mt-0.5 text-center text-xs italic text-indigo-100/80">
+                          (Max 3 images)
+                        </p>
+                      </div>
                     </div>
                   )}
                   {productImagesUris.length > 0 && (
@@ -272,6 +274,8 @@ export default function RegisterAuctionDrawer() {
                           onClick={() => openImageDialog(uri)}
                           key={i}
                           src={uri}
+                          loading="lazy"
+                          decoding="async"
                           alt="selected image"
                           className="aspect-video h-full w-1/3 rounded-lg object-contain"
                         />

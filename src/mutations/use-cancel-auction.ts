@@ -19,23 +19,19 @@ export const useCancelAuction = (auctionId: string) => {
       toast.success('Auction cancelled successfully');
       const auction = queryClient.getQueryData<Auction>(auctionKey(auctionId));
       if (!auction) return;
-      const updatedAuction: Auction = { ...auction, isCancelled: true };
+      const updatedAuction: Auction = { ...auction, status: 'cancelled' };
       queryClient.setQueryData<Auction>(auctionKey(auctionId), updatedAuction);
     },
 
     onError(err) {
-      toast.error(`Could not cancel auction! ${err.message}`);
+      toast.error(`Could not cancel auction! ${extractErrorMessage(err)}`);
       queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     }
   });
 };
 
 const cancelAuction = async (auctionId: string) => {
-  try {
-    return await axios.put(`${backendUrl}/api/auctions/${auctionId}/cancel`, undefined, {
-      withCredentials: true
-    });
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  return await axios.put(`${backendUrl}/api/auctions/${auctionId}/cancel`, undefined, {
+    withCredentials: true
+  });
 };

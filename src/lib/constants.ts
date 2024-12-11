@@ -19,7 +19,7 @@ export const dummyUserImage = 'https://avatars.githubusercontent.com/u/110604197
 export const dummyAuctionBanner =
   'https://cdn.sanity.io/images/tlr8oxjg/production/7b7f05720074a848850e0705779306c27da5a6cf-1065x597.png?w=3840&q=100&fit=clip&auto=format';
 
-export const productsCategories: { title: string; value: string }[] = [
+export const productsCategories = [
   { title: 'Arts', value: 'arts' },
   { title: 'Electronics', value: 'electronics' },
   { title: 'Real Estate', value: 'realestate' },
@@ -33,8 +33,8 @@ export const auctionProductConditions = [
 ] as const;
 
 export const auctionStatuses = [
-  { title: 'Pending', value: 'pending' },
   { title: 'Live', value: 'live' },
+  { title: 'Pending', value: 'pending' },
   { title: 'Completed', value: 'completed' },
   { title: 'Cancelled', value: 'cancelled' }
 ] as const;

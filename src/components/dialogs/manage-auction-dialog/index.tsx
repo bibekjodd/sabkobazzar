@@ -23,7 +23,7 @@ type Props = { auction: Auction; children: React.ReactNode };
 export default function ManageAuctionDialog({ auction, children }: Props) {
   return (
     <Dialog>
-      <DialogTrigger disabled={auction.isCancelled || auction.isCompleted} asChild>
+      <DialogTrigger disabled={auction.status !== 'pending'} asChild>
         {children}
       </DialogTrigger>
       <DialogContent className="flex flex-col text-sm">

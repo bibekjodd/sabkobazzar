@@ -11,7 +11,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { usePrevious } from '@/hooks/use-previous';
-import { auctionProductConditions, auctionStatuses } from '@/lib/constants';
+import { auctionProductConditions, auctionStatuses, productsCategories } from '@/lib/constants';
 import { cn, getSearchString } from '@/lib/utils';
 import { KeyOptions } from '@/queries/use-auctions';
 import {
@@ -43,7 +43,7 @@ export default function Filter() {
     () => ({
       category: searchParams.get('category') as KeyOptions['category'],
       owner: searchParams.get('owner'),
-      sort: searchParams.get('category') as KeyOptions['sort'],
+      sort: searchParams.get('sort') as KeyOptions['sort'],
       status: searchParams.get('status') as KeyOptions['status'],
       title: searchParams.get('title'),
       condition: searchParams.get('condition') as KeyOptions['condition']
@@ -71,6 +71,8 @@ export default function Filter() {
 
     return () => clearTimeout(timeout);
   }, [currentSearchParams, currentSearchString, previousSearchString, router]);
+
+  const isAppliedFilters = !!getSearchString({ ...filters, title: undefined });
 
   return (
     <div className="flex space-x-3 py-4">
@@ -162,6 +164,7 @@ export default function Filter() {
 
             <PopoverClose asChild>
               <Button
+                disabled={!isAppliedFilters}
                 variant="outline"
                 onClick={clearFilterAuctions}
                 className="!mt-2 flex items-center"
@@ -176,42 +179,63 @@ export default function Filter() {
 
       <div className="hidden items-center space-x-3 md:flex">
         <Button
+          onClick={clearFilterAuctions}
           variant="outline"
-          onClick={() => updateFilterAuctions({ ...filters, status: 'live' })}
           className={cn({
             'bg-indigo-100 text-primary-foreground hover:bg-indigo-100 hover:text-primary-foreground':
-              filters.status === 'live',
-            'brightness-75 hover:brightness-100': filters.status !== 'live'
+              !isAppliedFilters
           })}
         >
-          Live
+          All
         </Button>
+
+        {auctionStatuses.map((status) => {
+          if (status.value === 'cancelled') return null;
+          return (
+            <Button
+              key={status.value}
+              variant="outline"
+              onClick={() =>
+                updateFilterAuctions({
+                  ...filters,
+                  status: filters.status === status.value ? undefined : status.value
+                })
+              }
+              className={cn({
+                'bg-indigo-100 text-primary-foreground hover:bg-indigo-100 hover:text-primary-foreground':
+                  filters.status === status.value
+              })}
+            >
+              {status.title}
+            </Button>
+          );
+        })}
+
+        {productsCategories.map((category) => (
+          <Button
+            key={category.value}
+            variant="outline"
+            onClick={() =>
+              updateFilterAuctions({
+                ...filters,
+                category: filters.category === category.value ? undefined : category.value
+              })
+            }
+            className={cn('hidden xl:flex', {
+              'bg-indigo-100 text-primary-foreground hover:bg-indigo-100 hover:text-primary-foreground':
+                filters.category === category.value
+            })}
+          >
+            {category.title}
+          </Button>
+        ))}
 
         <Button
+          disabled={!isAppliedFilters}
           variant="outline"
-          onClick={() => updateFilterAuctions({ ...filters, status: 'pending' })}
-          className={cn({
-            'bg-indigo-100 text-primary-foreground hover:bg-indigo-100 hover:text-primary-foreground':
-              filters.status === 'pending',
-            'brightness-75 hover:brightness-100': filters.status !== 'pending'
-          })}
+          onClick={clearFilterAuctions}
+          className="flex items-center"
         >
-          Pending
-        </Button>
-
-        <Button
-          variant="outline"
-          onClick={() => updateFilterAuctions({ ...filters, status: 'completed' })}
-          className={cn({
-            'bg-indigo-100 text-primary-foreground hover:bg-indigo-100 hover:text-primary-foreground':
-              filters.status === 'completed',
-            'brightness-75 hover:brightness-100': filters.status !== 'completed'
-          })}
-        >
-          Completed
-        </Button>
-
-        <Button variant="outline" onClick={clearFilterAuctions} className="flex items-center">
           <span className="mr-2">Clear Filters</span>
           <FilterXIcon className="size-4" />
         </Button>

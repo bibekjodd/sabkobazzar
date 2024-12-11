@@ -78,17 +78,12 @@ export const formatDate = (value: string | Date | number) => {
 };
 
 export const isAuctionPending = (auction: Auction): boolean => {
-  return (
-    !auction.isCancelled &&
-    !auction.isCompleted &&
-    Date.now() < new Date(auction.startsAt).getTime()
-  );
+  return auction.status !== 'cancelled' && Date.now() < new Date(auction.startsAt).getTime();
 };
 
 export const isAuctionLive = (auction: Auction): boolean => {
   return (
-    !auction.isCancelled &&
-    !auction.isCompleted &&
+    auction.status !== 'cancelled' &&
     Date.now() >= new Date(auction.startsAt).getTime() &&
     Date.now() < new Date(auction.startsAt).getTime() + MILLIS.HOUR
   );
@@ -96,14 +91,13 @@ export const isAuctionLive = (auction: Auction): boolean => {
 
 export const isAuctionReady = (auction: Auction): boolean => {
   return (
-    !auction.isCancelled &&
-    !auction.isCompleted &&
+    auction.status !== 'cancelled' &&
     new Date(auction.startsAt).getTime() - Date.now() < MILLIS.MINUTE
   );
 };
 
 export const isAuctionCompleted = (auction: Auction): boolean => {
-  return !auction.isCancelled && new Date().toISOString() > auction.endsAt;
+  return auction.status !== 'cancelled' && new Date().toISOString() > auction.endsAt;
 };
 
 export const canJoinAuction = ({
@@ -114,8 +108,7 @@ export const canJoinAuction = ({
   userId: string;
 }): boolean => {
   return !!(
-    !auction.isCancelled &&
-    !auction.isCompleted &&
+    auction.status !== 'cancelled' &&
     Date.now() < new Date(auction.startsAt).getTime() &&
     userId !== auction.ownerId &&
     (auction.isInviteOnly
@@ -131,15 +124,18 @@ export const canCancelAuction = ({
   auction: Auction;
   userId: string;
 }): boolean => {
-  return userId === auction.ownerId && !auction.isCancelled && !auction.isCompleted;
+  return (
+    userId === auction.ownerId &&
+    auction.status === 'pending' &&
+    new Date().toISOString() < auction.startsAt
+  );
 };
 
 export const canLeaveAuction = ({ auction }: { auction: Auction }): boolean => {
   return (
     auction.participationStatus === 'joined' &&
-    !auction.isCancelled &&
-    !auction.isCompleted &&
-    Date.now() + 3 * MILLIS.HOUR < new Date(auction.startsAt).getTime()
+    auction.status !== 'cancelled' &&
+    Date.now() + 6 * MILLIS.HOUR < new Date(auction.startsAt).getTime()
   );
 };
 

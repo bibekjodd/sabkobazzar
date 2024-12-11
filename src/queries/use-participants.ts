@@ -1,5 +1,4 @@
 import { backendUrl } from '@/lib/constants';
-import { extractErrorMessage } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -18,13 +17,9 @@ const fetchParticipants = async ({
   auctionId: string;
   signal: AbortSignal;
 }): Promise<User[]> => {
-  try {
-    const res = await axios.get<{ participants: User[] }>(
-      `${backendUrl}/api/auctions/${auctionId}/participants`,
-      { signal }
-    );
-    return res.data.participants;
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  const res = await axios.get<{ participants: User[] }>(
+    `${backendUrl}/api/auctions/${auctionId}/participants`,
+    { signal }
+  );
+  return res.data.participants;
 };

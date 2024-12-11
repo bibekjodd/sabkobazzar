@@ -1,6 +1,5 @@
 import { backendUrl } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
-import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -32,17 +31,13 @@ const updateInterested = async ({
   interested: boolean;
   auctionId: string;
 }) => {
-  try {
-    const url = `${backendUrl}/api/auctions/${auctionId}/interested`;
-    if (interested) {
-      return await axios.post(url, undefined, {
-        withCredentials: true
-      });
-    }
-    return await axios.delete(url, {
+  const url = `${backendUrl}/api/auctions/${auctionId}/interested`;
+  if (interested) {
+    return await axios.post(url, undefined, {
       withCredentials: true
     });
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
   }
+  return await axios.delete(url, {
+    withCredentials: true
+  });
 };

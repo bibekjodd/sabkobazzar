@@ -9,6 +9,7 @@ export const useReadNotifications = () => {
   const queryClient = getQueryClient();
   return useMutation({
     mutationKey: ['read-notifications'],
+    retry: 1,
     mutationFn: async () => {
       const profile = queryClient.getQueryData<UserProfile>(profileKey);
       if (!profile) throw new Error('User is not authorized');
@@ -19,7 +20,7 @@ export const useReadNotifications = () => {
 
       const lastNotification = notificationsData.pages[0]?.notifications[0];
       if (!lastNotification) return null;
-      if (profile.lastNotificationReadAt > lastNotification?.receivedAt) return null;
+      if (profile.lastNotificationReadAt > lastNotification?.createdAt) return null;
       return await axios.put(`${backendUrl}/api/notifications/read`, undefined, {
         withCredentials: true
       });

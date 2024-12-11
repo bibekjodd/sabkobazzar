@@ -15,8 +15,13 @@ import Search from './search';
 export default function ManageAuctionsTable() {
   const { data: profile } = useProfile();
   const [filters, setFilters] = useState<KeyOptions>({ owner: profile?.id });
-  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } = useAuctions(filters);
-  const auctions = data?.pages.map((page) => page.auctions).flat(1) || [];
+  const {
+    data: auctions,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage
+  } = useAuctions(filters);
 
   const showMore = () => {
     if (isFetchingNextPage || !hasNextPage) return;
@@ -43,10 +48,8 @@ export default function ManageAuctionsTable() {
                 </TableRow>
               ))}
 
-            {auctions.map((auction) => (
-              <Row key={auction.id} auction={auction} />
-            ))}
-            {!isLoading && auctions.length === 0 && (
+            {auctions?.map((auction) => <Row key={auction.id} auction={auction} />)}
+            {!isLoading && auctions?.length === 0 && (
               <TableRow>
                 <TableCell colSpan={10} className="text-center">
                   No results found
@@ -58,9 +61,9 @@ export default function ManageAuctionsTable() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      {auctions.length > 0 && (
+      {auctions && auctions.length > 0 && (
         <div className="mt-4 flex justify-between">
-          <span className="text-sm text-muted-foreground">{auctions.length} Results</span>
+          <span className="text-sm text-muted-foreground">{auctions?.length} Results</span>
           <Button
             size="sm"
             variant="outline"

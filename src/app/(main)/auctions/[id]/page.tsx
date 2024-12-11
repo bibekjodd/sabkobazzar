@@ -4,6 +4,7 @@ import AuctionOverview, { auctionOverviewSkeleton } from '@/components/auction-o
 import AuctionCard from '@/components/cards/auction-card';
 import Live from '@/components/live';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { extractErrorMessage } from '@/lib/utils';
 import { useLeaveLiveAuction } from '@/mutations/use-leave-live-auction';
 import { useAuction } from '@/queries/use-auction';
 import { useAuctions } from '@/queries/use-auctions';
@@ -48,7 +49,7 @@ export default function Client() {
           <Alert variant="destructive" className="bg-destructive/10">
             <CircleAlert className="size-4" />
             <AlertTitle>Could not get auctions details!</AlertTitle>
-            <AlertDescription>{error.message}</AlertDescription>
+            <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
           </Alert>
         </div>
       )}
@@ -77,10 +78,7 @@ export default function Client() {
 function MoreAuctions({ currentAuction }: { currentAuction: Auction }) {
   const { data } = useAuctions({});
 
-  const auctions = (data?.pages || [])
-    .map((page) => page.auctions)
-    .flat(1)
-    .filter((auction) => auction.id !== currentAuction.id);
+  const auctions = data?.filter((auction) => auction.id !== currentAuction.id);
 
   return (
     <section className="relative z-10 scroll-m-20 pt-16" id="upcoming-auctions">
@@ -90,7 +88,7 @@ function MoreAuctions({ currentAuction }: { currentAuction: Auction }) {
       </h3>
 
       <div className="mt-4 flex flex-wrap">
-        {auctions.slice(0, 6).map((auction) => (
+        {auctions?.slice(0, 6).map((auction) => (
           <div key={auction.id} className="mb-7 w-full md:w-1/2 md:p-4 xl:w-1/3">
             <AuctionCard auction={auction} />
           </div>

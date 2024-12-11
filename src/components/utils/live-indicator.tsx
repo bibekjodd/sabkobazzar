@@ -13,12 +13,10 @@ type LiveIndicator = {
 
 export default function LiveIndicator() {
   const [show, setShow] = useState(false);
-  const { data: upcomingAuctions } = useAuctions({ status: 'pending' });
-  const totalUpcomingAuctions =
-    upcomingAuctions?.pages.map((page) => page.auctions).at(0)?.length || 0;
+  const { data: auctions } = useAuctions({ status: 'pending' });
 
   useEffect(() => {
-    if (!upcomingAuctions) return;
+    if (!auctions) return;
     setShow(true);
     const timeout = setTimeout(() => {
       setShow(false);
@@ -26,11 +24,11 @@ export default function LiveIndicator() {
     return () => {
       clearTimeout(timeout);
     };
-  }, [upcomingAuctions]);
+  }, [auctions]);
 
   return (
     <AnimatePresence>
-      {show && totalUpcomingAuctions !== 0 && (
+      {show && auctions?.length !== 0 && (
         <motion.div
           initial={{ opacity: 0, y: -40, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -45,7 +43,7 @@ export default function LiveIndicator() {
             <span className="absolute inset-0 rounded-full border-2 border-purple-900/40 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
             <span className="absolute inset-0 rounded-full border-2 border-purple-900/20 [mask-image:linear-gradient(to_top,black,transparent)]" />
             <span>
-              {totalUpcomingAuctions < 4 ? totalUpcomingAuctions : '4+'} Auctions coming live
+              {(auctions?.length || 0) < 4 ? auctions?.length : '4+'} Auctions coming live
             </span>
             <Dot className="size-4 scale-150 animate-pulse" />
           </ProgressLink>

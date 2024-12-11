@@ -1,5 +1,4 @@
 import { backendUrl } from '@/lib/constants';
-import { extractErrorMessage } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -11,11 +10,7 @@ export const useLeaveLiveAuction = (auctionId: string) => {
 };
 
 const leaveLiveAuction = async (auctionId: string) => {
-  try {
-    return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/leave`, undefined, {
-      withCredentials: true
-    });
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/leave`, undefined, {
+    withCredentials: true
+  });
 };

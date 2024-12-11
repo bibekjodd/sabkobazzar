@@ -1,6 +1,5 @@
 import { backendUrl } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
-import { extractErrorMessage } from '@/lib/utils';
 import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -15,14 +14,11 @@ export const useLogout = () => {
     onSuccess() {
       queryClient.setQueryData(profileKey, null);
       queryClient.clear();
-    }
+    },
+    retry: 1
   });
 };
 
 const logout = async () => {
-  try {
-    return await axios.post(`${backendUrl}/api/auth/logout`, undefined, { withCredentials: true });
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  return await axios.post(`${backendUrl}/api/auth/logout`, undefined, { withCredentials: true });
 };

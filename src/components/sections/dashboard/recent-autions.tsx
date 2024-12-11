@@ -15,7 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { FadeUp } from '@/components/utils/animations';
 import Avatar from '@/components/utils/avatar';
 import { prefetchDashboardAuctions } from '@/lib/query-utils';
-import { formatPrice } from '@/lib/utils';
+import { extractErrorMessage, formatPrice } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useAuctions } from '@/queries/use-auctions';
 import { useProfile } from '@/queries/use-profile';
@@ -31,14 +31,16 @@ import {
 
 export default function RecentAuctions() {
   const { data: profile } = useProfile();
-  const { data, isLoading, error } = useAuctions({
+  const {
+    data: auctions,
+    isLoading,
+    error
+  } = useAuctions({
     owner: profile?.id,
     status: 'completed',
     sort: 'starts_at_desc'
   });
-  const recentAuctions = (data?.pages.map((page) => page.auctions).flat(1) || [])
-    .filter((auction) => !!auction.winner)
-    .slice(0, 4);
+  const recentAuctions = auctions?.filter((auction) => !!auction.winner).slice(0, 4);
 
   return (
     <FadeUp
@@ -47,7 +49,7 @@ export default function RecentAuctions() {
     >
       <div className="flex items-center justify-between">
         <h3>Recent Auctions</h3>
-        {recentAuctions.length !== 0 && (
+        {recentAuctions?.length !== 0 && (
           <ProgressLink
             href="/dashboard/auctions"
             onClick={prefetchDashboardAuctions}
@@ -58,7 +60,7 @@ export default function RecentAuctions() {
           </ProgressLink>
         )}
       </div>
-      {!isLoading && recentAuctions.length === 0 && (
+      {!isLoading && recentAuctions?.length === 0 && (
         <p className="mt-1 text-sm text-indigo-200/70">
           <InfoIcon className="mr-0.5 inline size-3 -translate-y-0.5" />{' '}
           <span>No data to show here</span>
@@ -69,7 +71,7 @@ export default function RecentAuctions() {
         <Alert variant="destructive" className="mt-4">
           <CircleAlertIcon className="size-4" />
           <AlertTitle>Could not recent auctions data</AlertTitle>
-          <AlertDescription>{error.message}</AlertDescription>
+          <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
         </Alert>
       )}
       <div className="flex flex-col">
@@ -81,9 +83,7 @@ export default function RecentAuctions() {
             </div>
           ))}
 
-        {recentAuctions.map((auction) => (
-          <AuctionItem key={auction.id} auction={auction} />
-        ))}
+        {recentAuctions?.map((auction) => <AuctionItem key={auction.id} auction={auction} />)}
       </div>
     </FadeUp>
   );

@@ -32,14 +32,16 @@ type Auction = {
   finalBid: number | null;
   minBidders: number;
   maxBidders: number;
-  isCompleted: boolean;
-  isCancelled: boolean;
   owner: User;
+  winner: User | null;
   isInviteOnly: boolean;
   isInterested: boolean;
   participationStatus: ParticipationStatus;
   totalParticipants: number;
-} & ({ winner: null; isUnbidded: true } | { winner: User; isUnbidded: false });
+  status: 'pending' | 'cancelled' | 'completed' | 'unbidded';
+  cancelReason: string | null;
+  createdAt: string;
+};
 type ParticipationStatus = 'joined' | 'invited' | 'kicked' | 'rejected' | null;
 
 type UserNotification = {
@@ -47,7 +49,7 @@ type UserNotification = {
   userId: string;
   title: string;
   description?: string;
-  receivedAt: string;
+  createdAt: string;
   entity: string;
   params?: string;
   user: User;
@@ -58,7 +60,7 @@ type Bid = {
   id: string;
   auctionId: string;
   bidderId: string;
-  at: string;
+  createdAt: string;
   amount: number;
   bidder: User;
 };

@@ -17,7 +17,7 @@ export const useUpdateProfile = () => {
     mutationFn: updateProfile,
 
     onError(err) {
-      toast.error(`Could not update profile! ${err.message}`);
+      toast.error(`Could not update profile! ${extractErrorMessage(err)}`);
       queryClient.invalidateQueries({ queryKey: profileKey });
     },
 
@@ -30,25 +30,21 @@ export const useUpdateProfile = () => {
 
 type Options = Partial<UpdateProfileSchema> & { image: string | undefined | File };
 const updateProfile = async ({ image, ...data }: Options): Promise<UserProfile> => {
-  try {
-    const uploadedImagePromise = image instanceof File ? uploadImage(image) : undefined;
+  const uploadedImagePromise = image instanceof File ? uploadImage(image) : undefined;
 
-    const updateProfilePromise = axios
-      .put<{ user: UserProfile }>(
-        `${backendUrl}/api/users/profile`,
-        {
-          ...data,
-          image: typeof image === 'string' ? image : undefined
-        },
-        { withCredentials: true }
-      )
-      .then((res) => res.data.user);
+  const updateProfilePromise = axios
+    .put<{ user: UserProfile }>(
+      `${backendUrl}/api/users/profile`,
+      {
+        ...data,
+        image: typeof image === 'string' ? image : undefined
+      },
+      { withCredentials: true }
+    )
+    .then((res) => res.data.user);
 
-    const [imageUrl, user] = await Promise.all([uploadedImagePromise, updateProfilePromise]);
-    if (imageUrl) updateProfile({ image: imageUrl });
+  const [imageUrl, user] = await Promise.all([uploadedImagePromise, updateProfilePromise]);
+  if (imageUrl) updateProfile({ image: imageUrl });
 
-    return { ...user, image: imageUrl || user.image };
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  return { ...user, image: imageUrl || user.image };
 };

@@ -55,7 +55,9 @@ function BidItem({ bid }: { bid: Bid }) {
           <span className="font-medium">Rs {formatPrice(bid.amount)}</span>
         </div>
       </div>
-      <span className="mt-2 text-xs italic text-indigo-200/50">{dayjs(bid.at).fromNow()}</span>
+      <span className="mt-2 text-xs italic text-indigo-200/50">
+        {dayjs(bid.createdAt).fromNow()}
+      </span>
     </section>
   );
 }

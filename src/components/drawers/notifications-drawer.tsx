@@ -1,6 +1,7 @@
 'use client';
 
 import { useWindowSize } from '@/hooks/use-window-size';
+import { extractErrorMessage } from '@/lib/utils';
 import { useReadNotifications } from '@/mutations/use-read-notifications';
 import { useNotifications } from '@/queries/use-notifications';
 import { createStore } from '@jodd/snap';
@@ -63,7 +64,7 @@ export default function NotificationsDrawer() {
               <Alert variant="destructive">
                 <AlertCircle className="size-4" />
                 <AlertTitle>Could not get notifications</AlertTitle>
-                <AlertDescription>{error.message}</AlertDescription>
+                <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
               </Alert>
             </div>
           )}

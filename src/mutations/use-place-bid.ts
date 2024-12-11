@@ -23,7 +23,7 @@ export const usePlaceBid = (auctionId: string) => {
     },
 
     onError(err) {
-      toast.error(`Could not place bid! ${err.message}`);
+      toast.error(`Could not place bid! ${extractErrorMessage(err)}`);
       queryClient.invalidateQueries({ queryKey: bidsSnapshotKey(auctionId) });
       queryClient.invalidateQueries({ queryKey: bidsKey({ auctionId }) });
       queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
@@ -38,14 +38,10 @@ const placeBid = async ({
   auctionId: string;
   amount: number;
 }): Promise<Bid> => {
-  try {
-    const res = await axios.post<{ bid: Bid }>(
-      `${backendUrl}/api/auctions/${auctionId}/bids`,
-      { amount },
-      { withCredentials: true }
-    );
-    return res.data.bid;
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  const res = await axios.post<{ bid: Bid }>(
+    `${backendUrl}/api/auctions/${auctionId}/bids`,
+    { amount },
+    { withCredentials: true }
+  );
+  return res.data.bid;
 };

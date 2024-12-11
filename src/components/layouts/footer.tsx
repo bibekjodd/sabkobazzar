@@ -79,6 +79,8 @@ export default function Footer() {
           <span>Based in</span>
           <img
             src="https://i.ibb.co/F7Pqzy9/pngwing-com-min.png"
+            loading="lazy"
+            decoding="async"
             alt="flag"
             className="size-3.5 object-contain"
           />

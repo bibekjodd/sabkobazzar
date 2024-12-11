@@ -63,7 +63,7 @@ function BaseContent() {
           <Overview auction={auction} />
           <Participants auctionId={auction.id} />
 
-          {auction.isUnbidded && (
+          {auction.status === 'unbidded' && (
             <div className="mt-4">
               <h3 className="font-medium">
                 <HistoryIcon className="mr-2 inline size-4" />
@@ -72,7 +72,7 @@ function BaseContent() {
               <p className="mt-3 text-center text-sm text-rose-500">The auction was unbidded.</p>
             </div>
           )}
-          {auction.isCompleted && !auction.isUnbidded && (
+          {auction.status === 'completed' && (
             <Bids auctionId={auction.id} startDate={auction.startsAt} />
           )}
         </div>

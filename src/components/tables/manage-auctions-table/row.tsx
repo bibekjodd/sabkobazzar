@@ -1,7 +1,7 @@
 import { openImageDialog } from '@/components/dialogs/image-dialog';
 import { openAuctionDetailsDrawer } from '@/components/drawers/auction-details-drawer';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { dummyAuctionBanner, auctionProductConditions } from '@/lib/constants';
+import { auctionProductConditions, dummyAuctionBanner } from '@/lib/constants';
 import { cn, formatPrice, isAuctionCompleted, isAuctionLive, isAuctionPending } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import dayjs from 'dayjs';
@@ -34,6 +34,8 @@ export default function Row({ auction: auctionData }: { auction: Auction }) {
         <button onClick={() => openImageDialog(auction.banner || dummyAuctionBanner)}>
           <img
             src={auction.banner || dummyAuctionBanner}
+            loading="lazy"
+            decoding="async"
             alt="banner image"
             className="aspect-video object-cover"
           />
@@ -67,7 +69,7 @@ export default function Row({ auction: auctionData }: { auction: Auction }) {
             <span>Live</span>
           </div>
         )}
-        {auction.isCancelled && (
+        {auction.status === 'cancelled' && (
           <div className="flex items-center space-x-2 text-rose-500">
             <CircleOffIcon className="size-3.5" />
             <span>Cancelled</span>

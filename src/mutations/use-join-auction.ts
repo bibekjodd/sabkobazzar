@@ -22,23 +22,19 @@ export const useJoinAuction = (auctionId: string) => {
     },
 
     onError(err) {
-      toast.error(`Could not join auction! ${err.message}`);
+      toast.error(`Could not join auction! ${extractErrorMessage(err)}`);
       queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     }
   });
 };
 
 const joinAuction = async (auctionId: string): Promise<Auction> => {
-  try {
-    const res = await axios.put<{ auction: Auction }>(
-      `${backendUrl}/api/auctions/${auctionId}/join`,
-      undefined,
-      {
-        withCredentials: true
-      }
-    );
-    return res.data.auction;
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  const res = await axios.put<{ auction: Auction }>(
+    `${backendUrl}/api/auctions/${auctionId}/join`,
+    undefined,
+    {
+      withCredentials: true
+    }
+  );
+  return res.data.auction;
 };

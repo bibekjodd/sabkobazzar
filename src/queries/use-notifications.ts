@@ -1,5 +1,4 @@
 import { backendUrl } from '@/lib/constants';
-import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -25,16 +24,12 @@ const fetchNotifications = async ({
   signal,
   cursor
 }: Options): Promise<FetchNotificationsResult> => {
-  try {
-    const url = new URL(`${backendUrl}/api/notifications`);
-    if (cursor) url.searchParams.set('cursor', cursor);
+  const url = new URL(`${backendUrl}/api/notifications`);
+  if (cursor) url.searchParams.set('cursor', cursor);
 
-    const res = await axios.get<FetchNotificationsResult>(url.href, {
-      withCredentials: true,
-      signal
-    });
-    return res.data;
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  const res = await axios.get<FetchNotificationsResult>(url.href, {
+    withCredentials: true,
+    signal
+  });
+  return res.data;
 };

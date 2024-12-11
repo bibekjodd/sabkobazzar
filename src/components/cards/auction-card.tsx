@@ -6,7 +6,7 @@ import { canJoinAuction, canLeaveAuction, formatDate, isAuctionPending } from '@
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import { ChartNoAxesGanttIcon, ChevronsRight, InfoIcon } from 'lucide-react';
+import { ChartNoAxesGanttIcon, ChevronsRight, GlobeLockIcon, InfoIcon } from 'lucide-react';
 import JoinAuctionDialog from '../dialogs/join-auction-dialog';
 import LeaveAuctionDialog from '../dialogs/leave-auction.dialog';
 import { openLoginDialog } from '../dialogs/require-login-dialog';
@@ -47,13 +47,21 @@ export default function AuctionCard({
       <ProgressLink href={auctionLink}>
         <img
           src={auction.banner || dummyAuctionBanner}
+          loading="lazy"
+          decoding="async"
           alt="banner image"
           className="aspect-video w-full rounded-lg object-contain p-0.5"
         />
       </ProgressLink>
 
       <div className="mt-2.5 px-4">
-        <h3 className="mb-1 line-clamp-2 text-xl">{auction.title}</h3>
+        <h3 className="line-clamp-2 text-xl">{auction.title}</h3>
+        {auction.isInviteOnly && (
+          <div className="my-1 flex items-center space-x-1.5 text-sm text-indigo-200/90">
+            <GlobeLockIcon className="size-3.5" />
+            <span>Private Auction</span>
+          </div>
+        )}
         <p className="text-sm text-indigo-200/80">Scheduled for {formatDate(auction.startsAt)}</p>
         {canShowInviteOnlyInfo && (
           <p className="mt-1 text-sm text-gray-400/80">

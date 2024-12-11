@@ -22,7 +22,7 @@ export const useRegisterAuction = () => {
       queryClient.setQueryData<Auction>(auctionKey(auction.id), auction);
     },
     onError(err) {
-      toast.error(`Could not register auction! ${err.message}`);
+      toast.error(`Could not register auction! ${extractErrorMessage(err)}`);
     },
     onSettled() {
       const profile = queryClient.getQueryData<User>(profileKey);
@@ -42,27 +42,22 @@ const registerAuction = async ({
   productImages,
   ...data
 }: Options): Promise<Auction> => {
-  try {
-    const bannerImageUrlPromise =
-      bannerImage instanceof File ? uploadImage(bannerImage) : undefined;
+  const bannerImageUrlPromise = bannerImage instanceof File ? uploadImage(bannerImage) : undefined;
 
-    const productImagesUrlsPromise: Promise<string>[] = [];
-    for (const image of productImages || []) {
-      if (image instanceof File) productImagesUrlsPromise.push(uploadImage(image));
-    }
-
-    const [bannerImageUrl, ...productImagesUrls] = await Promise.all([
-      bannerImageUrlPromise,
-      ...productImagesUrlsPromise
-    ]);
-
-    const res = await axios.post<{ auction: Auction }>(
-      `${backendUrl}/api/auctions`,
-      { ...data, banner: bannerImageUrl || bannerImage, productImages: productImagesUrls },
-      { withCredentials: true }
-    );
-    return res.data.auction;
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
+  const productImagesUrlsPromise: Promise<string>[] = [];
+  for (const image of productImages || []) {
+    if (image instanceof File) productImagesUrlsPromise.push(uploadImage(image));
   }
+
+  const [bannerImageUrl, ...productImagesUrls] = await Promise.all([
+    bannerImageUrlPromise,
+    ...productImagesUrlsPromise
+  ]);
+
+  const res = await axios.post<{ auction: Auction }>(
+    `${backendUrl}/api/auctions`,
+    { ...data, banner: bannerImageUrl || bannerImage, productImages: productImagesUrls },
+    { withCredentials: true }
+  );
+  return res.data.auction;
 };

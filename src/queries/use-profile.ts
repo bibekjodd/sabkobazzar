@@ -1,6 +1,6 @@
 import { backendUrl, MILLIS } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
-import { extractErrorMessage, isShallowEqual } from '@/lib/utils';
+import { isShallowEqual } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -19,22 +19,18 @@ export const useProfile = () => {
 };
 
 export const fetchProfile = async ({ signal }: { signal: AbortSignal }): Promise<UserProfile> => {
-  try {
-    const url = `${backendUrl}/api/users/profile`;
-    const { data } = await axios.get<{ user: UserProfile }>(url, { withCredentials: true, signal });
+  const url = `${backendUrl}/api/users/profile`;
+  const { data } = await axios.get<{ user: UserProfile }>(url, { withCredentials: true, signal });
 
-    const queryClient = getQueryClient();
-    const oldProfileData = queryClient.getQueryData<UserProfile>(profileKey);
-    if (!oldProfileData) return data.user;
+  const queryClient = getQueryClient();
+  const oldProfileData = queryClient.getQueryData<UserProfile>(profileKey);
+  if (!oldProfileData) return data.user;
 
-    const isSame = isShallowEqual(
-      { ...oldProfileData, lastOnline: undefined },
-      { ...data.user, lastOnline: undefined }
-    );
-    if (isSame) return oldProfileData;
+  const isSame = isShallowEqual(
+    { ...oldProfileData, lastOnline: undefined },
+    { ...data.user, lastOnline: undefined }
+  );
+  if (isSame) return oldProfileData;
 
-    return data.user;
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  return data.user;
 };

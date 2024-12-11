@@ -9,7 +9,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import Avatar from '@/components/utils/avatar';
 import InfiniteScrollObserver from '@/components/utils/infinite-scroll-observer';
-import { formatPrice } from '@/lib/utils';
+import { extractErrorMessage, formatPrice } from '@/lib/utils';
 import { useBids } from '@/queries/use-bids';
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration';
@@ -62,7 +62,7 @@ export function Bids({ auctionId, startDate }: { auctionId: string; startDate: s
           <Alert variant="destructive">
             <CircleAlertIcon className="size-4" />
             <AlertTitle>Could not get bids result</AlertTitle>
-            <AlertDescription>{error.message}</AlertDescription>
+            <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
           </Alert>
         )}
 
@@ -88,7 +88,7 @@ export function Bids({ auctionId, startDate }: { auctionId: string; startDate: s
 }
 
 function BidItem({ bid, startDate }: { bid: Bid; startDate: string }) {
-  const duration = dayjs.duration(dayjs(bid.at).diff(dayjs(startDate)));
+  const duration = dayjs.duration(dayjs(bid.createdAt).diff(dayjs(startDate)));
   const minutes = duration.minutes();
   const seconds = duration.seconds();
 
@@ -96,7 +96,7 @@ function BidItem({ bid, startDate }: { bid: Bid; startDate: string }) {
     <div className="-mx-3 mb-1 rounded-md border-indigo-200/10 bg-indigo-900/10 py-1.5 last:border-b-0">
       <div className="px-4 py-2">
         <p className="text-xs text-indigo-100/80">
-          At {minutes && `${minutes} minutes`} {seconds && `${seconds} seconds`}
+          At {minutes !== 0 && `${minutes} minutes`} {seconds && `${seconds} seconds`}
         </p>
 
         <div className="mt-2.5 flex items-center justify-between">

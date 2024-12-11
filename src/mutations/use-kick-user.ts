@@ -15,11 +15,13 @@ export const useKickUser = ({ auctionId, userId }: KeyOptions) => {
   return useMutation({
     mutationKey: kickUserKey({ auctionId, userId }),
     mutationFn: () => kickUser({ auctionId, userId }),
+
     onError(err) {
-      toast.error(`Could not kick user from the auction! ${err.message}`);
+      toast.error(`Could not kick user from the auction! ${extractErrorMessage(err)}`);
       queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
       queryClient.invalidateQueries({ queryKey: participantsKey(auctionId) });
     },
+
     onSuccess() {
       const auction = queryClient.getQueryData<Auction>(auctionKey(auctionId));
       if (auction) {
@@ -38,11 +40,7 @@ export const useKickUser = ({ auctionId, userId }: KeyOptions) => {
 };
 
 const kickUser = async ({ auctionId, userId }: KeyOptions) => {
-  try {
-    return await axios.put(`${backendUrl}/api/auctions/${auctionId}/kick/${userId}`, undefined, {
-      withCredentials: true
-    });
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  return await axios.put(`${backendUrl}/api/auctions/${auctionId}/kick/${userId}`, undefined, {
+    withCredentials: true
+  });
 };

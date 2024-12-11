@@ -1,5 +1,4 @@
 import { backendUrl } from '@/lib/constants';
-import { extractErrorMessage } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -36,17 +35,13 @@ const fetchBids = async ({
   limit,
   sort
 }: Options): Promise<FetchBidsResult> => {
-  try {
-    const url = new URL(`${backendUrl}/api/auctions/${auctionId}/bids`);
-    if (cursor) url.searchParams.set('cursor', cursor);
-    if (sort) url.searchParams.set('sort', sort);
-    if (limit) url.searchParams.set('limit', limit.toString());
-    const res = await axios.get<FetchBidsResult>(url.href, {
-      withCredentials: true,
-      signal
-    });
-    return res.data;
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  const url = new URL(`${backendUrl}/api/auctions/${auctionId}/bids`);
+  if (cursor) url.searchParams.set('cursor', cursor);
+  if (sort) url.searchParams.set('sort', sort);
+  if (limit) url.searchParams.set('limit', limit.toString());
+  const res = await axios.get<FetchBidsResult>(url.href, {
+    withCredentials: true,
+    signal
+  });
+  return res.data;
 };

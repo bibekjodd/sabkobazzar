@@ -2,6 +2,7 @@
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { NOTIFICATION_MAP } from '@/lib/constants';
+import { extractErrorMessage } from '@/lib/utils';
 import { useNotifications } from '@/queries/use-notifications';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -22,7 +23,7 @@ export default function RecentActivities() {
           <Alert variant="destructive">
             <CircleAlertIcon className="size-4" />
             <AlertTitle>Could not load recent activities</AlertTitle>
-            <AlertDescription>{error.message}</AlertDescription>
+            <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
           </Alert>
         </div>
       )}
@@ -52,7 +53,7 @@ function NotificationItem({ notification }: { notification: UserNotification }) 
         <p>{notification.title}</p>
         <p className="mt-1 text-sm text-indigo-200/90">{notification.description}</p>
         <p className="mt-1.5 text-xs text-indigo-200/60">
-          {dayjs(notification.receivedAt).fromNow()}
+          {dayjs(notification.createdAt).fromNow()}
         </p>
       </div>
     </div>

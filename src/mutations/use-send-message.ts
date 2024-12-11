@@ -1,6 +1,5 @@
 import { backendUrl } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
-import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -20,11 +19,7 @@ export const useSendMessage = (auctionId: string) => {
 
 type Options = { text: string | undefined; emoji: string | undefined; auctionId: string };
 const sendMessage = async ({ auctionId, ...data }: Options) => {
-  try {
-    return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/message`, data, {
-      withCredentials: true
-    });
-  } catch (error) {
-    throw new Error(extractErrorMessage(error));
-  }
+  return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/message`, data, {
+    withCredentials: true
+  });
 };
