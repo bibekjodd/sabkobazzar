@@ -1,4 +1,4 @@
-import { HomeIcon, LucideIcon, WebhookIcon } from 'lucide-react';
+import { HomeIcon, LucideIcon, MessageSquareTextIcon, WebhookIcon } from 'lucide-react';
 import { prefetchDashboardAuctions, prefetchDashboardData } from './query-utils';
 
 export const dashboardLinks: {
@@ -6,17 +6,26 @@ export const dashboardLinks: {
   href: string;
   icon: LucideIcon;
   action?: () => unknown;
+  allowedRole: 'admin' | 'user' | 'any';
 }[] = [
   {
     title: 'Dashboard',
     href: '/dashboard',
     icon: HomeIcon,
-    action: prefetchDashboardData
+    action: prefetchDashboardData,
+    allowedRole: 'any'
   },
   {
     title: 'Auctions',
     href: '/dashboard/auctions',
     icon: WebhookIcon,
-    action: prefetchDashboardAuctions
+    action: prefetchDashboardAuctions,
+    allowedRole: 'any'
+  },
+  {
+    title: 'Feedbacks',
+    href: '/dashboard/feedbacks',
+    icon: MessageSquareTextIcon,
+    allowedRole: 'admin'
   }
 ];

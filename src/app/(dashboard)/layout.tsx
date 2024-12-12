@@ -6,15 +6,21 @@ import RegisterAuctionDialog from '@/components/drawers/register-auction-drawer'
 import DashboardHeader from '@/components/layouts/dashboard-header';
 import DashboardSidebar from '@/components/layouts/dashboard-sidebar';
 import SearchDashboard from '@/components/search-dashboard';
+import { dashboardLinks } from '@/lib/dashboard-links';
 import { useProfile } from '@/queries/use-profile';
-import { redirect } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import React from 'react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: profile, isLoading, error } = useProfile();
+  const pathname = usePathname();
   if (error) redirect('/');
   if (!isLoading && !profile) redirect('/');
-  if (!profile) return;
+  if (!profile) return null;
+
+  const currentPage = dashboardLinks.find((link) => link.href === pathname);
+  if (currentPage?.allowedRole !== 'any' && profile?.role !== currentPage?.allowedRole)
+    redirect('/dashboard');
 
   return (
     <>

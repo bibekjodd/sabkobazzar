@@ -64,3 +64,13 @@ type Bid = {
   amount: number;
   bidder: User;
 };
+
+type Feedback = {
+  id: string;
+  title: string;
+  text: string | null;
+  rating: number;
+  userId: string;
+  createdAt: string;
+  user: User;
+};

@@ -44,12 +44,9 @@ export const useAuctions = (options?: KeyOptions) => {
   return useInfiniteQuery({
     queryKey: auctionsKey(options),
     queryFn: ({ pageParam, signal }) => fetchAuctions({ cursor: pageParam, signal, ...options }),
-    select: (data) => {
-      return data.pages.map((page) => page.auctions).flat(1);
-    },
-
     initialPageParam: undefined as string | undefined,
-    getNextPageParam: (lastPage) => lastPage.cursor
+    getNextPageParam: (lastPage) => lastPage.cursor,
+    select: (data) => data.pages.map((page) => page.auctions).flat(1)
   });
 };
 

@@ -11,7 +11,8 @@ export const useNotifications = () => {
     gcTime: Infinity,
     maxPages: 10,
     initialPageParam: undefined as string | undefined,
-    getNextPageParam: (lastPage) => lastPage.cursor
+    getNextPageParam: (lastPage) => lastPage.cursor,
+    select: (data) => data.pages.map((page) => page.notifications).flat(1)
   });
 };
 

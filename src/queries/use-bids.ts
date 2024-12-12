@@ -22,7 +22,8 @@ export const useBids = (options: KeyOptions) => {
     initialPageParam: undefined as string | undefined,
     getNextPageParam(lastPage) {
       return lastPage.cursor;
-    }
+    },
+    select: (data) => data.pages.map((page) => page.bids).flat(1)
   });
 };
 

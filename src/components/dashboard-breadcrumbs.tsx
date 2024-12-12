@@ -1,18 +1,13 @@
 'use client';
 
-import { prefetchDashboardAuctions } from '@/lib/query-utils';
+import { dashboardLinks } from '@/lib/dashboard-links';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import {
-  ActivityIcon,
-  ChevronRightIcon,
-  HomeIcon,
-  TrendingUpIcon,
-  WebhookIcon
-} from 'lucide-react';
+import { ActivityIcon, ChevronRightIcon, HomeIcon, TrendingUpIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function DashboardBreadcrumbs() {
   const pathname = usePathname();
+  const currentLink = dashboardLinks.find((link) => link.href === pathname);
 
   return (
     <div className="flex items-center space-x-2 px-5 text-sm">
@@ -36,14 +31,14 @@ export default function DashboardBreadcrumbs() {
         </div>
       )}
 
-      {pathname === '/dashboard/auctions' && (
+      {currentLink && currentLink.href !== '/dashboard' && (
         <ProgressLink
-          href="/dashboard/auctions"
-          onClick={prefetchDashboardAuctions}
+          href={currentLink.href}
+          onClick={currentLink.action}
           className="flex items-center space-x-1.5"
         >
-          <WebhookIcon className="size-3.5" />
-          <span>Auctions</span>
+          <currentLink.icon className="size-3.5" />
+          <span>{currentLink.title}</span>
         </ProgressLink>
       )}
     </div>

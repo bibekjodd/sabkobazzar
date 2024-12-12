@@ -21,11 +21,17 @@ dayjs.extend(durationPlugin);
 export function Bids({ auctionId, startDate }: { auctionId: string; startDate: string }) {
   const [sort, setSort] = useState<'asc' | 'desc'>('asc');
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, error } = useBids({
+  const {
+    data: bids,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    error
+  } = useBids({
     auctionId,
     sort
   });
-  const bids = data?.pages.map((page) => page.bids).flat(1);
 
   return (
     <section className="mt-8">

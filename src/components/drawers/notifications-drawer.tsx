@@ -6,7 +6,7 @@ import { useReadNotifications } from '@/mutations/use-read-notifications';
 import { useNotifications } from '@/queries/use-notifications';
 import { createStore } from '@jodd/snap';
 import { AlertCircle } from 'lucide-react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { NotificationCard, NotificationCardSkeleton } from '../cards/notification-card';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
@@ -72,12 +72,8 @@ export default function NotificationsDrawer() {
           <div className="flex flex-col space-y-2 px-1">
             {isLoading &&
               new Array(6).fill('nothing').map((_, i) => <NotificationCardSkeleton key={i} />)}
-            {notifications?.pages.map((page, i) => (
-              <React.Fragment key={i}>
-                {page.notifications.map((notification) => (
-                  <NotificationCard key={notification.id} notification={notification} />
-                ))}
-              </React.Fragment>
+            {notifications?.map((notification) => (
+              <NotificationCard key={notification.id} notification={notification} />
             ))}
             <InfiniteScrollObserver
               showLoader

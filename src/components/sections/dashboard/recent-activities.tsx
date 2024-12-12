@@ -10,8 +10,7 @@ import { ActivityIcon, BellIcon, CircleAlertIcon } from 'lucide-react';
 
 dayjs.extend(relativeTime);
 export default function RecentActivities() {
-  const { data, error } = useNotifications();
-  const notifications = data?.pages[0].notifications.slice(0, 5);
+  const { data: notifications, error } = useNotifications();
 
   return (
     <section id="activities" className="-mx-4 mt-20 scroll-m-16 rounded-lg bg-indigo-950/10 py-6">
