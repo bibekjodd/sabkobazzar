@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { MailIcon, PhoneIcon } from 'lucide-react';
+import { BadgeCheckIcon, MailIcon, PhoneIcon } from 'lucide-react';
 import React from 'react';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card';
 import Avatar from '../utils/avatar';
@@ -18,7 +18,12 @@ export default function UserHoverCard({
         <div className="flex items-start space-x-4">
           <Avatar src={user.image} size="lg" />
           <div>
-            <p className="text-base font-semibold">{user.name}</p>
+            <div className="flex items-center space-x-2">
+              <p className="text-base font-semibold">{user.name}</p>
+              {user.isVerified && (
+                <BadgeCheckIcon className="size-4 fill-sky-500 text-indigo-100" />
+              )}
+            </div>
 
             <div className="mt-1 flex items-center space-x-2">
               <MailIcon className="size-3.5" />

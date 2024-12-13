@@ -5,6 +5,7 @@ import ProfileDialog from '@/components/dialogs/profile-dialog';
 import QrCodeDialog from '@/components/dialogs/qr-code-dialog';
 import RequireLoginDialog from '@/components/dialogs/require-login-dialog';
 import UpdateProfileDialog from '@/components/dialogs/update-profile-dialog';
+import VerifyAccountDialog from '@/components/dialogs/verify-account-dialog';
 import AuctionDetailsDrawer from '@/components/drawers/auction-details-drawer';
 import NotificationsDrawer from '@/components/drawers/notifications-drawer';
 import RealtimeListener from '@/components/utils/realtime-listener';
@@ -39,6 +40,7 @@ export default function RootLayout({
 
           <ProfileDialog />
           <UpdateProfileDialog />
+          <VerifyAccountDialog />
           <RequireLoginDialog />
           <LogoutDialog />
           <QrCodeDialog />
