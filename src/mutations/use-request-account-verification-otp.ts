@@ -10,16 +10,14 @@ export const useRequestAccountVerificationOtp = () => {
   return useMutation({
     mutationKey: ['request-account-verification-otp'],
     mutationFn: async () => {
-      await axios.get(`${backendUrl}/api/users/verify`, { withCredentials: true });
+      await axios.post(`${backendUrl}/api/users/otp/request`, undefined, { withCredentials: true });
     },
 
     onSuccess() {
-      toast.dismiss();
       toast.success('Account verification otp has been sent to mail');
     },
 
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not get verification otp! ${extractErrorMessage(err)}`);
       const queryClient = getQueryClient();
       queryClient.invalidateQueries({ queryKey: profileKey });

@@ -11,7 +11,7 @@ export const useVerifyAccount = () => {
   return useMutation({
     mutationKey: ['verify-account'],
     mutationFn: async ({ otp }: { otp: string }) => {
-      await axios.put(`${backendUrl}/api/users/verify`, { otp }, { withCredentials: true });
+      await axios.post(`${backendUrl}/api/users/otp/verify`, { otp }, { withCredentials: true });
     },
 
     onError() {

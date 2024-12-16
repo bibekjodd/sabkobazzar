@@ -7,6 +7,7 @@ import { createStore } from '@jodd/snap';
 import {
   BadgeCheckIcon,
   BadgeInfoIcon,
+  KeyRoundIcon,
   Loader2Icon,
   LogOutIcon,
   MailIcon,
@@ -17,6 +18,7 @@ import { useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
 import Avatar from '../utils/avatar';
 import { openLogoutDialog } from './logout-dialog';
+import { openUpdatePasswordDialog } from './update-password-dialog';
 import { openUpdateProfileDialog } from './update-profile-dialog';
 import { openVerifyAccountDialog } from './verify-account-dialog';
 
@@ -116,6 +118,16 @@ export default function ProfileDialog() {
               <SettingsIcon />
               <p className="ml-2 mr-auto">Update profile</p>
             </button>
+
+            {profile.authSource === 'credentials' && (
+              <button
+                onClick={openUpdatePasswordDialog}
+                className="flex items-center rounded-md px-3 py-1.5 hover:bg-muted/50"
+              >
+                <KeyRoundIcon />
+                <p className="ml-2 mr-auto">Update password</p>
+              </button>
+            )}
 
             <button
               onClick={openLogoutDialog}

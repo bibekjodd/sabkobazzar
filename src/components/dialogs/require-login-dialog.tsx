@@ -13,17 +13,17 @@ import {
 } from '@/ui/dialog';
 import { createStore } from '@jodd/snap';
 
-const useLoginDialog = createStore<{ isOpen: boolean }>(() => ({
+const useRequireLoginDialog = createStore<{ isOpen: boolean }>(() => ({
   isOpen: false
 }));
 
-const onOpenChange = (isOpen: boolean) => useLoginDialog.setState({ isOpen });
+const onOpenChange = (isOpen: boolean) => useRequireLoginDialog.setState({ isOpen });
 
-export const openLoginDialog = () => onOpenChange(true);
-export const closeLoginDialog = () => onOpenChange(false);
+export const openRequireLoginDialog = () => onOpenChange(true);
+export const closeRequireLoginDialog = () => onOpenChange(false);
 
 export default function RequireLoginDialog() {
-  const { isOpen } = useLoginDialog();
+  const { isOpen } = useRequireLoginDialog();
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>

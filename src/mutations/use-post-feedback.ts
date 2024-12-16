@@ -12,11 +12,9 @@ export const usePostFeedback = () => {
     mutationKey: postFeedbackKey,
     mutationFn: postFeedback,
     onError(err) {
-      toast.dismiss();
       toast.error(`Could not post feedback! ${extractErrorMessage(err)}`);
     },
     onSuccess() {
-      toast.dismiss();
       toast.success('Your feedback was sent!');
     }
   });

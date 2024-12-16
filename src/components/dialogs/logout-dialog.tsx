@@ -22,8 +22,17 @@ export const closeLogoutDialog = () => onOpenChange(false);
 
 export default function LogoutDialog() {
   const { data: profile } = useProfile();
-  const { mutate: logout, isPending } = useLogout();
+  const { mutate, isPending } = useLogout();
   const { isOpen } = useLogoutDialog();
+  const logout = () => {
+    if (isPending) return;
+    mutate(undefined, {
+      onSuccess() {
+        closeLogoutDialog();
+      }
+    });
+  };
+
   if (!profile) return null;
 
   return (
@@ -40,16 +49,9 @@ export default function LogoutDialog() {
           <DialogClose asChild>
             <Button variant="text">Cancel</Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button
-              disabled={isPending}
-              loading={isPending}
-              onClick={() => logout()}
-              variant="secondary"
-            >
-              Logout
-            </Button>
-          </DialogClose>
+          <Button disabled={isPending} loading={isPending} onClick={logout} variant="secondary">
+            Logout
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

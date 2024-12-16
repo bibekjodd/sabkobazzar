@@ -33,7 +33,7 @@ import { toast } from 'sonner';
 import UserHoverCard from './cards/user-hover-card';
 import JoinAuctionDialog from './dialogs/join-auction-dialog';
 import LeaveAuctionDialog from './dialogs/leave-auction.dialog';
-import { openLoginDialog } from './dialogs/require-login-dialog';
+import { openRequireLoginDialog } from './dialogs/require-login-dialog';
 import { openAuctionDetailsDrawer } from './drawers/auction-details-drawer';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
@@ -172,7 +172,7 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
                   <Button Icon={TicketPlusIcon}>Join Auction</Button>
                 </JoinAuctionDialog>
               ) : (
-                <Button onClick={openLoginDialog}>Join Auction</Button>
+                <Button onClick={openRequireLoginDialog}>Join Auction</Button>
               ))}
             {canUserLeaveAuction && (
               <LeaveAuctionDialog auctionId={auction.id}>

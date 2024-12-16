@@ -135,7 +135,9 @@ function BaseDialog() {
 
         <DialogFooter>
           <DialogClose asChild ref={closeButtonRef}>
-            <Button variant="text">Cancel</Button>
+            <Button variant="text" disabled={isPending}>
+              Cancel
+            </Button>
           </DialogClose>
           <Button
             variant="secondary"

@@ -1,9 +1,12 @@
+import AuthDialog from '@/components/dialogs/auth-dialog';
 import ImageDialog from '@/components/dialogs/image-dialog';
+import RequestLoginOtpDialog from '@/components/dialogs/login-with-otp-dialog';
 import LogoutDialog from '@/components/dialogs/logout-dialog';
 import PostFeedbackDialog from '@/components/dialogs/post-feedback-dialog';
 import ProfileDialog from '@/components/dialogs/profile-dialog';
 import QrCodeDialog from '@/components/dialogs/qr-code-dialog';
 import RequireLoginDialog from '@/components/dialogs/require-login-dialog';
+import UpdatePasswordDialog from '@/components/dialogs/update-password-dialog';
 import UpdateProfileDialog from '@/components/dialogs/update-profile-dialog';
 import VerifyAccountDialog from '@/components/dialogs/verify-account-dialog';
 import AuctionDetailsDrawer from '@/components/drawers/auction-details-drawer';
@@ -40,9 +43,12 @@ export default function RootLayout({
 
           <ProfileDialog />
           <UpdateProfileDialog />
+          <AuthDialog />
           <VerifyAccountDialog />
           <RequireLoginDialog />
           <LogoutDialog />
+          <RequestLoginOtpDialog />
+          <UpdatePasswordDialog />
           <QrCodeDialog />
           <ImageDialog />
           <PostFeedbackDialog />

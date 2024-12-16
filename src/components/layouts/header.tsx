@@ -1,13 +1,13 @@
 'use client';
 
 import { logo } from '@/components/utils/logo';
-import { redirectToLogin } from '@/lib/utils';
 import { useProfile } from '@/queries/use-profile';
 import { clearFilterAuctions } from '@/stores/use-filter-auctions';
 import { ProgressLink, useLoadingBar } from '@jodd/next-top-loading-bar';
 import { LogIn, SearchIcon, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, useState } from 'react';
+import { openAuthDialog } from '../dialogs/auth-dialog';
 import ProfileDropdown from '../dropdowns/profile-dropdown';
 import { Skeleton } from '../ui/skeleton';
 import Avatar from '../utils/avatar';
@@ -49,7 +49,7 @@ export default function Header() {
           {isFetched && !profile && (
             <button
               className="flex items-center space-x-1.5 hover:text-indigo-100"
-              onClick={redirectToLogin}
+              onClick={openAuthDialog}
             >
               <span>Login</span>
               <LogIn className="size-4" />

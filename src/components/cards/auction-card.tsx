@@ -9,7 +9,7 @@ import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { ChartNoAxesGanttIcon, ChevronsRight, GlobeLockIcon, InfoIcon } from 'lucide-react';
 import JoinAuctionDialog from '../dialogs/join-auction-dialog';
 import LeaveAuctionDialog from '../dialogs/leave-auction.dialog';
-import { openLoginDialog } from '../dialogs/require-login-dialog';
+import { openRequireLoginDialog } from '../dialogs/require-login-dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
@@ -97,7 +97,7 @@ export default function AuctionCard({
               </Button>
             </JoinAuctionDialog>
           ) : (
-            <Button variant="secondary" className="w-full" onClick={openLoginDialog}>
+            <Button variant="secondary" className="w-full" onClick={openRequireLoginDialog}>
               Join Auction
             </Button>
           ))}

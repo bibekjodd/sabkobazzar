@@ -23,7 +23,7 @@ import { Label } from '../ui/label';
 import { ScrollArea } from '../ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
-import { openLoginDialog } from './require-login-dialog';
+import { openRequireLoginDialog } from './require-login-dialog';
 
 const usePostfeedbackDialog = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
 const onOpenChange = (isOpen: boolean) => usePostfeedbackDialog.setState({ isOpen });
@@ -56,7 +56,7 @@ export default function PostFeedbackDialog() {
   const { mutate } = usePostFeedback();
   const onSubmit = handleSubmit(async (data: PostFeedbackSchema) => {
     if (!profile) {
-      openLoginDialog();
+      openRequireLoginDialog();
       return;
     }
 
