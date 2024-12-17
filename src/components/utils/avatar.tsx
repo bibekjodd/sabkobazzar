@@ -23,7 +23,29 @@ export default function Avatar({
   ...props
 }: Props) {
   const image = (
-    <div className="relative inline size-fit select-none rounded-full">
+    <div
+      className={cn(
+        'relative select-none',
+        {
+          'aspect-square h-4 min-h-4': size === 'xs',
+          'aspect-square h-6 min-h-6': size === 'sm',
+          'aspect-square h-8 min-h-8': size === 'md' || !size,
+          'aspect-square h-10 min-h-10': size === 'lg',
+          'aspect-square h-12 min-h-12': size === 'xl',
+          'aspect-square h-14 min-h-14': size === '2xl'
+        },
+        className
+      )}
+    >
+      <img
+        src={src || dummyUserImage}
+        loading="lazy"
+        decoding="async"
+        alt="user avatar"
+        className="h-full w-full rounded-full object-cover"
+        {...props}
+      />
+
       {showOnlineIndicator && (
         <div className="absolute bottom-0 right-0 size-2 scale-90 rounded-full border border-background bg-green-600" />
       )}
@@ -40,29 +62,6 @@ export default function Avatar({
           </span>
         </div>
       )}
-
-      <div
-        className={cn(
-          {
-            'size-4': size === 'xs',
-            'size-6': size === 'sm',
-            'size-8': size === 'md' || !size,
-            'size-10': size === 'lg',
-            'size-12': size === 'xl',
-            'size-14': size === '2xl'
-          },
-          className
-        )}
-      >
-        <img
-          src={src || dummyUserImage}
-          loading="lazy"
-          decoding="async"
-          alt="user avatar"
-          className="h-full w-full rounded-full object-cover"
-          {...props}
-        />
-      </div>
     </div>
   );
   if (isLink) {

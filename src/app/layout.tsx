@@ -1,11 +1,13 @@
 import AuthDialog from '@/components/dialogs/auth-dialog';
 import ImageDialog from '@/components/dialogs/image-dialog';
+import JoinAuctionDialog from '@/components/dialogs/join-auction-dialog';
+import LeaveAuctionDialog from '@/components/dialogs/leave-auction.dialog';
 import RequestLoginOtpDialog from '@/components/dialogs/login-with-otp-dialog';
 import LogoutDialog from '@/components/dialogs/logout-dialog';
 import PostFeedbackDialog from '@/components/dialogs/post-feedback-dialog';
 import ProfileDialog from '@/components/dialogs/profile-dialog';
 import QrCodeDialog from '@/components/dialogs/qr-code-dialog';
-import RequireLoginDialog from '@/components/dialogs/require-login-dialog';
+import ReportAuctionDialog from '@/components/dialogs/report-auction-dialog';
 import UpdatePasswordDialog from '@/components/dialogs/update-password-dialog';
 import UpdateProfileDialog from '@/components/dialogs/update-profile-dialog';
 import VerifyAccountDialog from '@/components/dialogs/verify-account-dialog';
@@ -45,13 +47,18 @@ export default function RootLayout({
           <UpdateProfileDialog />
           <AuthDialog />
           <VerifyAccountDialog />
-          <RequireLoginDialog />
           <LogoutDialog />
           <RequestLoginOtpDialog />
           <UpdatePasswordDialog />
+
+          <JoinAuctionDialog />
+          <LeaveAuctionDialog />
+
           <QrCodeDialog />
           <ImageDialog />
+
           <PostFeedbackDialog />
+          <ReportAuctionDialog />
 
           <NotificationsDrawer />
           <AuctionDetailsDrawer />

@@ -1,31 +1,22 @@
 'use client';
 
-import ManageAuctionDialog from '@/components/dialogs/manage-auction-dialog';
 import { dummyAuctionBanner } from '@/lib/constants';
-import { canJoinAuction, canLeaveAuction, formatDate, isAuctionPending } from '@/lib/utils';
+import { canJoinAuction, canLeaveAuction, formatDate } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import { ChartNoAxesGanttIcon, ChevronsRight, GlobeLockIcon, InfoIcon } from 'lucide-react';
-import JoinAuctionDialog from '../dialogs/join-auction-dialog';
-import LeaveAuctionDialog from '../dialogs/leave-auction.dialog';
-import { openRequireLoginDialog } from '../dialogs/require-login-dialog';
+import { ChevronsRight, GlobeLockIcon, InfoIcon } from 'lucide-react';
+import { openAuthDialog } from '../dialogs/auth-dialog';
+import { openJoinAuctionDialog } from '../dialogs/join-auction-dialog';
+import { openLeaveAuctionDialog } from '../dialogs/leave-auction.dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 type Props = {
   auction: Auction;
-  showJoinButton?: boolean;
-  showInviteOnlyInfo?: boolean;
-  showManageAuctionButton?: boolean;
 };
-export default function AuctionCard({
-  auction: auctionData,
-  showJoinButton,
-  showInviteOnlyInfo,
-  showManageAuctionButton
-}: Props) {
+export default function AuctionCard({ auction: auctionData }: Props) {
   const auctionLink = `/auctions/${auctionData.id}`;
   const { data: profile } = useProfile();
 
@@ -34,11 +25,6 @@ export default function AuctionCard({
 
   const canUserJoinAuction = canJoinAuction({ auction, userId: profile?.id! });
   const canUserLeaveAuction = canLeaveAuction({ auction });
-  const canShowInviteOnlyInfo =
-    showInviteOnlyInfo &&
-    auction.isInviteOnly &&
-    isAuctionPending(auction) &&
-    auction.ownerId !== profile?.id;
 
   return (
     <div className="relative flex h-full w-full flex-col rounded-lg filter backdrop-blur-3xl">
@@ -63,7 +49,7 @@ export default function AuctionCard({
           </div>
         )}
         <p className="text-sm text-indigo-200/80">Scheduled for {formatDate(auction.startsAt)}</p>
-        {canShowInviteOnlyInfo && (
+        {auction.isInviteOnly && (
           <p className="mt-1 text-sm text-gray-400/80">
             <TooltipProvider delayDuration={300}>
               <Tooltip>
@@ -88,34 +74,27 @@ export default function AuctionCard({
           </Button>
         </ProgressLink>
 
-        {canUserJoinAuction &&
-          showJoinButton &&
-          (profile ? (
-            <JoinAuctionDialog auctionId={auction.id}>
-              <Button variant="secondary" className="w-full">
-                Join Auction
-              </Button>
-            </JoinAuctionDialog>
-          ) : (
-            <Button variant="secondary" className="w-full" onClick={openRequireLoginDialog}>
-              Join Auction
-            </Button>
-          ))}
-
-        {canUserLeaveAuction && showJoinButton && (
-          <LeaveAuctionDialog auctionId={auction.id}>
-            <Button variant="outline" className="w-full">
-              Leave Auction
-            </Button>
-          </LeaveAuctionDialog>
+        {canUserJoinAuction && (
+          <Button
+            onClick={() => {
+              if (profile) return openJoinAuctionDialog(auction.id);
+              openAuthDialog();
+            }}
+            variant="secondary"
+            className="w-full"
+          >
+            Join Auction
+          </Button>
         )}
 
-        {showManageAuctionButton && (
-          <ManageAuctionDialog auction={auction}>
-            <Button variant="outline" className="w-full" Icon={ChartNoAxesGanttIcon}>
-              Manage
-            </Button>
-          </ManageAuctionDialog>
+        {canUserLeaveAuction && (
+          <Button
+            onClick={() => openLeaveAuctionDialog(auction.id)}
+            variant="outline"
+            className="w-full"
+          >
+            Leave Auction
+          </Button>
         )}
       </div>
     </div>

@@ -1,6 +1,7 @@
-import { joinAuctionKey, useJoinAuction } from '@/mutations/use-join-auction';
-import { useIsMutating } from '@tanstack/react-query';
-import React, { useRef } from 'react';
+'use client';
+
+import { useJoinAuction } from '@/mutations/use-join-auction';
+import { createStore } from '@jodd/snap';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -9,30 +10,38 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '../ui/dialog';
 
-type Props = {
-  auctionId: string;
-  children: React.ReactNode;
-};
-export default function JoinAuctionDialog({ children, auctionId }: Props) {
-  const { mutate } = useJoinAuction(auctionId);
-  const isJoiningAuction = !!useIsMutating({ mutationKey: joinAuctionKey(auctionId) });
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+const useJoinAuctionDialog = createStore<{ isOpen: boolean; auctionId: string | null }>(() => ({
+  isOpen: false,
+  auctionId: null
+}));
+const onOpenChange = (isOpen: boolean) =>
+  useJoinAuctionDialog.setState((state) => ({
+    isOpen,
+    auctionId: isOpen ? state.auctionId : null
+  }));
+
+export const openJoinAuctionDialog = (auctionId: string) =>
+  useJoinAuctionDialog.setState({ isOpen: true, auctionId });
+export const closeJoinAuctionDialog = () => onOpenChange(false);
+
+export default function JoinAuctionDialog() {
+  const { isOpen, auctionId } = useJoinAuctionDialog();
+  const { mutate, isPending } = useJoinAuction(auctionId!);
 
   const joinAuction = () => {
+    if (isPending || !auctionId) return;
     mutate(undefined, {
       onSuccess() {
-        closeButtonRef.current?.click();
+        closeJoinAuctionDialog();
       }
     });
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure to join the auction?</DialogTitle>
@@ -40,15 +49,15 @@ export default function JoinAuctionDialog({ children, auctionId }: Props) {
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose asChild ref={closeButtonRef}>
+          <DialogClose asChild>
             <Button variant="text">Close</Button>
           </DialogClose>
 
           <Button
             onClick={joinAuction}
             variant="secondary"
-            loading={isJoiningAuction}
-            disabled={isJoiningAuction}
+            loading={isPending}
+            disabled={isPending}
           >
             Join
           </Button>

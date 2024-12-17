@@ -21,6 +21,7 @@ import {
   CheckCheckIcon,
   ClockIcon,
   CopyIcon,
+  FlagIcon,
   LogOutIcon,
   ReceiptTextIcon,
   TicketPlusIcon,
@@ -31,9 +32,10 @@ import {
 import { useState } from 'react';
 import { toast } from 'sonner';
 import UserHoverCard from './cards/user-hover-card';
-import JoinAuctionDialog from './dialogs/join-auction-dialog';
-import LeaveAuctionDialog from './dialogs/leave-auction.dialog';
-import { openRequireLoginDialog } from './dialogs/require-login-dialog';
+import { openAuthDialog } from './dialogs/auth-dialog';
+import { openJoinAuctionDialog } from './dialogs/join-auction-dialog';
+import { openLeaveAuctionDialog } from './dialogs/leave-auction.dialog';
+import { openReportAuctionDialog } from './dialogs/report-auction-dialog';
 import { openAuctionDetailsDrawer } from './drawers/auction-details-drawer';
 import { Skeleton } from './ui/skeleton';
 import Avatar from './utils/avatar';
@@ -158,6 +160,14 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
             </UserHoverCard>
           </div>
 
+          <button
+            onClick={() => openReportAuctionDialog(auction.id)}
+            className="mt-2 flex items-center space-x-1 hover:underline"
+          >
+            <FlagIcon className="size-3.5" />
+            <span>Report</span>
+          </button>
+
           {auction.description && (
             <div className="pt-3">
               <p>Description</p>
@@ -166,20 +176,25 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
           )}
 
           <div className="flex flex-col space-y-2 pt-7">
-            {canUserJoinAuction &&
-              (profile ? (
-                <JoinAuctionDialog auctionId={auction.id}>
-                  <Button Icon={TicketPlusIcon}>Join Auction</Button>
-                </JoinAuctionDialog>
-              ) : (
-                <Button onClick={openRequireLoginDialog}>Join Auction</Button>
-              ))}
+            {canUserJoinAuction && (
+              <Button
+                onClick={() => {
+                  if (profile) return openJoinAuctionDialog(auction.id);
+                  openAuthDialog();
+                }}
+                Icon={TicketPlusIcon}
+              >
+                Join Auction
+              </Button>
+            )}
             {canUserLeaveAuction && (
-              <LeaveAuctionDialog auctionId={auction.id}>
-                <Button variant="outline" Icon={LogOutIcon}>
-                  Leave Auction
-                </Button>
-              </LeaveAuctionDialog>
+              <Button
+                onClick={() => openLeaveAuctionDialog(auction.id)}
+                variant="outline"
+                Icon={LogOutIcon}
+              >
+                Leave Auction
+              </Button>
             )}
 
             {auction.owner.id === profile?.id && <Button disabled>Join Auction</Button>}

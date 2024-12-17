@@ -1,6 +1,7 @@
-import { leaveAuctionKey, useLeaveAuction } from '@/mutations/use-leave-auction';
-import { useIsMutating } from '@tanstack/react-query';
-import React, { useRef } from 'react';
+'use client';
+
+import { useLeaveAuction } from '@/mutations/use-leave-auction';
+import { createStore } from '@jodd/snap';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -9,30 +10,38 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '../ui/dialog';
 
-type Props = {
-  auctionId: string;
-  children: React.ReactNode;
-};
-export default function LeaveAuctionDialog({ children, auctionId }: Props) {
-  const { mutate } = useLeaveAuction(auctionId);
-  const isLeavingAuction = !!useIsMutating({ mutationKey: leaveAuctionKey(auctionId) });
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+const useLeaveAuctionDialog = createStore<{ isOpen: boolean; auctionId: string | null }>(() => ({
+  isOpen: false,
+  auctionId: null
+}));
+const onOpenChange = (isOpen: boolean) =>
+  useLeaveAuctionDialog.setState((state) => ({
+    isOpen,
+    auctionId: isOpen ? state.auctionId : null
+  }));
+
+export const openLeaveAuctionDialog = (auctionId: string) =>
+  useLeaveAuctionDialog.setState({ isOpen: true, auctionId });
+export const closeLeaveAuctionDialog = () => onOpenChange(false);
+
+export default function LeaveAuctionDialog() {
+  const { isOpen, auctionId } = useLeaveAuctionDialog();
+  const { mutate, isPending } = useLeaveAuction(auctionId!);
 
   const leaveAuction = () => {
+    if (isPending || !auctionId) return;
     mutate(undefined, {
       onSuccess() {
-        closeButtonRef.current?.click();
+        closeLeaveAuctionDialog();
       }
     });
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
@@ -40,15 +49,15 @@ export default function LeaveAuctionDialog({ children, auctionId }: Props) {
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose asChild ref={closeButtonRef}>
+          <DialogClose asChild>
             <Button variant="text">Close</Button>
           </DialogClose>
 
           <Button
             onClick={leaveAuction}
             variant="secondary"
-            loading={isLeavingAuction}
-            disabled={isLeavingAuction}
+            loading={isPending}
+            disabled={isPending}
           >
             Leave
           </Button>
