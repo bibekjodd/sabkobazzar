@@ -8,19 +8,29 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command';
-import { ProgressLink } from '@jodd/next-top-loading-bar';
+import { useLoadingBar } from '@jodd/next-top-loading-bar';
 import { createStore } from '@jodd/snap';
 import {
   ActivityIcon,
   EggFriedIcon,
   HistoryIcon,
+  LucideIcon,
   PackageIcon,
   TrendingUpIcon,
   WebhookIcon
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { openRegisterAuctionDrawer } from './drawers/register-auction-drawer';
 import { DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
+
+const commandItems: { title: string; href: string; icon: LucideIcon }[] = [
+  { title: 'Activities', href: '/dashboard#activities', icon: ActivityIcon },
+  { title: 'Analytics', href: '/dashboard#analytics', icon: TrendingUpIcon },
+  { title: 'Auctions History', href: '/dashboard#auctions-history', icon: HistoryIcon },
+  { title: 'Manage Auctions', href: '/dashboard/auctions', icon: WebhookIcon },
+  { title: 'Recent Auctions', href: '/dashboard#recent-auctions', icon: PackageIcon }
+];
 
 const useSearchDashboard = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
 const onOpenChange = (isOpen: boolean) => useSearchDashboard.setState({ isOpen });
@@ -29,6 +39,8 @@ export const closeSearchDashboard = () => onOpenChange(false);
 
 export default function SearchDashboard() {
   const { isOpen } = useSearchDashboard();
+  const startRouteTransition = useLoadingBar((state) => state.start);
+  const router = useRouter();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -55,53 +67,29 @@ export default function SearchDashboard() {
         <CommandEmpty>No results found.</CommandEmpty>
 
         <CommandGroup heading="All">
-          <ProgressLink href="/dashboard/#activities" onClick={closeSearchDashboard}>
-            <CommandItem>
-              <ActivityIcon />
-              <span>Activities</span>
+          {commandItems.map((item) => (
+            <CommandItem
+              key={item.title}
+              onSelect={() => {
+                startRouteTransition(item.href);
+                router.push(item.href);
+                closeSearchDashboard();
+              }}
+            >
+              <item.icon />
+              <span>{item.title}</span>
             </CommandItem>
-          </ProgressLink>
+          ))}
 
-          <ProgressLink href="/dashboard#analytics" onClick={closeSearchDashboard}>
-            <CommandItem>
-              <TrendingUpIcon />
-              <span>Analytics</span>
-            </CommandItem>
-          </ProgressLink>
-
-          <ProgressLink href="/dashboard#auctions-history" onClick={closeSearchDashboard}>
-            <CommandItem>
-              <HistoryIcon />
-              <span>Auctions history</span>
-            </CommandItem>
-          </ProgressLink>
-
-          <ProgressLink href="/dashboard/auctions" onClick={closeSearchDashboard}>
-            <CommandItem>
-              <WebhookIcon />
-              <span>Manage auctions</span>
-            </CommandItem>
-          </ProgressLink>
-
-          <ProgressLink href="/dashboard#recent-auctions" onClick={closeSearchDashboard}>
-            <CommandItem>
-              <PackageIcon />
-              <span>Recent auctions</span>
-            </CommandItem>
-          </ProgressLink>
-
-          <button
-            className="w-full"
-            onClick={() => {
-              closeSearchDashboard();
+          <CommandItem
+            onSelect={() => {
               openRegisterAuctionDrawer();
+              closeSearchDashboard();
             }}
           >
-            <CommandItem>
-              <EggFriedIcon />
-              <span>Register an auction</span>
-            </CommandItem>
-          </button>
+            <EggFriedIcon />
+            <span>Register an auction</span>
+          </CommandItem>
         </CommandGroup>
       </CommandList>
     </CommandDialog>

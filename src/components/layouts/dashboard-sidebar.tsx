@@ -24,9 +24,9 @@ export default function DashboardSidebar() {
               href={link.href}
               onClick={link.action}
               className={cn(
-                'mb-0.5 flex h-12 items-center space-x-3 rounded-lg pl-4 hover:bg-purple-600/15 hover:text-purple-400',
+                'mb-0.5 flex h-12 items-center space-x-3 rounded-lg pl-4 hover:bg-purple-400/10 hover:text-purple-400',
                 {
-                  'bg-purple-600/15 text-purple-400': pathname === link.href
+                  'bg-purple-400/10 text-purple-400': pathname === link.href
                 }
               )}
             >

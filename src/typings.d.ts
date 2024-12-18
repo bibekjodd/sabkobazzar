@@ -77,3 +77,15 @@ type Feedback = {
   createdAt: string;
   user: User;
 };
+
+type DashboardReport = {
+  id: string;
+  text: string | null;
+  userId: string;
+  auctionId: string;
+  title: string;
+  response: string | null;
+  images: string[] | null;
+  createdAt: string;
+  user: User;
+};

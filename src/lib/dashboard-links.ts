@@ -1,4 +1,6 @@
+import { fetchReports, reportsKey } from '@/queries/use-reports';
 import { FlagIcon, HomeIcon, LucideIcon, MessageSquareTextIcon, WebhookIcon } from 'lucide-react';
+import { getQueryClient } from './query-client';
 import { prefetchDashboardAuctions, prefetchDashboardData } from './query-utils';
 
 export const dashboardLinks: {
@@ -32,6 +34,15 @@ export const dashboardLinks: {
     title: 'Reports',
     href: '/dashboard/reports',
     icon: FlagIcon,
-    allowedRole: 'admin'
+    allowedRole: 'admin',
+    action: () => {
+      const queryClient = getQueryClient();
+      if (queryClient.getQueryData(reportsKey({}))) return;
+      queryClient.prefetchInfiniteQuery({
+        queryKey: reportsKey({}),
+        initialPageParam: undefined,
+        queryFn: ({ signal }) => fetchReports({ signal, cursor: undefined })
+      });
+    }
   }
 ];

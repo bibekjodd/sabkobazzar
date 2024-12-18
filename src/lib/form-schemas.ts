@@ -137,7 +137,15 @@ export const postFeedbackSchema = z.object({
 export type PostFeedbackSchema = z.infer<typeof postFeedbackSchema>;
 
 export const reportAuctionSchema = z.object({
-  title: z.string().max(100, 'Too long title'),
+  title: z.string().min(10, 'Too short report title').max(100, 'Too long title'),
   text: z.string().max(1000, "Report message can't exceed 1000 characters")
 });
 export type ReportAuctionSchema = z.infer<typeof reportAuctionSchema>;
+
+export const respondReportSchema = z.object({
+  response: z
+    .string()
+    .min(10, 'Too short response')
+    .max(1000, "Response can't exceed 1000 characters")
+});
+export type RespondReportSchema = z.infer<typeof respondReportSchema>;

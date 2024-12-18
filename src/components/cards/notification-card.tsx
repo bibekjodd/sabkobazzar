@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BellIcon } from 'lucide-react';
 import { useState } from 'react';
+import { openReportDetailsDialog } from '../dialogs/report-details-dialog';
 import { closeNotificationsDrawer } from '../drawers/notifications-drawer';
 import { Skeleton } from '../ui/skeleton';
 
@@ -31,8 +32,18 @@ export function NotificationCard({ notification }: { notification: UserNotificat
     severity: 'neutral'
   };
 
+  const onClickAction = () => {
+    if (
+      notification.entity === 'reports' &&
+      notification.type === 'response' &&
+      notification.params
+    ) {
+      openReportDetailsDialog(notification.params);
+    }
+  };
+
   const element = (
-    <div className="relative overflow-hidden rounded-xl">
+    <div className="relative cursor-pointer overflow-hidden rounded-xl" onClick={onClickAction}>
       <div className="absolute left-0 top-0 -z-20 aspect-square h-20 rounded-full bg-indigo-300/15 blur-3xl filter" />
       <div className="absolute right-0 top-0 -z-20 aspect-square h-20 rounded-full bg-indigo-300/30 blur-3xl filter" />
       <div className="absolute inset-0 -z-20 bg-gradient-to-b from-blue-300/5" />

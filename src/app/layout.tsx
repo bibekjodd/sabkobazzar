@@ -8,6 +8,7 @@ import PostFeedbackDialog from '@/components/dialogs/post-feedback-dialog';
 import ProfileDialog from '@/components/dialogs/profile-dialog';
 import QrCodeDialog from '@/components/dialogs/qr-code-dialog';
 import ReportAuctionDialog from '@/components/dialogs/report-auction-dialog';
+import ReportDetailsDialog from '@/components/dialogs/report-details-dialog';
 import UpdatePasswordDialog from '@/components/dialogs/update-password-dialog';
 import UpdateProfileDialog from '@/components/dialogs/update-profile-dialog';
 import VerifyAccountDialog from '@/components/dialogs/verify-account-dialog';
@@ -59,6 +60,7 @@ export default function RootLayout({
 
           <PostFeedbackDialog />
           <ReportAuctionDialog />
+          <ReportDetailsDialog />
 
           <NotificationsDrawer />
           <AuctionDetailsDrawer />

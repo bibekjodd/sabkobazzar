@@ -46,9 +46,9 @@ export default function DashboardMenuDrawer() {
                 closeDashbordMenuDrawer();
               }}
               className={cn(
-                'flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500',
+                'flex items-center space-x-2 p-4 font-semibold hover:bg-purple-400/10 hover:text-purple-400',
                 pathname === link.href &&
-                  'border-l-4 border-purple-700 bg-purple-700/15 text-purple-500'
+                  'border-l-4 border-purple-700 bg-purple-400/10 text-purple-400'
               )}
             >
               <link.icon className="size-5" />
@@ -61,7 +61,7 @@ export default function DashboardMenuDrawer() {
               openRegisterAuctionDrawer();
               closeDashbordMenuDrawer();
             }}
-            className="flex items-center space-x-2 p-4 font-semibold hover:bg-purple-700/15 hover:text-purple-500"
+            className="flex items-center space-x-2 p-4 font-semibold hover:bg-purple-400/10 hover:text-purple-400"
           >
             <WebhookIcon className="size-5" />
             <span>Register Auction</span>
