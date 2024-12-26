@@ -52,7 +52,7 @@ function BaseContent() {
   return (
     <>
       <DrawerHeader>
-        <DrawerTitle className="line-clamp-1 text-center text-lg font-medium text-purple-400/90">
+        <DrawerTitle className="line-clamp-1 text-center text-lg font-medium text-brand">
           {auction.title}
         </DrawerTitle>
       </DrawerHeader>
@@ -69,7 +69,7 @@ function BaseContent() {
                 <HistoryIcon className="mr-2 inline size-4" />
                 <span>Bids History</span>
               </h3>
-              <p className="mt-3 text-center text-sm text-rose-500">The auction was unbidded.</p>
+              <p className="mt-3 text-center text-sm text-error">The auction was unbidded.</p>
             </div>
           )}
           {auction.status === 'completed' && (
@@ -78,7 +78,7 @@ function BaseContent() {
         </div>
       </ScrollArea>
 
-      <DrawerFooter>
+      <DrawerFooter className="sm:hidden">
         <DrawerClose asChild>
           <Button variant="outline">Close</Button>
         </DrawerClose>

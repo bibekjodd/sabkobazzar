@@ -1,9 +1,13 @@
-import { backendUrl, MILLIS } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
+import { MILLIS } from '@/lib/constants';
+import { concatenateSearchParams } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type KeyOptions = { auctionId: string; q: string };
-export const searchInviteKey = (options: KeyOptions) => ['search-invite', options];
+export const searchInviteKey = (options: KeyOptions) => [
+  'search-invite',
+  { ...options, q: options.q.trim() || undefined }
+];
 
 export const useSearchInvite = ({ auctionId, q }: KeyOptions) => {
   return useInfiniteQuery({
@@ -14,20 +18,19 @@ export const useSearchInvite = ({ auctionId, q }: KeyOptions) => {
       if (lastPage.length) return lastPageParam + 1;
       return undefined;
     },
-    gcTime: MILLIS.MINUTE / 2,
-    maxPages: 3
+    gcTime: MILLIS.MINUTE / 2
   });
 };
 
 type Result = User & { status: ParticipationStatus };
 type Options = { signal: AbortSignal; q: string; auctionId: string; page: number | undefined };
-const searchInvite = async ({ signal, q, auctionId, page }: Options): Promise<Result[]> => {
-  const url = new URL(`${backendUrl}/api/auctions/${auctionId}/search-invite`);
-  url.searchParams.set('q', q);
-  if (page) url.searchParams.set('page', page.toString());
-  const res = await axios.get<{ users: Result[] }>(url.href, {
-    withCredentials: true,
-    signal
-  });
+const searchInvite = async ({ signal, auctionId, ...query }: Options): Promise<Result[]> => {
+  const res = await apiClient.get<{ users: Result[] }>(
+    concatenateSearchParams(`/api/auctions/${auctionId}/search-invite`, query),
+    {
+      withCredentials: true,
+      signal
+    }
+  );
   return res.data.users;
 };

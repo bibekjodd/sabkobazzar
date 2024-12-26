@@ -66,7 +66,6 @@ function BaseContent() {
     mutate(data, {
       onSuccess() {
         reset();
-        closeRespondReortDialog();
       }
     });
   });
@@ -77,21 +76,15 @@ function BaseContent() {
         <AutoAnimate className="flex flex-col space-y-2">
           <Label id="response">Response</Label>
           <Textarea rows={6} {...register('response')} placeholder="Response message..." />
-          {errors.response && <p className="text-sm text-rose-500">{errors.response.message}</p>}
+          {errors.response && <p className="text-sm text-error">{errors.response.message}</p>}
         </AutoAnimate>
       </form>
 
       <DialogFooter>
         <DialogClose asChild>
-          <Button variant="text">Cancel</Button>
+          <Button variant="ghost">Cancel</Button>
         </DialogClose>
-        <Button
-          onClick={onSubmit}
-          variant="secondary"
-          Icon={CheckCheckIcon}
-          disabled={isPending}
-          loading={isPending}
-        >
+        <Button onClick={onSubmit} Icon={CheckCheckIcon} disabled={isPending} loading={isPending}>
           Send Response
         </Button>
       </DialogFooter>

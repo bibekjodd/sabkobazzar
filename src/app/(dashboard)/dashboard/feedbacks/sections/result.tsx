@@ -22,7 +22,7 @@ export default function Result() {
   return (
     <div className="mt-3 space-y-2">
       {!isLoading && feedbacks?.length === 0 && (
-        <p className="text-sm font-medium text-rose-500">No results found.</p>
+        <p className="text-sm font-medium text-error">No results found.</p>
       )}
       {isLoading &&
         new Array(6).fill('nothing').map((_, i) => (
@@ -48,11 +48,13 @@ export default function Result() {
         >
           <div className="flex items-center space-x-3">
             <UserHoverCard user={feedback.user}>
-              <Avatar src={feedback.user.image} />
+              <button>
+                <Avatar src={feedback.user.image} />
+              </button>
             </UserHoverCard>
             <div className="flex flex-col -space-y-1">
               <UserHoverCard user={feedback.user}>
-                <span className="font-semibold hover:underline">{feedback.user.name}</span>
+                <button className="font-semibold hover:underline">{feedback.user.name}</button>
               </UserHoverCard>
               <div>
                 {new Array(Math.round(feedback.rating)).fill('nothing').map((val, i) => (
@@ -64,10 +66,12 @@ export default function Result() {
 
           <div className="mt-1">
             <h3 className="font-medium">{feedback.title}</h3>
-            <p className="text-indigo-100/90">{feedback.text}</p>
+            <p className="text-muted-foreground">{feedback.text}</p>
           </div>
 
-          <p className="mt-2 text-xs text-indigo-200/80">{dayjs(feedback.createdAt).fromNow()}</p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {dayjs(feedback.createdAt).fromNow()}
+          </p>
         </section>
       ))}
 

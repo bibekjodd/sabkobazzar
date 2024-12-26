@@ -1,8 +1,7 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
 import { isAuctionCompleted } from '@/lib/utils';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { useEffect } from 'react';
 
 export const auctionKey = (id: string) => ['auction', id];
@@ -44,7 +43,7 @@ export const fetchAuction = async ({
   auctionId: string;
   signal: AbortSignal;
 }): Promise<Auction> => {
-  const res = await axios.get<{ auction: Auction }>(`${backendUrl}/api/auctions/${auctionId}`, {
+  const res = await apiClient.get<{ auction: Auction }>(`/api/auctions/${auctionId}`, {
     signal,
     withCredentials: true
   });

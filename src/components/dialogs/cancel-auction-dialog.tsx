@@ -1,5 +1,10 @@
+'use client';
+
+import { CancelAuctionSchema, cancelAuctionSchema } from '@/lib/form-schemas';
 import { useCancelAuction } from '@/mutations/use-cancel-auction';
-import React, { useRef } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createStore } from '@jodd/snap';
+import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -8,48 +13,67 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '../ui/dialog';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
 
-export default function CancelAuctionDialog({
-  auctionId,
-  children
-}: {
-  auctionId: string;
-  children: React.ReactNode;
-}) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const { mutate, isPending } = useCancelAuction(auctionId);
+const useCancelAuctionDialog = createStore<{ isOpen: boolean; auctionId: string | null }>(() => ({
+  isOpen: false,
+  auctionId: null
+}));
+const onOpenChange = (isOpen: boolean) =>
+  useCancelAuctionDialog.setState((state) => ({
+    isOpen,
+    auctionId: isOpen ? state.auctionId : null
+  }));
 
-  const cancelAuction = () => {
-    mutate(undefined, { onSuccess: () => closeButtonRef.current?.click() });
-  };
+export const openCancelAuctionDialog = (auctionId: string) =>
+  useCancelAuctionDialog.setState({ isOpen: true, auctionId });
+export const closeCancelAuctionDialog = () => onOpenChange(false);
+
+export default function CancelAuctionDialog() {
+  const { isOpen, auctionId } = useCancelAuctionDialog();
+  const { mutate, isPending } = useCancelAuction(auctionId!);
+
+  const {
+    handleSubmit,
+    reset,
+    formState: { errors },
+    register
+  } = useForm<CancelAuctionSchema>({ resolver: zodResolver(cancelAuctionSchema) });
+
+  const onSubmit = handleSubmit((data) => {
+    if (isPending || !auctionId) return;
+    mutate(data, {
+      onSuccess() {
+        reset();
+      }
+    });
+  });
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="backdrop-blur-lg">
         <DialogHeader>
-          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogTitle className="text-center">Are you sure to cancel the auction?</DialogTitle>
         </DialogHeader>
-        <DialogDescription className="text-indigo-200/80">
-          You cannot undo this action and will have to register to bring product to the auction
-          again!
-        </DialogDescription>
+        <DialogDescription className="hidden" />
+
+        <form className="flex flex-col space-y-2" onSubmit={onSubmit}>
+          <Label htmlFor="reason">Reason</Label>
+          <Textarea rows={6} id="reason" placeholder="Cancel reason..." {...register('reason')} />
+          <div className="flex flex-wrap justify-between">
+            {errors.reason && <p className="text-sm text-error">{errors.reason.message}</p>}
+          </div>
+        </form>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="text" ref={closeButtonRef}>
-              Close
-            </Button>
+            <Button variant="ghost">Close</Button>
           </DialogClose>
-          <Button
-            onClick={cancelAuction}
-            loading={isPending}
-            disabled={isPending}
-            variant="secondary"
-          >
+
+          <Button onClick={onSubmit} loading={isPending} disabled={isPending}>
             Confirm
           </Button>
         </DialogFooter>

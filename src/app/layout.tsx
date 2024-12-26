@@ -4,10 +4,8 @@ import JoinAuctionDialog from '@/components/dialogs/join-auction-dialog';
 import LeaveAuctionDialog from '@/components/dialogs/leave-auction.dialog';
 import RequestLoginOtpDialog from '@/components/dialogs/login-with-otp-dialog';
 import LogoutDialog from '@/components/dialogs/logout-dialog';
-import PostFeedbackDialog from '@/components/dialogs/post-feedback-dialog';
 import ProfileDialog from '@/components/dialogs/profile-dialog';
 import QrCodeDialog from '@/components/dialogs/qr-code-dialog';
-import ReportAuctionDialog from '@/components/dialogs/report-auction-dialog';
 import ReportDetailsDialog from '@/components/dialogs/report-details-dialog';
 import UpdatePasswordDialog from '@/components/dialogs/update-password-dialog';
 import UpdateProfileDialog from '@/components/dialogs/update-profile-dialog';
@@ -17,11 +15,13 @@ import NotificationsDrawer from '@/components/drawers/notifications-drawer';
 import RealtimeListener from '@/components/utils/realtime-listener';
 import QueryProvider from '@/providers/query-provider';
 import { LoadingBar } from '@jodd/next-top-loading-bar';
-import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
+import { Geist } from 'next/font/google';
 import React from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
+
+const geist = Geist({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700', '900'] });
 
 export const metadata: Metadata = {
   title: 'Sabkobazzar',
@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`antialiased ${GeistSans.className} text-indigo-100`}>
+      <body className={`antialiased ${geist.className}`}>
         <QueryProvider>
           {children}
 
@@ -58,8 +58,6 @@ export default function RootLayout({
           <QrCodeDialog />
           <ImageDialog />
 
-          <PostFeedbackDialog />
-          <ReportAuctionDialog />
           <ReportDetailsDialog />
 
           <NotificationsDrawer />

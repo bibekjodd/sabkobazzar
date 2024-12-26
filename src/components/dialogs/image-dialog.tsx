@@ -21,7 +21,7 @@ export default function ImageDialog() {
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
-        className="h-fit w-[calc(100%-20px)] max-w-md overflow-hidden rounded-md border-none p-0 [&_svg]:hidden"
+        className="h-fit w-[calc(100%-20px)] max-w-md overflow-hidden rounded-md border-none p-0"
       >
         <DialogHeader className="sr-only">
           <DialogTitle />

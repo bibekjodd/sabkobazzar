@@ -1,6 +1,5 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const participantsKey = (auctionId: string) => ['participants', auctionId];
 export const useParticipants = (auctionId: string) => {
@@ -17,8 +16,8 @@ const fetchParticipants = async ({
   auctionId: string;
   signal: AbortSignal;
 }): Promise<User[]> => {
-  const res = await axios.get<{ participants: User[] }>(
-    `${backendUrl}/api/auctions/${auctionId}/participants`,
+  const res = await apiClient.get<{ participants: User[] }>(
+    `/api/auctions/${auctionId}/participants`,
     { signal }
   );
   return res.data.participants;

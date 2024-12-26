@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon, LockKeyholeIcon, MailIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { closeAuthDialog } from '.';
+import { openLoginWithOtpDialog } from '../login-with-otp-dialog';
 
 export default function LoginForm() {
   const {
@@ -25,7 +25,6 @@ export default function LoginForm() {
     mutate(data, {
       onSuccess() {
         reset();
-        closeAuthDialog();
       }
     });
   });
@@ -39,18 +38,27 @@ export default function LoginForm() {
         {...register('email')}
         error={errors.email?.message}
       />
-      <Input
-        IconLeft={LockKeyholeIcon}
-        label="Password"
-        type={hidePassword ? 'password' : 'text'}
-        placeholder="trump@gmail.com"
-        {...register('password')}
-        iconRightAction={() => setHidePassword(!hidePassword)}
-        IconRight={hidePassword ? EyeOffIcon : EyeIcon}
-        error={errors.password?.message}
-      />
+      <div className="flex flex-col space-y-2">
+        <Input
+          IconLeft={LockKeyholeIcon}
+          label="Password"
+          type={hidePassword ? 'password' : 'text'}
+          placeholder="trump@gmail.com"
+          {...register('password')}
+          iconRightAction={() => setHidePassword(!hidePassword)}
+          IconRight={hidePassword ? EyeOffIcon : EyeIcon}
+          error={errors.password?.message}
+        />
+        <button
+          type="button"
+          onClick={openLoginWithOtpDialog}
+          className="mx-auto w-fit text-purple-500 hover:underline"
+        >
+          Forgot password?
+        </button>
+      </div>
 
-      <Button variant="default" disabled={isPending} loading={isPending}>
+      <Button variant="brand" disabled={isPending} loading={isPending}>
         Login
       </Button>
     </form>

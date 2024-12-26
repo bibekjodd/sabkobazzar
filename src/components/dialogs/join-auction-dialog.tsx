@@ -2,6 +2,7 @@
 
 import { useJoinAuction } from '@/mutations/use-join-auction';
 import { createStore } from '@jodd/snap';
+import { FlameIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -33,11 +34,7 @@ export default function JoinAuctionDialog() {
 
   const joinAuction = () => {
     if (isPending || !auctionId) return;
-    mutate(undefined, {
-      onSuccess() {
-        closeJoinAuctionDialog();
-      }
-    });
+    mutate();
   };
 
   return (
@@ -50,15 +47,10 @@ export default function JoinAuctionDialog() {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="text">Close</Button>
+            <Button variant="ghost">Cancel</Button>
           </DialogClose>
 
-          <Button
-            onClick={joinAuction}
-            variant="secondary"
-            loading={isPending}
-            disabled={isPending}
-          >
+          <Button Icon={FlameIcon} onClick={joinAuction} loading={isPending} disabled={isPending}>
             Join
           </Button>
         </DialogFooter>

@@ -85,17 +85,17 @@ function Details() {
       <section className="pb-2">
         <div className="mt-2 flex items-start space-x-3">
           <UserHoverCard user={report.user}>
-            <Avatar src={report.user.image} />
+            <button>
+              <Avatar src={report.user.image} />
+            </button>
           </UserHoverCard>
           <div className="-mt-0.5">
             <div className="flex items-center">
               <UserHoverCard user={report.user}>
-                <p className="w-fit font-medium hover:underline">{report.user.name}</p>
+                <button className="w-fit font-medium hover:underline">{report.user.name}</button>
               </UserHoverCard>
               <DotIcon className="size-4" />
-              <p className="inline text-sm text-indigo-100/90">
-                {dayjs(report.createdAt).format('ddd, MMM DD, ha')}
-              </p>
+              <p className="inline text-sm">{dayjs(report.createdAt).format('ddd, MMM DD, ha')}</p>
             </div>
             <p>{report.title}</p>
           </div>
@@ -107,7 +107,7 @@ function Details() {
               <MessageCircleMoreIcon className="size-4" />
               <p>Remarks</p>
             </div>
-            <p className="pl-1 text-indigo-100/90"> {report.text}</p>
+            <p className="pl-1"> {report.text}</p>
           </div>
         )}
 
@@ -117,7 +117,7 @@ function Details() {
               <ReplyAllIcon className="size-4" />
               <p>Response</p>
             </div>
-            <p className="pl-1 text-indigo-100/90"> {report.response}</p>
+            <p className="pl-1"> {report.response}</p>
           </div>
         )}
 
@@ -148,7 +148,6 @@ function Details() {
         )}
 
         <Button
-          variant="secondary"
           onClick={() => openAuctionDetailsDrawer(report.auctionId)}
           Icon={ChartNoAxesGanttIcon}
         >

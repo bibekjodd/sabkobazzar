@@ -78,7 +78,7 @@ export function Bids({ auctionId, startDate }: { auctionId: string; startDate: s
             .map((_, i) => <Skeleton key={i} className="-mx-3 mb-1 h-16" />)}
 
         {!isLoading && bids?.length === 0 && (
-          <p className="mt-4 text-center text-sm text-rose-500">No results to show</p>
+          <p className="mt-4 text-center text-sm text-error">No results to show</p>
         )}
 
         {bids?.map((bid) => <BidItem key={bid.id} bid={bid} startDate={startDate} />)}
@@ -99,20 +99,20 @@ function BidItem({ bid, startDate }: { bid: Bid; startDate: string }) {
   const seconds = duration.seconds();
 
   return (
-    <div className="-mx-3 mb-1 rounded-md border-indigo-200/10 bg-indigo-900/10 py-1.5 last:border-b-0">
+    <div className="-mx-3 mb-1 rounded-md border-foreground/10 bg-indigo-900/10 py-1.5 last:border-b-0">
       <div className="px-4 py-2">
-        <p className="text-xs text-indigo-100/80">
+        <p className="text-xs">
           At {minutes !== 0 && `${minutes} minutes`} {seconds && `${seconds} seconds`}
         </p>
 
         <div className="mt-2.5 flex items-center justify-between">
           <UserHoverCard user={bid.bidder}>
-            <div className="flex items-center space-x-2 hover:underline">
+            <button className="flex items-center space-x-2 hover:underline">
               <Avatar src={bid.bidder.image} size="sm" />
               <p className="text-sm">{bid.bidder.name}</p>
-            </div>
+            </button>
           </UserHoverCard>
-          <p className="ml-auto font-medium text-purple-400/90">{formatPrice(bid.amount)}</p>
+          <p className="ml-auto font-medium text-brand">{formatPrice(bid.amount)}</p>
         </div>
       </div>
     </div>

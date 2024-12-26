@@ -1,9 +1,8 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
 import { FetchNotificationsResult, notificationsKey } from '@/queries/use-notifications';
 import { profileKey } from '@/queries/use-profile';
 import { InfiniteData, useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useReadNotifications = () => {
   const queryClient = getQueryClient();
@@ -21,7 +20,7 @@ export const useReadNotifications = () => {
       const lastNotification = notificationsData.pages[0]?.notifications[0];
       if (!lastNotification) return null;
       if (profile.lastNotificationReadAt > lastNotification?.createdAt) return null;
-      return await axios.put(`${backendUrl}/api/notifications/read`, undefined, {
+      return await apiClient.put('/api/notifications/read', undefined, {
         withCredentials: true
       });
     },

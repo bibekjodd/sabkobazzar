@@ -149,3 +149,8 @@ export const respondReportSchema = z.object({
     .max(1000, "Response can't exceed 1000 characters")
 });
 export type RespondReportSchema = z.infer<typeof respondReportSchema>;
+
+export const cancelAuctionSchema = z.object({
+  reason: z.string().max(200, "Reason can't exceed 200 characters").optional()
+});
+export type CancelAuctionSchema = z.infer<typeof cancelAuctionSchema>;

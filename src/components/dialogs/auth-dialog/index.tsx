@@ -41,9 +41,9 @@ export default function AuthDialog() {
             {authMode === 'register' && <RegisterForm />}
 
             <div className="flex items-center space-x-4">
-              <div className="h-0.5 flex-grow rounded-full bg-indigo-200/15" />
+              <div className="h-0.5 flex-grow rounded-full bg-foreground/15" />
               <p>or</p>
-              <div className="h-0.5 flex-grow rounded-full bg-indigo-200/15" />
+              <div className="h-0.5 flex-grow rounded-full bg-foreground/15" />
             </div>
 
             <div className="flex flex-col space-y-1.5">
@@ -52,22 +52,20 @@ export default function AuthDialog() {
                   closeAuthDialog();
                   redirectToLogin();
                 }}
-                className="flex h-9 w-full items-center justify-center space-x-1 rounded-md bg-gradient-to-b from-gray-200 to-gray-400/90 font-medium text-primary-foreground hover:brightness-110"
+                className="flex h-9 w-full items-center justify-center space-x-1 rounded-md bg-gradient-to-b from-gray-200 to-gray-300/80 font-medium text-primary-foreground hover:brightness-110"
               >
                 <img src="/google.png" alt="google icon" className="size-6" />
                 <span>Continue with Google</span>
               </button>
 
-              <Button variant="secondary" onClick={openLoginWithOtpDialog}>
-                Login with OTP
-              </Button>
+              <Button onClick={openLoginWithOtpDialog}>Login with OTP</Button>
             </div>
 
             <p className="text-center">
               {`${authMode === 'login' ? "Don't have an account?" : 'Already have an account?'} `}
               <button
                 onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                className="font-medium text-purple-500 hover:underline"
+                className="font-medium text-brand hover:underline"
               >
                 {authMode === 'login' ? 'Register' : 'Login'}
               </button>

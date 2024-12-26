@@ -26,7 +26,7 @@ export default function Participants({
         </span>
       </h4>
       {participants?.length === 0 && (
-        <div className="mt-1 flex items-center space-x-2 text-xs text-gray-300">
+        <div className="mt-1 flex items-center space-x-2 text-xs text-muted-foreground">
           <InfoIcon className="size-3" />
           <span className="italic">No any participants has joined the auction</span>
         </div>
@@ -65,14 +65,7 @@ function ParticipantItem({
     <div key={participant.id} className="flex items-center">
       <Avatar size="sm" src={participant.image} />
       <span className="ml-2 mr-auto">{participant.name}</span>
-      <Button
-        onClick={kickUser}
-        disabled={isPending}
-        loading={isPending}
-        size="sm"
-        className="h-6"
-        variant="secondary"
-      >
+      <Button onClick={kickUser} disabled={isPending} loading={isPending} size="sm" className="h-6">
         Kick
       </Button>
     </div>

@@ -20,14 +20,17 @@ import dayjs from 'dayjs';
 import { CalendarIcon, FilterIcon, FilterXIcon } from 'lucide-react';
 
 const initialState: KeyOptions = {
-  from: undefined,
-  to: undefined,
-  limit: undefined,
-  rating: 'all',
   sort: 'desc'
 };
 export const useFilters = createStore<KeyOptions>(() => initialState);
-export const clearFilters = () => useFilters.setState(initialState);
+export const clearFilters = () => {
+  const clearedState = { ...useFilters.getState() };
+  for (const key of Object.keys(clearedState)) {
+    // @ts-expect-error ...
+    clearedState[key] = undefined;
+  }
+  useFilters.setState({ ...clearedState });
+};
 
 export default function Filter() {
   const { width: windowWidth } = useWindowSize();
@@ -63,8 +66,10 @@ function BaseFilter() {
       <section className="flex flex-col space-y-2">
         <Label>Ratings</Label>
         <Select
-          value={filters.rating?.toString()}
-          onValueChange={(val) => useFilters.setState({ rating: Number(val) || 'all' })}
+          value={filters.rating?.toString() || 'all'}
+          onValueChange={(val) =>
+            useFilters.setState({ rating: val === 'all' ? undefined : Number(val) })
+          }
         >
           <SelectTrigger className="min-w-32">
             <SelectValue placeholder="All" />

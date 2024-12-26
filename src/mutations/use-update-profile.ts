@@ -1,10 +1,10 @@
-import { backendUrl } from '@/lib/constants';
+import { closeUpdateProfileDialog } from '@/components/dialogs/update-profile-dialog';
+import { apiClient } from '@/lib/api-client';
 import { UpdateProfileSchema } from '@/lib/form-schemas';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
 import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 export const updateProfileKey = ['update-profile'];
@@ -22,6 +22,7 @@ export const useUpdateProfile = () => {
     },
 
     onSuccess(updatedProfile) {
+      closeUpdateProfileDialog();
       toast.success('Profile updated successfully');
       queryClient.setQueryData(profileKey, updatedProfile);
     }
@@ -32,9 +33,9 @@ type Options = Partial<UpdateProfileSchema> & { image: string | undefined | File
 const updateProfile = async ({ image, ...data }: Options): Promise<UserProfile> => {
   const uploadedImagePromise = image instanceof File ? uploadImage(image) : undefined;
 
-  const updateProfilePromise = axios
+  const updateProfilePromise = apiClient
     .put<{ user: UserProfile }>(
-      `${backendUrl}/api/users/profile`,
+      '/api/users/profile',
       {
         ...data,
         image: typeof image === 'string' ? image : undefined

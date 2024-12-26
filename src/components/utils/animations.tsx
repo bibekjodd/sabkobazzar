@@ -1,6 +1,7 @@
 'use client';
 
 import { HTMLMotionProps, motion } from 'framer-motion';
+import { JSX } from 'react';
 
 type ComponentProps = JSX.IntrinsicElements['div'] &
   HTMLMotionProps<'div'> & { duration?: number; delay?: number };

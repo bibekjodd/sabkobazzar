@@ -39,7 +39,6 @@ export default function UpdateProfileDialog() {
 
 function BaseDialog() {
   const { isOpen } = useUpdateProfileDialog();
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const imagePickerRef = useRef<HTMLInputElement>(null);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const { data: profile } = useProfile();
@@ -72,12 +71,7 @@ function BaseDialog() {
   const onSubmit = handleSubmit((data) => {
     if (isPending) return;
     const image = imagePickerRef.current?.files && imagePickerRef.current.files[0];
-    mutate(
-      { ...data, image: image || undefined },
-      {
-        onSuccess: () => closeButtonRef.current?.click()
-      }
-    );
+    mutate({ ...data, image: image || undefined });
   });
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -134,18 +128,12 @@ function BaseDialog() {
         </form>
 
         <DialogFooter>
-          <DialogClose asChild ref={closeButtonRef}>
-            <Button variant="text" disabled={isPending}>
+          <DialogClose asChild>
+            <Button variant="ghost" disabled={isPending}>
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            variant="secondary"
-            onClick={onSubmit}
-            disabled={isPending}
-            loading={isPending}
-            Icon={CheckCheckIcon}
-          >
+          <Button onClick={onSubmit} disabled={isPending} loading={isPending} Icon={CheckCheckIcon}>
             Save
           </Button>
         </DialogFooter>

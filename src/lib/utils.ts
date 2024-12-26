@@ -12,6 +12,7 @@ export const redirectToLogin = () => {
 };
 
 export const extractErrorMessage = (error: unknown): string => {
+  if (typeof error === 'string') return error;
   if (error instanceof AxiosError) {
     return error.response?.data.message || error.message;
   } else if (error instanceof Error) {
@@ -28,6 +29,21 @@ export const formatPrice = (price: number, prefix = true): string => {
   );
   if (prefix) return 'Rs. ' + formattedPrice;
   return formattedPrice;
+};
+
+export const concatenateSearchParams = (
+  url: string,
+  params: Record<string, string | boolean | number | undefined | null>
+) => {
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && value !== '') {
+      searchParams.set(key, String(value));
+    }
+  }
+  const searchString = searchParams.toString();
+  if (searchString) url += '?' + searchString;
+  return url;
 };
 
 export const getSearchString = (searchParameters: Record<string, unknown>): string => {
@@ -162,11 +178,8 @@ export const isShallowEqual = (
   objB: Record<string | number, unknown>
 ): boolean => {
   if (objA === objB) return true;
-  const keysA = Object.keys(objA);
-  const keysB = Object.keys(objB);
-  if (keysA.length !== keysB.length) return false;
-
-  const isEqual = keysA.every((key) => objA[key] === objB[key]);
+  const keys = [...new Set([...Object.keys(objA), ...Object.keys(objB)])];
+  const isEqual = keys.every((key) => objA[key] === objB[key]);
   return isEqual;
 };
 

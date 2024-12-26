@@ -110,7 +110,6 @@ function Form() {
         onSuccess() {
           reset();
           unpickImages();
-          closeReportAuctionDialog();
         }
       }
     );
@@ -118,12 +117,12 @@ function Form() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col space-y-5">
-      <Input label="Title" id="title" {...register('title')} />
+      <Input label="Title" id="title" {...register('title')} error={errors.title?.message} />
 
       <AutoAnimate className="flex flex-col space-y-2">
         <Label htmlFor="remarks">Remarks</Label>
         <Textarea {...register('text')} id="remarks" rows={6} />
-        {errors.text && <p className="text-sm text-rose-500">{errors.text.message}</p>}
+        {errors.text && <p className="text-sm text-error">{errors.text.message}</p>}
       </AutoAnimate>
 
       <section className="space-y-1.5">
@@ -155,9 +154,7 @@ function Form() {
               <ImageIcon className="size-8" />
               <div className="p-4">
                 <p className="text-sm">Provide 16:9 aspect ratio image for better compatibility</p>
-                <p className="mt-0.5 text-center text-xs italic text-indigo-100/80">
-                  (Max 3 images)
-                </p>
+                <p className="mt-0.5 text-center text-xs italic">(Max 3 images)</p>
               </div>
             </div>
           )}
@@ -181,11 +178,10 @@ function Form() {
 
       <DialogFooter>
         <DialogClose asChild>
-          <Button variant="text">Cancel</Button>
+          <Button variant="ghost">Cancel</Button>
         </DialogClose>
         <Button
           onClick={onSubmit}
-          variant="secondary"
           Icon={SendHorizonalIcon}
           loading={isPending}
           disabled={isPending}

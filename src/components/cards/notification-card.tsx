@@ -53,12 +53,12 @@ export function NotificationCard({ notification }: { notification: UserNotificat
       <section className="relative flex space-x-3 p-3">
         <div
           className={cn('size-fit translate-y-0.5 rounded-full p-2', {
-            'bg-indigo-300/10 text-indigo-100': severity === 'neutral',
+            'bg-indigo-300/10': severity === 'neutral',
             'bg-yellow-300/10 text-yellow-500': severity === 'warning',
-            'bg-rose-300/10 text-rose-500': severity === 'critical',
+            'bg-rose-300/10 text-error': severity === 'critical',
             'bg-emerald-300/10 text-emerald-500': severity === 'success',
             'bg-sky-300/10 text-sky-500': severity === 'info',
-            'bg-purple-300/10 text-purple-500': severity === 'acknowledge'
+            'bg-brand/10 text-brand': severity === 'acknowledge'
           })}
         >
           <Icon className="size-5" />
@@ -67,14 +67,14 @@ export function NotificationCard({ notification }: { notification: UserNotificat
           <div>
             <span className="font-medium">{notification.title}</span>
             {isNew && (
-              <span className="ml-2 w-fit rounded-full bg-purple-500/20 px-2 py-0.5 text-xs text-purple-500">
+              <span className="ml-2 w-fit rounded-full bg-brand-darker/20 px-2 py-0.5 text-xs text-brand">
                 New
               </span>
             )}
           </div>
 
-          <span className="mt-0.5 text-sm text-indigo-100/80">{notification.description}</span>
-          <span className="mt-2 text-xs text-gray-500">
+          <span className="mt-0.5 text-sm">{notification.description}</span>
+          <span className="mt-2 text-xs text-muted-foreground">
             {dayjs(notification.createdAt).fromNow()}
           </span>
         </div>

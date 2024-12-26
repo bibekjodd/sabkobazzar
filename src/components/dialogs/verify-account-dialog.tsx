@@ -16,7 +16,7 @@ export const closeVerifyAccountDialog = () => onOpenChange(false);
 export default function VerifyAccountDialog() {
   const { isOpen } = useVerifyAccountDialog();
   const [otp, setOtp] = useState('');
-  const { mutate, isPending, error } = useVerifyAccount();
+  const { mutate, isPending, error, reset } = useVerifyAccount();
 
   const onOtpInput = (otp: string) => {
     setOtp(otp);
@@ -26,7 +26,7 @@ export default function VerifyAccountDialog() {
         { otp },
         {
           onSuccess() {
-            closeVerifyAccountDialog();
+            reset();
           }
         }
       );
@@ -69,9 +69,7 @@ export default function VerifyAccountDialog() {
             )}
 
             {error && (
-              <p className="text-rose-500">
-                Could not verify account! {extractErrorMessage(error)}
-              </p>
+              <p className="text-error">Could not verify account! {extractErrorMessage(error)}</p>
             )}
           </div>
         </section>

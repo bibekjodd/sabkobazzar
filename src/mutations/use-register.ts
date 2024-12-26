@@ -1,10 +1,10 @@
-import { backendUrl } from '@/lib/constants';
+import { closeAuthDialog } from '@/components/dialogs/auth-dialog';
+import { apiClient } from '@/lib/api-client';
 import { RegisterSchema } from '@/lib/form-schemas';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage, uploadImage } from '@/lib/utils';
 import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 export const useRegister = () => {
@@ -17,8 +17,8 @@ export const useRegister = () => {
     }: RegisterSchema & { image: string | File | undefined }) => {
       const imageUrl = image instanceof File ? await uploadImage(image) : undefined;
 
-      const res = await axios.post<{ user: UserProfile }>(
-        `${backendUrl}/api/auth/register`,
+      const res = await apiClient.post<{ user: UserProfile }>(
+        '/api/auth/register',
         { ...data, image: typeof image === 'string' ? image : imageUrl },
         {
           withCredentials: true
@@ -31,6 +31,7 @@ export const useRegister = () => {
       toast.error(`Could not register account! ${extractErrorMessage(err)}`);
     },
     onSuccess(data) {
+      closeAuthDialog();
       queryClient.setQueryData<UserProfile>(profileKey, data);
     }
   });

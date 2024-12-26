@@ -26,11 +26,7 @@ export default function LogoutDialog() {
   const { isOpen } = useLogoutDialog();
   const logout = () => {
     if (isPending) return;
-    mutate(undefined, {
-      onSuccess() {
-        closeLogoutDialog();
-      }
-    });
+    mutate();
   };
 
   if (!profile) return null;
@@ -40,16 +36,16 @@ export default function LogoutDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
-          <DialogDescription className="text-indigo-200/80">
-            You will need to log in again to access your account
+          <DialogDescription>
+            You will need to log in again to access your account.
           </DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="text">Cancel</Button>
+            <Button variant="ghost">Cancel</Button>
           </DialogClose>
-          <Button disabled={isPending} loading={isPending} onClick={logout} variant="secondary">
+          <Button disabled={isPending} loading={isPending} onClick={logout}>
             Logout
           </Button>
         </DialogFooter>

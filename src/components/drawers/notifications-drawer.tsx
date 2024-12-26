@@ -4,6 +4,7 @@ import { useWindowSize } from '@/hooks/use-window-size';
 import { extractErrorMessage } from '@/lib/utils';
 import { useReadNotifications } from '@/mutations/use-read-notifications';
 import { useNotifications } from '@/queries/use-notifications';
+import { useProfile } from '@/queries/use-profile';
 import { createStore } from '@jodd/snap';
 import { AlertCircle } from 'lucide-react';
 import { useEffect } from 'react';
@@ -28,23 +29,9 @@ export const openNotificationsDrawer = () => onOpenChange(true);
 export const closeNotificationsDrawer = () => onOpenChange(false);
 
 export default function NotificationsDrawer() {
-  const {
-    data: notifications,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching
-  } = useNotifications();
-
-  const { mutate: readNotifications } = useReadNotifications();
+  const { data: profile } = useProfile();
   const { width: screenWidth } = useWindowSize();
-
   const { isOpen } = useNotificationsDrawer();
-
-  useEffect(() => {
-    if (isOpen) readNotifications();
-  }, [isOpen, readNotifications]);
 
   return (
     <Drawer
@@ -58,38 +45,59 @@ export default function NotificationsDrawer() {
         </DrawerHeader>
         <DrawerDescription className="hidden" />
 
-        <ScrollArea className="h-full overflow-y-auto pr-2 scrollbar-thin">
-          {error && (
-            <div className="px-1">
-              <Alert variant="destructive">
-                <AlertCircle className="size-4" />
-                <AlertTitle>Could not get notifications</AlertTitle>
-                <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
-              </Alert>
-            </div>
-          )}
+        {profile && <BaseContent />}
 
-          <div className="flex flex-col space-y-2 px-1">
-            {isLoading &&
-              new Array(6).fill('nothing').map((_, i) => <NotificationCardSkeleton key={i} />)}
-            {notifications?.map((notification) => (
-              <NotificationCard key={notification.id} notification={notification} />
-            ))}
-            <InfiniteScrollObserver
-              showLoader
-              isFetching={isFetching}
-              hasNextPage={hasNextPage}
-              fetchNextPage={fetchNextPage}
-            />
-          </div>
-        </ScrollArea>
-
-        <DrawerFooter>
+        <DrawerFooter className="md:hidden">
           <DrawerClose asChild>
             <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+  );
+}
+
+function BaseContent() {
+  const {
+    data: notifications,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching
+  } = useNotifications();
+
+  const { mutate: readNotifications } = useReadNotifications();
+
+  useEffect(() => {
+    readNotifications();
+  }, [readNotifications]);
+
+  return (
+    <ScrollArea className="h-full overflow-y-auto pr-2 scrollbar-thin">
+      {error && (
+        <div className="px-1">
+          <Alert variant="destructive">
+            <AlertCircle className="size-4" />
+            <AlertTitle>Could not get notifications</AlertTitle>
+            <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
+          </Alert>
+        </div>
+      )}
+
+      <div className="flex flex-col space-y-2 px-1">
+        {isLoading &&
+          new Array(6).fill('nothing').map((_, i) => <NotificationCardSkeleton key={i} />)}
+        {notifications?.map((notification) => (
+          <NotificationCard key={notification.id} notification={notification} />
+        ))}
+        <InfiniteScrollObserver
+          showLoader
+          isFetching={isFetching}
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+        />
+      </div>
+    </ScrollArea>
   );
 }

@@ -1,4 +1,4 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { onPlaceBid } from '@/lib/events-actions';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
@@ -6,7 +6,6 @@ import { auctionKey } from '@/queries/use-auction';
 import { bidsKey } from '@/queries/use-bids';
 import { bidsSnapshotKey } from '@/queries/use-bids-snapshot';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 export const placeBidKey = (auctionId: string) => ['place-bid', auctionId];
@@ -38,8 +37,8 @@ const placeBid = async ({
   auctionId: string;
   amount: number;
 }): Promise<Bid> => {
-  const res = await axios.post<{ bid: Bid }>(
-    `${backendUrl}/api/auctions/${auctionId}/bids`,
+  const res = await apiClient.post<{ bid: Bid }>(
+    `/api/auctions/${auctionId}/bids`,
     { amount },
     { withCredentials: true }
   );

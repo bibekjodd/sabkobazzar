@@ -1,6 +1,5 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useLeaveLiveAuction = (auctionId: string) => {
   return useMutation({
@@ -10,7 +9,7 @@ export const useLeaveLiveAuction = (auctionId: string) => {
 };
 
 const leaveLiveAuction = async (auctionId: string) => {
-  return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/leave`, undefined, {
+  return await apiClient.put(`/api/events/auctions/${auctionId}/leave`, undefined, {
     withCredentials: true
   });
 };

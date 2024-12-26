@@ -9,7 +9,8 @@ export function makeQueryClient() {
         refetchOnWindowFocus: false,
         retry: false,
         gcTime: 3 * MILLIS.MINUTE,
-        refetchIntervalInBackground: false
+        refetchIntervalInBackground: false,
+        maxPages: 10
       },
       mutations: {
         retry: false,

@@ -1,8 +1,9 @@
 'use client';
 
-import CancelAuctionDialog from '@/components/dialogs/cancel-auction-dialog';
+import { openCancelAuctionDialog } from '@/components/dialogs/cancel-auction-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useCancelAuction } from '@/mutations/use-cancel-auction';
+import { useAuction } from '@/queries/use-auction';
 import { Button } from '@/ui/button';
 import {
   Dialog,
@@ -11,27 +12,39 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@/ui/dialog';
+import { createStore } from '@jodd/snap';
 import { TriangleAlertIcon, UserPlusIcon } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import InviteUsers from './invite-users';
 import Participants from './participants';
 
-type Props = { auction: Auction; children: React.ReactNode };
-export default function ManageAuctionDialog({ auction, children }: Props) {
+const useManageAuctionDialog = createStore<{ isOpen: boolean; auctionId: string | null }>(() => ({
+  isOpen: false,
+  auctionId: null
+}));
+const onOpenChange = (isOpen: boolean) =>
+  useManageAuctionDialog.setState((state) => ({
+    isOpen,
+    auctionId: isOpen ? state.auctionId : null
+  }));
+export const openManageAuctionDialog = (auctionId: string) =>
+  useManageAuctionDialog.setState({ isOpen: true, auctionId });
+export const closeManageAuctionDialog = () => onOpenChange(false);
+
+export default function ManageAuctionDialog() {
+  const { isOpen, auctionId } = useManageAuctionDialog();
+  const { data: auction } = useAuction(auctionId!, { enabled: !!auctionId });
+
   return (
-    <Dialog>
-      <DialogTrigger disabled={auction.status !== 'pending'} asChild>
-        {children}
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="flex flex-col text-sm">
         <DialogHeader>
-          <DialogTitle className="line-clamp-1 text-center">{auction.title} </DialogTitle>
+          <DialogTitle className="line-clamp-1 text-center">{auction?.title}</DialogTitle>
         </DialogHeader>
         <DialogDescription className="hidden" />
-        <BaseContent auction={auction} />
+        {auction && <BaseContent auction={auction} />}
       </DialogContent>
     </Dialog>
   );
@@ -69,14 +82,12 @@ function BaseContent({ auction }: { auction: Auction }) {
 
       <DialogFooter>
         <DialogClose asChild ref={closeButtonRef}>
-          <Button variant="text">Close</Button>
+          <Button variant="ghost">Close</Button>
         </DialogClose>
 
-        <CancelAuctionDialog auctionId={auction.id}>
-          <Button variant="secondary" Icon={TriangleAlertIcon}>
-            Cancel Auction
-          </Button>
-        </CancelAuctionDialog>
+        <Button Icon={TriangleAlertIcon} onClick={() => openCancelAuctionDialog(auction.id)}>
+          Cancel Auction
+        </Button>
       </DialogFooter>
     </>
   );

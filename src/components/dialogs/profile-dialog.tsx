@@ -54,7 +54,7 @@ export default function ProfileDialog() {
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
-        className="max-w-md text-indigo-100"
+        className="max-w-md"
         onKeyDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
         onPointerMove={(e) => e.stopPropagation()}
@@ -72,9 +72,7 @@ export default function ProfileDialog() {
             <div>
               <div className="flex items-center space-x-2">
                 <p className="text-lg font-semibold">{profile.name}</p>
-                {profile.isVerified && (
-                  <BadgeCheckIcon className="size-3.5 fill-sky-500 text-indigo-100" />
-                )}
+                {profile.isVerified && <BadgeCheckIcon className="size-3.5 fill-sky-500" />}
               </div>
               <p className="text-muted-foreground">
                 <MailIcon className="mr-2 inline" />
@@ -83,7 +81,7 @@ export default function ProfileDialog() {
             </div>
           </div>
 
-          <div className="mb-3 mt-5 border-b border-indigo-200/15" />
+          <div className="mb-3 mt-5 border-b border-foreground/15" />
 
           <div className="flex flex-col space-y-2">
             {!profile.isVerified && (
@@ -119,15 +117,13 @@ export default function ProfileDialog() {
               <p className="ml-2 mr-auto">Update profile</p>
             </button>
 
-            {profile.authSource === 'credentials' && (
-              <button
-                onClick={openUpdatePasswordDialog}
-                className="flex items-center rounded-md px-3 py-1.5 hover:bg-muted/50"
-              >
-                <KeyRoundIcon />
-                <p className="ml-2 mr-auto">Update password</p>
-              </button>
-            )}
+            <button
+              onClick={openUpdatePasswordDialog}
+              className="flex items-center rounded-md px-3 py-1.5 hover:bg-muted/50"
+            >
+              <KeyRoundIcon />
+              <p className="ml-2 mr-auto">Update password</p>
+            </button>
 
             <button
               onClick={openLogoutDialog}

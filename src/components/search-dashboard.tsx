@@ -8,28 +8,63 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command';
+import { useProfile } from '@/queries/use-profile';
 import { useLoadingBar } from '@jodd/next-top-loading-bar';
 import { createStore } from '@jodd/snap';
 import {
   ActivityIcon,
   EggFriedIcon,
+  FlagIcon,
   HistoryIcon,
   LucideIcon,
+  MessageSquareTextIcon,
   PackageIcon,
   TrendingUpIcon,
   WebhookIcon
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { openRegisterAuctionDrawer } from './drawers/register-auction-drawer';
 import { DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 
-const commandItems: { title: string; href: string; icon: LucideIcon }[] = [
-  { title: 'Activities', href: '/dashboard#activities', icon: ActivityIcon },
-  { title: 'Analytics', href: '/dashboard#analytics', icon: TrendingUpIcon },
-  { title: 'Auctions History', href: '/dashboard#auctions-history', icon: HistoryIcon },
-  { title: 'Manage Auctions', href: '/dashboard/auctions', icon: WebhookIcon },
-  { title: 'Recent Auctions', href: '/dashboard#recent-auctions', icon: PackageIcon }
+const commandItems: {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+  allowedRole: 'user' | 'admin' | 'any';
+}[] = [
+  { title: 'Activities', href: '/dashboard#activities', icon: ActivityIcon, allowedRole: 'any' },
+  { title: 'Analytics', href: '/dashboard#analytics', icon: TrendingUpIcon, allowedRole: 'any' },
+  {
+    title: 'Auctions History',
+    href: '/dashboard#auctions-history',
+    icon: HistoryIcon,
+    allowedRole: 'any'
+  },
+  { title: 'Manage Auctions', href: '/dashboard/auctions', icon: WebhookIcon, allowedRole: 'any' },
+  {
+    title: 'Recent Auctions',
+    href: '/dashboard#recent-auctions',
+    icon: PackageIcon,
+    allowedRole: 'any'
+  },
+  {
+    title: 'Register Auction',
+    href: '/dashboard/register-auction',
+    icon: EggFriedIcon,
+    allowedRole: 'user'
+  },
+  {
+    title: 'Feedbacks',
+    href: '/dashboard/feedbacks',
+    icon: MessageSquareTextIcon,
+    allowedRole: 'admin'
+  },
+  {
+    title: 'Reports',
+    href: '/dashboard/reports',
+    icon: FlagIcon,
+    allowedRole: 'admin'
+  }
 ];
 
 const useSearchDashboard = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
@@ -38,6 +73,7 @@ export const openSearchDashboard = () => onOpenChange(true);
 export const closeSearchDashboard = () => onOpenChange(false);
 
 export default function SearchDashboard() {
+  const { data: profile } = useProfile();
   const { isOpen } = useSearchDashboard();
   const startRouteTransition = useLoadingBar((state) => state.start);
   const router = useRouter();
@@ -67,29 +103,24 @@ export default function SearchDashboard() {
         <CommandEmpty>No results found.</CommandEmpty>
 
         <CommandGroup heading="All">
-          {commandItems.map((item) => (
-            <CommandItem
-              key={item.title}
-              onSelect={() => {
-                startRouteTransition(item.href);
-                router.push(item.href);
-                closeSearchDashboard();
-              }}
-            >
-              <item.icon />
-              <span>{item.title}</span>
-            </CommandItem>
-          ))}
-
-          <CommandItem
-            onSelect={() => {
-              openRegisterAuctionDrawer();
-              closeSearchDashboard();
-            }}
-          >
-            <EggFriedIcon />
-            <span>Register an auction</span>
-          </CommandItem>
+          {commandItems
+            .sort((a, b) => a.title.localeCompare(b.title))
+            .map((item) => {
+              if (item.allowedRole !== 'any' && item.allowedRole !== profile?.role) return null;
+              return (
+                <CommandItem
+                  key={item.title}
+                  onSelect={() => {
+                    startRouteTransition(item.href);
+                    router.push(item.href);
+                    closeSearchDashboard();
+                  }}
+                >
+                  <item.icon className="mr-1.5 size-5" />
+                  <span>{item.title}</span>
+                </CommandItem>
+              );
+            })}
         </CommandGroup>
       </CommandList>
     </CommandDialog>

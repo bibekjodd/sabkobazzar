@@ -1,6 +1,5 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const bidsSnapshotKey = (auctionId: string) => ['bids-snapshot', auctionId];
 export const useBidsSnapshot = (auctionId: string) => {
@@ -19,11 +18,8 @@ const fetchBidsSnapshot = async ({
   auctionId: string;
   signal: AbortSignal;
 }): Promise<Bid[]> => {
-  const res = await axios.get<{ bids: Bid[] }>(
-    `${backendUrl}/api/auctions/${auctionId}/bids-snapshot`,
-    {
-      signal
-    }
-  );
+  const res = await apiClient.get<{ bids: Bid[] }>(`/api/auctions/${auctionId}/bids-snapshot`, {
+    signal
+  });
   return res.data.bids;
 };

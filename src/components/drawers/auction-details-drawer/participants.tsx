@@ -35,10 +35,10 @@ export function Participants({ auctionId }: { auctionId: string }) {
 
         {participants?.map((participant) => (
           <UserHoverCard key={participant.id} user={participant}>
-            <div className="flex w-fit items-center space-x-3 hover:underline">
+            <button className="flex w-fit items-center space-x-3 hover:underline">
               <Avatar src={participant.image} size="sm" />
               <p className="text-sm">{participant.name}</p>
-            </div>
+            </button>
           </UserHoverCard>
         ))}
       </div>

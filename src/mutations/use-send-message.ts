@@ -1,8 +1,7 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
 import { auctionKey } from '@/queries/use-auction';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const sendMessageKey = (auctionId: string) => ['send-message', auctionId];
 
@@ -19,7 +18,7 @@ export const useSendMessage = (auctionId: string) => {
 
 type Options = { text: string | undefined; emoji: string | undefined; auctionId: string };
 const sendMessage = async ({ auctionId, ...data }: Options) => {
-  return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/message`, data, {
+  return await apiClient.put(`/api/events/auctions/${auctionId}/message`, data, {
     withCredentials: true
   });
 };

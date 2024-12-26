@@ -1,8 +1,8 @@
-import { backendUrl, MILLIS } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
+import { MILLIS } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
 import { isShallowEqual } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const profileKey = ['profile'];
 export const useProfile = () => {
@@ -19,8 +19,10 @@ export const useProfile = () => {
 };
 
 export const fetchProfile = async ({ signal }: { signal: AbortSignal }): Promise<UserProfile> => {
-  const url = `${backendUrl}/api/users/profile`;
-  const { data } = await axios.get<{ user: UserProfile }>(url, { withCredentials: true, signal });
+  const { data } = await apiClient.get<{ user: UserProfile }>('/api/users/profile', {
+    withCredentials: true,
+    signal
+  });
 
   const queryClient = getQueryClient();
   const oldProfileData = queryClient.getQueryData<UserProfile>(profileKey);

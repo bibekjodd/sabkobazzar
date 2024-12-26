@@ -45,7 +45,6 @@ export default function UpdatePasswordDialog() {
     mutate(data, {
       onSuccess() {
         reset();
-        closeUpdatePasswordDialog();
       }
     });
   });
@@ -83,11 +82,11 @@ export default function UpdatePasswordDialog() {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="text" disabled={isPending}>
+            <Button variant="ghost" disabled={isPending}>
               Cancel
             </Button>
           </DialogClose>
-          <Button onClick={onSubmit} loading={isPending} disabled={isPending} variant="secondary">
+          <Button onClick={onSubmit} loading={isPending} disabled={isPending}>
             Update
           </Button>
         </DialogFooter>

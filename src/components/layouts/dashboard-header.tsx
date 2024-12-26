@@ -15,7 +15,7 @@ export default function DashboardHeader() {
 
   if (!profile) return null;
   return (
-    <header className="sticky left-0 top-0 z-30 flex h-16 w-full items-center border-gray-400/10 px-4 text-sm filter backdrop-blur-3xl">
+    <header className="sticky left-0 top-0 z-30 flex h-16 w-full items-center px-4 text-sm filter backdrop-blur-3xl">
       <div className="w-60">
         <ProgressLink href="/" className="text-3xl lg:px-2 lg:text-2xl">
           {logo}
@@ -30,7 +30,7 @@ export default function DashboardHeader() {
         <div className="hidden md:block">
           <button
             onClick={openSearchDashboard}
-            className="relative mr-2 hidden h-9 w-60 cursor-pointer items-center rounded-lg border border-indigo-200/10 bg-indigo-900/10 px-2 md:flex"
+            className="relative mr-2 hidden h-9 w-60 cursor-pointer items-center rounded-lg border border-foreground/10 bg-indigo-900/10 px-2 md:flex"
           >
             <SearchIcon className="size-4" />
             <span className="ml-2 mr-auto">Search...</span>

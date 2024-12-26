@@ -1,6 +1,7 @@
 import { dummyUserImage } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
+import { JSX } from 'react';
 
 type Props = Omit<JSX.IntrinsicElements['img'], 'src'> & {
   src: string | null | undefined;
@@ -53,7 +54,7 @@ export default function Avatar({
       {!!unreadNotifications && (
         <div
           className={cn(
-            'absolute -right-1 -top-1 grid h-4 place-items-center overflow-hidden rounded-full bg-purple-700 px-1',
+            'absolute -right-1 -top-1 grid h-4 place-items-center overflow-hidden rounded-full bg-brand-darker px-1 text-foreground',
             unreadNotifications <= 9 && 'aspect-square'
           )}
         >

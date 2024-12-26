@@ -1,10 +1,10 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
+import { concatenateSearchParams } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export type KeyOptions = {
   sort?: 'asc' | 'desc';
-  rating?: number | 'all';
+  rating?: number;
   from?: string;
   to?: string;
   limit?: number;
@@ -13,11 +13,8 @@ export type KeyOptions = {
 export const feedbacksKey = (options: KeyOptions | undefined) => [
   'feedbacks',
   {
-    sort: options?.sort || 'desc',
-    rating: options?.rating || 'all',
-    from: options?.from,
-    to: options?.to,
-    limit: options?.limit
+    ...options,
+    sort: options?.sort || 'desc'
   }
 ];
 
@@ -30,7 +27,6 @@ export const useFeedbacks = (keyOptions?: KeyOptions) => {
     getNextPageParam(lastPage) {
       return lastPage.cursor;
     },
-    maxPages: 10,
     select: (data) => data.pages.map((page) => page.feedbacks).flat(1)
   });
 };
@@ -41,12 +37,9 @@ type Options = {
   cursor: string | undefined;
 } & KeyOptions;
 export const fetchFeedbacks = async ({ signal, ...query }: Options): Promise<Result> => {
-  const url = new URL(`${backendUrl}/api/feedbacks`);
-
-  if (query.rating === 'all') query.rating = undefined;
-  for (const [key, value] of Object.entries(query)) {
-    if (value !== undefined && value !== null) url.searchParams.set(key, String(value));
-  }
-  const res = await axios.get<Result>(url.href, { signal, withCredentials: true });
+  const res = await apiClient.get<Result>(concatenateSearchParams('/api/feedbacks', query), {
+    signal,
+    withCredentials: true
+  });
   return res.data;
 };

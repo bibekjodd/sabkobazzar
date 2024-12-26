@@ -1,6 +1,6 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
+import { concatenateSearchParams } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type KeyOptions = { auctionId: string } & Partial<{
   sort: 'asc' | 'desc';
@@ -29,20 +29,13 @@ export const useBids = (options: KeyOptions) => {
 
 export type FetchBidsResult = { cursor: string | undefined; bids: Bid[] };
 type Options = KeyOptions & { cursor: string | undefined; signal: AbortSignal };
-const fetchBids = async ({
-  signal,
-  auctionId,
-  cursor,
-  limit,
-  sort
-}: Options): Promise<FetchBidsResult> => {
-  const url = new URL(`${backendUrl}/api/auctions/${auctionId}/bids`);
-  if (cursor) url.searchParams.set('cursor', cursor);
-  if (sort) url.searchParams.set('sort', sort);
-  if (limit) url.searchParams.set('limit', limit.toString());
-  const res = await axios.get<FetchBidsResult>(url.href, {
-    withCredentials: true,
-    signal
-  });
+const fetchBids = async ({ signal, auctionId, ...query }: Options): Promise<FetchBidsResult> => {
+  const res = await apiClient.get<FetchBidsResult>(
+    concatenateSearchParams(`/api/auctions/${auctionId}/bids`, query),
+    {
+      withCredentials: true,
+      signal
+    }
+  );
   return res.data;
 };

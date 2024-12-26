@@ -1,10 +1,9 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { participantsKey } from '@/queries/use-participants';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 type KeyOptions = { auctionId: string; userId: string };
@@ -40,7 +39,7 @@ export const useKickUser = ({ auctionId, userId }: KeyOptions) => {
 };
 
 const kickUser = async ({ auctionId, userId }: KeyOptions) => {
-  return await axios.put(`${backendUrl}/api/auctions/${auctionId}/kick/${userId}`, undefined, {
+  return await apiClient.put(`/api/auctions/${auctionId}/kick/${userId}`, undefined, {
     withCredentials: true
   });
 };

@@ -1,8 +1,8 @@
-import AuctionsHistoryChart from '@/components/sections/dashboard/auctions-history-chart';
-import RecentActivities from '@/components/sections/dashboard/recent-activities';
-import RecentAuctions from '@/components/sections/dashboard/recent-autions';
-import RevenueChart from '@/components/sections/dashboard/revenue-chart';
-import StatsCards from '@/components/sections/dashboard/stats-cards';
+import AuctionsHistoryChart from './sections/auctions-history-chart';
+import RecentActivities from './sections/recent-activities';
+import RecentAuctions from './sections/recent-autions';
+import RevenueLineChart from './sections/revenue-line-chart';
+import StatsCards from './sections/stats-cards';
 
 export default function page() {
   return (
@@ -12,7 +12,7 @@ export default function page() {
         <AuctionsHistoryChart />
         <RecentAuctions />
       </div>
-      <RevenueChart />
+      <RevenueLineChart />
       <RecentActivities />
     </main>
   );

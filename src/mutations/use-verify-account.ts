@@ -1,8 +1,8 @@
-import { backendUrl } from '@/lib/constants';
+import { closeVerifyAccountDialog } from '@/components/dialogs/verify-account-dialog';
+import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
 import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 export const useVerifyAccount = () => {
@@ -11,7 +11,7 @@ export const useVerifyAccount = () => {
   return useMutation({
     mutationKey: ['verify-account'],
     mutationFn: async ({ otp }: { otp: string }) => {
-      await axios.post(`${backendUrl}/api/users/otp/verify`, { otp }, { withCredentials: true });
+      await apiClient.post('/api/users/otp/verify', { otp }, { withCredentials: true });
     },
 
     onError() {
@@ -19,6 +19,7 @@ export const useVerifyAccount = () => {
     },
 
     onSuccess() {
+      closeVerifyAccountDialog();
       toast.success('Account verified successfully');
       const profileData = queryClient.getQueryData<UserProfile>(profileKey);
       if (!profileData) return;

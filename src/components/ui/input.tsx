@@ -11,6 +11,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   error?: string;
   label?: string;
   parentClassName?: string;
+  info?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -25,6 +26,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       label,
       error,
       type,
+      info,
       ...props
     },
     ref
@@ -34,7 +36,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && <Label htmlFor={id}>{label}</Label>}
         <div className="group relative">
           {IconLeft && (
-            <IconLeft className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-indigo-200/80 group-focus-within:text-indigo-200" />
+            <IconLeft className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground group-focus-within:text-foreground" />
           )}
           <input
             id={id}
@@ -56,13 +58,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <IconRight
               onClick={iconRightAction}
               className={cn(
-                'absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-indigo-200/80 group-focus-within:text-indigo-200',
+                'absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground group-focus-within:text-foreground',
                 { 'cursor-pointer': !!iconRightAction }
               )}
             />
           )}
         </div>
-        {error && <p className="text-sm text-rose-500">{error}</p>}
+        {(error || info) && (
+          <div className="flex flex-wrap gap-y-1">
+            {error && <p className="text-sm text-error">{error}</p>}
+            {info && (
+              <p className="ml-auto w-fit text-xs italic text-muted-foreground/80">{info}</p>
+            )}
+          </div>
+        )}
       </AutoAnimate>
     );
   }

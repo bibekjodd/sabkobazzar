@@ -1,5 +1,13 @@
+import { feedbacksKey, fetchFeedbacks } from '@/queries/use-feedbacks';
 import { fetchReports, reportsKey } from '@/queries/use-reports';
-import { FlagIcon, HomeIcon, LucideIcon, MessageSquareTextIcon, WebhookIcon } from 'lucide-react';
+import {
+  EggFriedIcon,
+  FlagIcon,
+  HomeIcon,
+  LucideIcon,
+  MessageSquareTextIcon,
+  WebhookIcon
+} from 'lucide-react';
 import { getQueryClient } from './query-client';
 import { prefetchDashboardAuctions, prefetchDashboardData } from './query-utils';
 
@@ -18,17 +26,38 @@ export const dashboardLinks: {
     allowedRole: 'any'
   },
   {
-    title: 'Auctions',
+    title: 'Manage Auctions',
     href: '/dashboard/auctions',
     icon: WebhookIcon,
     action: prefetchDashboardAuctions,
     allowedRole: 'any'
   },
   {
+    title: 'Register Auction',
+    href: '/dashboard/register-auction',
+    icon: EggFriedIcon,
+    allowedRole: 'user'
+  },
+  {
     title: 'Feedbacks',
     href: '/dashboard/feedbacks',
     icon: MessageSquareTextIcon,
-    allowedRole: 'admin'
+    allowedRole: 'admin',
+    action: () => {
+      const queryClient = getQueryClient();
+      const accessorKey = feedbacksKey({});
+      if (
+        queryClient.getQueryData(accessorKey) ||
+        queryClient.isFetching({ queryKey: accessorKey })
+      )
+        return;
+
+      queryClient.prefetchInfiniteQuery({
+        queryKey: accessorKey,
+        initialPageParam: undefined,
+        queryFn: ({ signal }) => fetchFeedbacks({ cursor: undefined, signal })
+      });
+    }
   },
   {
     title: 'Reports',
@@ -37,9 +66,15 @@ export const dashboardLinks: {
     allowedRole: 'admin',
     action: () => {
       const queryClient = getQueryClient();
-      if (queryClient.getQueryData(reportsKey({}))) return;
+      const accessorKey = reportsKey({});
+      if (
+        queryClient.getQueryData(accessorKey) ||
+        queryClient.isFetching({ queryKey: accessorKey })
+      )
+        return;
+
       queryClient.prefetchInfiniteQuery({
-        queryKey: reportsKey({}),
+        queryKey: accessorKey,
         initialPageParam: undefined,
         queryFn: ({ signal }) => fetchReports({ signal, cursor: undefined })
       });

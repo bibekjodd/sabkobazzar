@@ -1,21 +1,20 @@
 'use client';
 
-import AuctionOverview, { auctionOverviewSkeleton } from '@/components/auction-overview';
-import AuctionCard from '@/components/cards/auction-card';
-import Live from '@/components/live';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { extractErrorMessage } from '@/lib/utils';
 import { useLeaveLiveAuction } from '@/mutations/use-leave-live-auction';
 import { useAuction } from '@/queries/use-auction';
-import { useAuctions } from '@/queries/use-auctions';
 import { useAuctionStore } from '@/stores/use-auction-store';
-import { ActivityIcon, CircleAlert } from 'lucide-react';
+import { CircleAlert } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
+import AuctionOverview, { auctionOverviewSkeleton } from './sections/auction-overview';
+import Live from './sections/live';
+import MoreAuctions from './sections/more-auctions';
 
 export const dynamic = 'force-static';
 
-export default function Client() {
+export default function Page() {
   const { id: auctionId } = useParams<{ id: string }>();
   const { data: auction, error, isLoading } = useAuction(auctionId);
   const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
@@ -41,7 +40,7 @@ export default function Client() {
   }, []);
 
   return (
-    <main className="min-h-screen pb-20 pt-16">
+    <main className="min-h-screen pb-20 pt-28 md:pt-16">
       {!showLive && graphics}
 
       {error && (
@@ -62,7 +61,7 @@ export default function Client() {
 
       {showLive && auction && <Live auction={auction} />}
 
-      <div className="cont text-indigo-200">
+      <div className="cont text-muted-foreground">
         {auction && !showLive && (
           <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
             <AuctionOverview auction={auction} />
@@ -75,32 +74,9 @@ export default function Client() {
   );
 }
 
-function MoreAuctions({ currentAuction }: { currentAuction: Auction }) {
-  const { data } = useAuctions({});
-
-  const auctions = data?.filter((auction) => auction.id !== currentAuction.id);
-
-  return (
-    <section className="relative z-10 scroll-m-20 pt-16" id="upcoming-auctions">
-      <h3 className="flex items-center space-x-2 px-2 text-2xl font-medium xs:text-3xl">
-        <span className="">Explore more auctions</span>
-        <ActivityIcon className="size-6 text-purple-600 xs:size-7" />
-      </h3>
-
-      <div className="mt-4 flex flex-wrap">
-        {auctions?.slice(0, 6).map((auction) => (
-          <div key={auction.id} className="mb-7 w-full md:w-1/2 md:p-4 xl:w-1/3">
-            <AuctionCard auction={auction} />
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 const graphics = (
   <>
-    <div className="fixed right-5 top-16 -z-10 size-40 rounded-full bg-purple-500/10 blur-3xl filter md:size-80" />
+    <div className="fixed right-5 top-16 -z-10 size-40 rounded-full bg-brand-darker/10 blur-3xl filter md:size-80" />
     <div className="fixed left-5 top-16 -z-10 size-40 rounded-full bg-sky-500/15 blur-3xl filter md:size-80" />
   </>
 );

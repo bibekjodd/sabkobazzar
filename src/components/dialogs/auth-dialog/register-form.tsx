@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { closeAuthDialog } from '.';
 
 export default function RegisterForm() {
   const {
@@ -58,7 +57,6 @@ export default function RegisterForm() {
         onSuccess() {
           unPickImage();
           reset();
-          closeAuthDialog();
         }
       }
     );
@@ -109,7 +107,7 @@ export default function RegisterForm() {
         />
         {imageUri && (
           <button onClick={unPickImage} type="button" className="relative size-fit rounded-full">
-            <div className="absolute right-0 top-0 z-10 size-fit rounded-full bg-indigo-100 text-primary-foreground">
+            <div className="absolute right-0 top-0 z-10 size-fit rounded-full bg-foreground text-primary-foreground">
               <XIcon className="size-3" />
             </div>
             <Avatar src={imageUri} />
@@ -117,7 +115,7 @@ export default function RegisterForm() {
         )}
       </div>
 
-      <Button variant="default" disabled={isPending} loading={isPending}>
+      <Button variant="brand" disabled={isPending} loading={isPending}>
         Register
       </Button>
     </form>

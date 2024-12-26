@@ -1,10 +1,10 @@
-import { backendUrl } from '@/lib/constants';
+import { closeAuthDialog } from '@/components/dialogs/auth-dialog';
+import { apiClient } from '@/lib/api-client';
 import { LoginSchema } from '@/lib/form-schemas';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 export const useLogin = () => {
@@ -12,7 +12,7 @@ export const useLogin = () => {
   return useMutation({
     mutationKey: ['login'],
     mutationFn: async (data: LoginSchema) => {
-      const res = await axios.post<{ user: UserProfile }>(`${backendUrl}/api/auth/login`, data, {
+      const res = await apiClient.post<{ user: UserProfile }>('/api/auth/login', data, {
         withCredentials: true
       });
       return res.data.user;
@@ -22,6 +22,7 @@ export const useLogin = () => {
       toast.error(`Could not login! ${extractErrorMessage(err)}`);
     },
     onSuccess(data) {
+      closeAuthDialog();
       toast.success('Logged in successfully');
       queryClient.setQueryData<UserProfile>(profileKey, data);
     }

@@ -1,4 +1,5 @@
-import { backendUrl } from '@/lib/constants';
+import { closeLeaveAuctionDialog } from '@/components/dialogs/leave-auction.dialog';
+import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
@@ -6,7 +7,6 @@ import { notificationsKey } from '@/queries/use-notifications';
 import { participantsKey } from '@/queries/use-participants';
 import { profileKey } from '@/queries/use-profile';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 export const leaveAuctionKey = (auctionId: string) => ['kick-user', auctionId];
@@ -19,6 +19,7 @@ export const useLeaveAuction = (auctionId: string) => {
     mutationFn: () => leaveAuction(auctionId),
 
     onSuccess() {
+      closeLeaveAuctionDialog();
       toast.success('Left auction successfully');
       queryClient.invalidateQueries({ queryKey: notificationsKey });
       const auction = queryClient.getQueryData<Auction>(auctionKey(auctionId));
@@ -50,11 +51,7 @@ export const useLeaveAuction = (auctionId: string) => {
 };
 
 const leaveAuction = async (auctionId: string) => {
-  await axios.put<{ auction: Auction }>(
-    `${backendUrl}/api/auctions/${auctionId}/leave`,
-    undefined,
-    {
-      withCredentials: true
-    }
-  );
+  await apiClient.put<{ auction: Auction }>(`/api/auctions/${auctionId}/leave`, undefined, {
+    withCredentials: true
+  });
 };

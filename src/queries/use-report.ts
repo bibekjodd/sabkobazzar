@@ -1,6 +1,5 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const reportKey = (reportId: string) => ['report', reportId];
 
@@ -14,9 +13,9 @@ export const useReport = (reportId: string, queryOptions?: UseQueryOptions<Dashb
 
 type Options = { reportId: string; signal: AbortSignal };
 export const fetchReport = async ({ reportId, signal }: Options) => {
-  const res = await axios.get<{ report: DashboardReport }>(
-    `${backendUrl}/api/reports/${reportId}`,
-    { withCredentials: true, signal }
-  );
+  const res = await apiClient.get<{ report: DashboardReport }>(`/api/reports/${reportId}`, {
+    withCredentials: true,
+    signal
+  });
   return res.data.report;
 };

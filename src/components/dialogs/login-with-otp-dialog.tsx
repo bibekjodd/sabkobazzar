@@ -20,7 +20,6 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../ui/input-otp';
-import { closeAuthDialog } from './auth-dialog';
 
 const useRequestLoginOtpDialog = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
 const onOpenChange = (isOpen: boolean) => useRequestLoginOtpDialog.setState({ isOpen });
@@ -65,8 +64,8 @@ export default function RequestLoginOtpDialog() {
         <section className="pt-4">
           {!isSuccess && (
             <>
-              <p className="mb-2 text-sm text-indigo-200/90">
-                Enter your email to receive password reset OTP
+              <p className="mb-2 text-sm text-muted-foreground">
+                Enter your email to receive 6 digit otp
               </p>
               <form onSubmit={onSubmit}>
                 <Input
@@ -85,13 +84,7 @@ export default function RequestLoginOtpDialog() {
 
         {!isSuccess && (
           <DialogFooter>
-            <Button
-              variant="secondary"
-              onClick={onSubmit}
-              loading={isPending}
-              disabled={isPending}
-              className="w-full"
-            >
+            <Button onClick={onSubmit} loading={isPending} disabled={isPending} className="w-full">
               Request OTP
             </Button>
           </DialogFooter>
@@ -109,7 +102,7 @@ function LoginWithOtp({
   clearMutationCache: () => unknown;
 }) {
   const [otp, setOtp] = useState('');
-  const { mutate, isPending, error } = useLoginWithOtp();
+  const { mutate, isPending, error, reset } = useLoginWithOtp();
 
   const onOtpInput = (otp: string) => {
     if (isPending) return;
@@ -119,9 +112,8 @@ function LoginWithOtp({
       { email, otp },
       {
         onSuccess() {
-          closeLoginWithOtpDialog();
-          closeAuthDialog();
           clearMutationCache();
+          reset();
         }
       }
     );
@@ -129,7 +121,7 @@ function LoginWithOtp({
 
   return (
     <section className="flex flex-col items-center">
-      <p className="mb-2 text-center text-sm text-indigo-200/90">
+      <p className="mb-2 text-center text-sm text-muted-foreground">
         Enter the 6 digit otp sent to {email}
       </p>
 
@@ -156,7 +148,7 @@ function LoginWithOtp({
         )}
 
         {error && (
-          <p className="text-rose-500">Could not login with otp! {extractErrorMessage(error)}</p>
+          <p className="text-error">Could not login with otp! {extractErrorMessage(error)}</p>
         )}
       </div>
     </section>

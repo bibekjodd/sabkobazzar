@@ -1,6 +1,6 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
+import { concatenateSearchParams } from '@/lib/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export type KeyOptions = Partial<{
   sort: 'asc' | 'desc';
@@ -9,19 +9,14 @@ export type KeyOptions = Partial<{
   limit: number;
   user: string;
   auction: string;
-  responded: 'true' | 'false' | 'all';
+  responded: boolean;
 }>;
 
 export const reportsKey = (options: KeyOptions) => [
   'reports',
   {
-    sort: options.sort || 'desc',
-    from: options.from,
-    to: options.to,
-    limit: options.limit,
-    user: options.user,
-    auction: options.auction,
-    responded: options.responded || 'all'
+    ...options,
+    sort: options.sort || 'desc'
   } satisfies KeyOptions
 ];
 
@@ -33,8 +28,7 @@ export const useReports = (options: KeyOptions) => {
     getNextPageParam(lastPage) {
       return lastPage.cursor;
     },
-    select: (data) => data.pages.map((page) => page.reports).flat(1),
-    maxPages: 10
+    select: (data) => data.pages.map((page) => page.reports).flat(1)
   });
 };
 
@@ -47,11 +41,9 @@ type Result = {
   cursor: string | undefined;
 };
 export const fetchReports = async ({ signal, ...query }: Options): Promise<Result> => {
-  const url = new URL(`${backendUrl}/api/reports`);
-
-  for (const [key, value] of Object.entries(query)) {
-    if (value) url.searchParams.set(key, String(value));
-  }
-  const res = await axios.get<Result>(url.href, { withCredentials: true, signal });
+  const res = await apiClient.get<Result>(concatenateSearchParams('/api/reports', query), {
+    withCredentials: true,
+    signal
+  });
   return res.data;
 };

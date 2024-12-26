@@ -24,6 +24,7 @@ import {
   ChartNoAxesGanttIcon,
   CheckCheckIcon,
   CheckIcon,
+  ClockIcon,
   EllipsisVerticalIcon,
   MessageCircleReplyIcon
 } from 'lucide-react';
@@ -36,7 +37,7 @@ export default function Result() {
   return (
     <div className="mt-3 space-y-2">
       {!isLoading && reports?.length === 0 && (
-        <p className="text-sm font-medium text-rose-500">No results found.</p>
+        <p className="text-sm font-medium text-error">No results found.</p>
       )}
       {isLoading &&
         new Array(3).fill('nothing').map((_, i) => (
@@ -75,15 +76,16 @@ function ReportItem(props: { report: DashboardReport }) {
   return (
     <section className="relative space-y-1 rounded-md border border-indigo-300/10 bg-indigo-900/5 p-4">
       <UserHoverCard user={report.user}>
-        <div className="flex w-fit items-center space-x-2 hover:underline">
+        <button className="flex w-fit items-center space-x-2 hover:underline">
           <Avatar src={report.user.image} size="sm" />
           <p className="font-medium">{report.user.name}</p>
-        </div>
+        </button>
       </UserHoverCard>
 
       <h3 className="line-clamp-1 font-medium">{report.title}</h3>
-      <p className="line-clamp-2 text-sm text-indigo-100/90">{report.text}</p>
-      <p className="text-sm text-indigo-200/80">
+      <p className="line-clamp-2 text-sm">{report.text}</p>
+      <p className="text-sm text-muted-foreground">
+        <ClockIcon className="mr-1 inline size-3" />
         {report.createdAt > new Date(Date.now() - 24 * MILLIS.HOUR).toISOString()
           ? dayjs(report.createdAt).fromNow()
           : dayjs(report.createdAt).format('MMMM DD')}
@@ -94,8 +96,8 @@ function ReportItem(props: { report: DashboardReport }) {
           disabled={!!report.response}
           onClick={report.response ? undefined : () => openRespondReportDialog(report.id)}
           className={cn('flex items-center space-x-1.5 rounded-md px-3 py-1.5', {
-            'bg-teal-400/10 text-teal-400 hover:bg-teal-400/20': report.response,
-            'bg-blue-400/10 text-blue-400 hover:bg-blue-400/20': !report.response
+            'bg-success/10 text-success hover:bg-success/20': report.response,
+            'bg-info/10 text-info hover:bg-info/20': !report.response
           })}
         >
           <span>{report.response ? 'Already responded' : 'Add reponse'}</span>
@@ -108,7 +110,7 @@ function ReportItem(props: { report: DashboardReport }) {
 
         <button
           onClick={() => openReportDetailsDialog(report.id)}
-          className="flex items-center space-x-1.5 rounded-md bg-purple-400/10 px-3 py-1.5 text-purple-400 hover:bg-purple-400/20"
+          className="flex items-center space-x-1.5 rounded-md bg-brand/10 px-3 py-1.5 text-brand hover:bg-brand/20"
         >
           <span>Details</span>
           <ChartNoAxesGanttIcon className="size-4" />
@@ -117,7 +119,7 @@ function ReportItem(props: { report: DashboardReport }) {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="absolute right-2 top-2 p-2 text-indigo-100/80 ring-indigo-300/10 focus:outline-none focus:ring-1">
+          <button className="absolute right-2 top-2 p-2 ring-indigo-300/10 focus:outline-none focus:ring-1">
             <EllipsisVerticalIcon className="size-3.5" />
           </button>
         </DropdownMenuTrigger>

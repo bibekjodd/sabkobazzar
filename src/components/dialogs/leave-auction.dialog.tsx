@@ -33,11 +33,7 @@ export default function LeaveAuctionDialog() {
 
   const leaveAuction = () => {
     if (isPending || !auctionId) return;
-    mutate(undefined, {
-      onSuccess() {
-        closeLeaveAuctionDialog();
-      }
-    });
+    mutate();
   };
 
   return (
@@ -50,15 +46,10 @@ export default function LeaveAuctionDialog() {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="text">Close</Button>
+            <Button variant="ghost">Close</Button>
           </DialogClose>
 
-          <Button
-            onClick={leaveAuction}
-            variant="secondary"
-            loading={isPending}
-            disabled={isPending}
-          >
+          <Button onClick={leaveAuction} loading={isPending} disabled={isPending}>
             Leave
           </Button>
         </DialogFooter>

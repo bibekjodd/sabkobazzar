@@ -15,6 +15,11 @@ const config: Config = {
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        brand: {
+          DEFAULT: 'hsl(var(--brand))',
+          lighter: 'hsl(var(--brand-lighter))',
+          darker: 'hsl(var(--brand-darker))'
+        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
@@ -43,6 +48,10 @@ const config: Config = {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))'
         },
+        info: 'hsl(var(--info))',
+        warning: 'hsl(var(--warning))',
+        success: 'hsl(var(--success))',
+        error: 'hsl(var(--error))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

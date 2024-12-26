@@ -63,7 +63,6 @@ export default function PostFeedbackDialog() {
     mutate(data, {
       onSuccess() {
         reset();
-        closePostFeedbackDialog();
       }
     });
   });
@@ -111,7 +110,7 @@ export default function PostFeedbackDialog() {
                 )}
               />
               {errors.rating?.message && (
-                <p className="text-sm text-rose-500">{errors.rating.message}</p>
+                <p className="text-sm text-error">{errors.rating.message}</p>
               )}
             </div>
 
@@ -123,20 +122,17 @@ export default function PostFeedbackDialog() {
                 id="text"
                 placeholder="Give us your honest feedback...."
               />
-              {errors.text?.message && (
-                <p className="text-sm text-rose-500">{errors.text.message}</p>
-              )}
+              {errors.text?.message && <p className="text-sm text-error">{errors.text.message}</p>}
             </div>
           </form>
         </ScrollArea>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="text">Cancel</Button>
+            <Button variant="ghost">Cancel</Button>
           </DialogClose>
 
           <Button
-            variant="secondary"
             Icon={SendHorizontalIcon}
             onClick={onSubmit}
             loading={isPostingFeedback}

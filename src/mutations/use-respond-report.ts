@@ -1,9 +1,9 @@
-import { backendUrl } from '@/lib/constants';
+import { closeRespondReortDialog } from '@/components/dialogs/respond-report-dialog';
+import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { reportKey } from '@/queries/use-report';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 export const useRespondReport = (reportId: string) => {
@@ -11,11 +11,12 @@ export const useRespondReport = (reportId: string) => {
   return useMutation({
     mutationKey: ['respond-report', reportId],
     mutationFn: async (data: { response: string }) => {
-      await axios.post(`${backendUrl}/api/reports/${reportId}/response`, data, {
+      await apiClient.post(`/api/reports/${reportId}/response`, data, {
         withCredentials: true
       });
     },
     onSuccess(_, { response }) {
+      closeRespondReortDialog();
       toast.success('Response sent to user successfully');
       const reportData = queryClient.getQueryData<DashboardReport>(reportKey(reportId));
       if (!reportData) return;

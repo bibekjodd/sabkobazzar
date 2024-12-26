@@ -1,8 +1,7 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
 import { auctionKey } from '@/queries/use-auction';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useNotifyJoinLive = (auctionId: string) => {
   const queryClient = getQueryClient();
@@ -18,7 +17,7 @@ export const useNotifyJoinLive = (auctionId: string) => {
 };
 
 const notifyJoinLive = async (auctionId: string) => {
-  return await axios.put(`${backendUrl}/api/events/auctions/${auctionId}/join`, undefined, {
+  return await apiClient.put(`/api/events/auctions/${auctionId}/join`, undefined, {
     withCredentials: true
   });
 };

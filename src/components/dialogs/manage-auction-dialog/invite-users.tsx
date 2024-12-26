@@ -36,10 +36,8 @@ export default function InviteUsers({
         className="mt-2 h-8"
       />
       <ScrollArea className="mt-3 flex max-h-60 flex-col">
-        {!isLoading && users.length === 0 && (
-          <p className="text-sm text-rose-500">No results found</p>
-        )}
-        {!isLoading && users.length !== 0 && <p className="mb-2 text-gray-300">Results</p>}
+        {!isLoading && users.length === 0 && <p className="text-sm text-error">No results found</p>}
+        {!isLoading && users.length !== 0 && <p className="mb-2 text-muted-foreground">Results</p>}
         <AutoAnimate className="flex flex-col space-y-3">
           {users.map((user) => (
             <ResultUser key={user.id} user={user} auctionId={auctionId} refetchResult={refetch} />
@@ -97,7 +95,6 @@ function ResultUser({
       )}
       {(user.status === null || user.status === 'kicked') && !isInvited && (
         <Button
-          variant="secondary"
           size="sm"
           loading={isPending}
           disabled={isPending}

@@ -1,33 +1,51 @@
-import { backendUrl } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
+import { concatenateSearchParams } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
-export const auctionsStatsKey = ['auctions-stats'];
+type KeyOptions = Partial<{
+  user: string;
+  resource: 'self';
+}>;
 
-export const useAuctionsStats = () => {
+export const auctionsStatsKey = (options: KeyOptions) => [
+  'auctions-stats',
+  {
+    user: options.user,
+    resource: options.resource
+  }
+];
+
+export const useAuctionsStats = (options: KeyOptions) => {
   return useQuery({
-    queryKey: auctionsStatsKey,
-    queryFn: fetchAuctionsStats
+    queryKey: auctionsStatsKey(options),
+    queryFn: ({ signal }) => fetchAuctionsStats({ signal, ...options })
   });
 };
 
-type FetchAuctionsStatsResult = {
+export type FetchAuctionsStatsResult = {
   stats: {
     cancelled: number;
     completed: number;
     date: string;
     revenue: number;
+    interests: number;
   }[];
 };
 
-export const fetchAuctionsStats = async ({
-  signal
-}: {
+type Options = KeyOptions & {
   signal: AbortSignal;
-}): Promise<FetchAuctionsStatsResult['stats']> => {
-  const res = await axios.get<FetchAuctionsStatsResult>(`${backendUrl}/api/stats/auctions`, {
-    withCredentials: true,
-    signal
-  });
+};
+
+export const fetchAuctionsStats = async ({
+  signal,
+  ...query
+}: Options): Promise<FetchAuctionsStatsResult['stats']> => {
+  const res = await apiClient.get<FetchAuctionsStatsResult>(
+    concatenateSearchParams('/api/stats/auctions', query),
+    {
+      withCredentials: true,
+      signal
+    }
+  );
   return res.data.stats;
 };

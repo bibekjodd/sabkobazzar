@@ -4,7 +4,6 @@ import { useAuctions } from '@/queries/use-auctions';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Dot } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 type LiveIndicator = {
   show: boolean;
@@ -12,38 +11,26 @@ type LiveIndicator = {
 };
 
 export default function LiveIndicator() {
-  const [show, setShow] = useState(false);
   const { data: auctions } = useAuctions({ status: 'pending' });
-
-  useEffect(() => {
-    if (!auctions) return;
-    setShow(true);
-    const timeout = setTimeout(() => {
-      setShow(false);
-    }, 10_000);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [auctions]);
 
   return (
     <AnimatePresence>
-      {show && auctions?.length !== 0 && (
+      {auctions?.length !== 0 && (
         <motion.div
           initial={{ opacity: 0, y: -40, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -40, scale: 0.98 }}
           transition={{ ease: 'easeOut', duration: 0.3, delay: 1 }}
-          className="absolute top-24 z-20 w-full text-xs font-medium"
+          className="absolute top-24 z-20 w-full text-xs"
         >
           <ProgressLink
             href="/auctions"
-            className="relative mx-auto flex w-fit items-center justify-center rounded-full bg-violet-950/40 px-2.5 py-0.5 text-gray-300 hover:text-gray-100 hover:underline"
+            className="relative mx-auto flex w-fit items-center justify-center rounded-full bg-brand/5 px-3 py-1 text-foreground hover:underline"
           >
-            <span className="absolute inset-0 rounded-full border-2 border-purple-900/40 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-            <span className="absolute inset-0 rounded-full border-2 border-purple-900/20 [mask-image:linear-gradient(to_top,black,transparent)]" />
+            <span className="absolute inset-0 rounded-full border-2 border-brand/10 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+            <span className="absolute inset-0 rounded-full border-2 border-brand-lighter/5 [mask-image:linear-gradient(to_top,black,transparent)]" />
             <span>
-              {(auctions?.length || 0) < 4 ? auctions?.length : '4+'} Auctions coming live
+              {(auctions?.length || 0) < 10 ? auctions?.length : '9+'}{' '}
+              <span className="mx-1">Auctions coming live</span>
             </span>
             <Dot className="size-4 scale-150 animate-pulse" />
           </ProgressLink>

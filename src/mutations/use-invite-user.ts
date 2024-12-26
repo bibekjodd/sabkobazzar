@@ -1,9 +1,9 @@
-import { backendUrl, MILLIS } from '@/lib/constants';
+import { apiClient } from '@/lib/api-client';
+import { MILLIS } from '@/lib/constants';
 import { getQueryClient } from '@/lib/query-client';
 import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
 
 type KeyOptions = { auctionId: string; userId: string };
@@ -25,7 +25,7 @@ export const useInviteUser = (options: KeyOptions) => {
 };
 
 const inviteUser = async ({ userId, auctionId }: KeyOptions) => {
-  return await axios.put(`${backendUrl}/api/auctions/${auctionId}/invite/${userId}`, undefined, {
+  return await apiClient.put(`/api/auctions/${auctionId}/invite/${userId}`, undefined, {
     withCredentials: true
   });
 };

@@ -1,17 +1,30 @@
 'use client';
 
 import { dummyAuctionBanner } from '@/lib/constants';
-import { canJoinAuction, canLeaveAuction, formatDate } from '@/lib/utils';
+import {
+  canJoinAuction,
+  canLeaveAuction,
+  formatDate,
+  isAuctionCompleted,
+  isAuctionPending
+} from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import { ChevronsRight, GlobeLockIcon, InfoIcon } from 'lucide-react';
+import {
+  BanIcon,
+  ChartNoAxesGanttIcon,
+  CircleCheckBigIcon,
+  FlameIcon,
+  GlobeIcon,
+  GlobeLockIcon,
+  RadioIcon
+} from 'lucide-react';
 import { openAuthDialog } from '../dialogs/auth-dialog';
 import { openJoinAuctionDialog } from '../dialogs/join-auction-dialog';
 import { openLeaveAuctionDialog } from '../dialogs/leave-auction.dialog';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 type Props = {
   auction: Auction;
@@ -25,62 +38,78 @@ export default function AuctionCard({ auction: auctionData }: Props) {
 
   const canUserJoinAuction = canJoinAuction({ auction, userId: profile?.id! });
   const canUserLeaveAuction = canLeaveAuction({ auction });
+  const isCompleted = isAuctionCompleted(auction);
+  const isPending = isAuctionPending(auction);
 
   return (
     <div className="relative flex h-full w-full flex-col rounded-lg filter backdrop-blur-3xl">
       {graphics}
 
-      <ProgressLink href={auctionLink}>
+      <ProgressLink href={auctionLink} className="relative">
+        {auction.status === 'cancelled' && (
+          <div className="absolute right-1.5 top-1.5 z-10 flex w-fit items-center space-x-2 rounded-full bg-error px-2 py-0.5 text-sm text-white">
+            <BanIcon className="size-3" />
+            <span>Cancelled</span>
+          </div>
+        )}
+
+        {isPending && (
+          <div className="absolute right-1.5 top-1.5 z-10 flex w-fit items-center space-x-2 rounded-full bg-brand px-2 py-0.5 text-sm text-white">
+            <RadioIcon className="size-3" />
+            <span>Coming live</span>
+          </div>
+        )}
+
+        {isCompleted && (
+          <div className="absolute right-1.5 top-1.5 z-10 flex w-fit items-center space-x-2 rounded-full bg-success px-2 py-0.5 text-sm text-white">
+            <CircleCheckBigIcon className="size-3" />
+            <span>Sold out</span>
+          </div>
+        )}
+
         <img
           src={auction.banner || dummyAuctionBanner}
           loading="lazy"
           decoding="async"
           alt="banner image"
-          className="aspect-video w-full rounded-lg object-contain p-0.5"
+          className="aspect-video w-full object-cover p-0.5"
         />
       </ProgressLink>
 
       <div className="mt-2.5 px-4">
         <h3 className="line-clamp-2 text-xl">{auction.title}</h3>
-        {auction.isInviteOnly && (
-          <div className="my-1 flex items-center space-x-1.5 text-sm text-indigo-200/90">
-            <GlobeLockIcon className="size-3.5" />
-            <span>Private Auction</span>
-          </div>
-        )}
-        <p className="text-sm text-indigo-200/80">Scheduled for {formatDate(auction.startsAt)}</p>
-        {auction.isInviteOnly && (
-          <p className="mt-1 text-sm text-gray-400/80">
-            <TooltipProvider delayDuration={300}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <InfoIcon className="inline size-3.5 -translate-y-[1px]" />
-                </TooltipTrigger>
-                <TooltipContent className="bg-gray-300 font-medium">
-                  <p>This is invite only auction and only invited members can join the auction.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>{' '}
-            Invite only auction
-          </p>
-        )}
+        <div className="my-1 flex items-center space-x-1.5 text-sm text-muted-foreground">
+          {auction.isInviteOnly ? (
+            <>
+              <GlobeLockIcon className="size-3.5" />
+              <span>Private Auction</span>
+            </>
+          ) : (
+            <>
+              <GlobeIcon className="size-3.5" />
+              <span>Public Auction</span>
+            </>
+          )}
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Scheduled for {formatDate(auction.startsAt)}
+        </p>
       </div>
 
       <div className="mt-auto flex flex-col space-y-1 px-4 pb-4 pt-5">
         <ProgressLink href={auctionLink}>
-          <Button className="flex w-full items-center">
-            <span>See more</span>
-            <ChevronsRight className="ml-1 size-4" />
+          <Button variant="brand" Icon={ChartNoAxesGanttIcon} className="flex w-full items-center">
+            <span>See More Details</span>
           </Button>
         </ProgressLink>
 
         {canUserJoinAuction && (
           <Button
+            Icon={FlameIcon}
             onClick={() => {
               if (profile) return openJoinAuctionDialog(auction.id);
               openAuthDialog();
             }}
-            variant="secondary"
             className="w-full"
           >
             Join Auction
@@ -103,11 +132,11 @@ export default function AuctionCard({ auction: auctionData }: Props) {
 
 const graphics = (
   <>
-    <div className="absolute inset-0 -z-10 rounded-lg border-2 border-purple-500/10 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+    <div className="absolute inset-0 -z-10 rounded-lg border-2 border-brand-darker/10 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
     <div className="absolute inset-0 -z-10 rounded-lg border-2 border-purple-900/40 [mask-image:linear-gradient(to_top,black,transparent)]" />
 
     <div className="absolute left-10 top-10 -z-20 size-20 rounded-full bg-white/60 blur-3xl filter" />
-    <div className="absolute bottom-10 right-10 -z-20 size-20 rounded-full bg-purple-400/50 blur-3xl filter" />
+    <div className="absolute bottom-10 right-10 -z-20 size-20 rounded-full bg-brand/50 blur-3xl filter" />
     <div className="absolute bottom-10 left-10 -z-20 size-20 rounded-full bg-sky-400/50 blur-3xl filter" />
   </>
 );
