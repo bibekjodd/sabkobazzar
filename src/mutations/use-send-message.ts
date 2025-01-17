@@ -1,7 +1,10 @@
+import { closeSendMessageDialog } from '@/app/(main)/auctions/[id]/sections/live/send-message';
 import { apiClient } from '@/lib/api-client';
 import { getQueryClient } from '@/lib/query-client';
+import { extractErrorMessage } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 export const sendMessageKey = (auctionId: string) => ['send-message', auctionId];
 
@@ -10,7 +13,11 @@ export const useSendMessage = (auctionId: string) => {
   return useMutation({
     mutationKey: sendMessageKey(auctionId),
     mutationFn: (data: Omit<Options, 'auctionId'>) => sendMessage({ auctionId, ...data }),
-    onError() {
+    onSuccess() {
+      closeSendMessageDialog();
+    },
+    onError(err) {
+      toast.error(`Could not send message! ${extractErrorMessage(err)}`);
       queryClient.invalidateQueries({ queryKey: auctionKey(auctionId) });
     }
   });

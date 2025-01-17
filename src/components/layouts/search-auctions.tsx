@@ -1,6 +1,7 @@
 'use client';
 
 import { useFilters } from '@/app/(main)/auctions/sections/filter';
+import { useAuctionStore } from '@/stores/use-auction-store';
 import { useLoadingBar } from '@jodd/next-top-loading-bar';
 import { SearchIcon, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -8,7 +9,9 @@ import React, { Suspense, useEffect, useState } from 'react';
 
 export default function SearchAuctions() {
   const pathname = usePathname();
-  if (!pathname.startsWith('/auctions')) return null;
+  const isLive = useAuctionStore((state) => state.isLive);
+  if (!pathname.startsWith('/auctions') || isLive) return null;
+
   return (
     <Suspense>
       <BaseComponent />

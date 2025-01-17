@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default:
           'bg-gradient-to-b from-gray-200 to-gray-300/80 hover:brightness-110 text-primary-foreground',
         brand:
-          'bg-gradient-to-br from-brand-darker text-white [&_svg]:text-white to-brand-darker/80 hover:brightness-[1.15]',
+          'bg-gradient-to-br from-brand-darker focus:ring-1 ring-foreground text-white [&_svg]:text-white to-brand-darker/80 hover:brightness-[1.15]',
         destructive: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
           'border border-input bg-transparent shadow-sm hover:bg-muted/50 hover:text-accent-foreground',
@@ -66,7 +66,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     Icon = IconRight || Icon;
     return (
       <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
-        <span className={cn(loading && 'opacity-0', 'inline-flex items-center justify-center')}>
+        <span className={cn('inline-flex items-center justify-center', { 'opacity-0': loading })}>
           {IconLeft && (
             <IconLeft
               className={cn('mr-2', { 'size-3.5': size === 'sm', 'size-4': size !== 'sm' })}

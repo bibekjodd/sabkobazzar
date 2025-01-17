@@ -6,28 +6,45 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger
+  DrawerTitle
 } from '@/components/ui/drawer';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import Avatar from '@/components/utils/avatar';
 import InfiniteScrollObserver from '@/components/utils/infinite-scroll-observer';
-import { formatPrice } from '@/lib/utils';
+import { MILLIS } from '@/lib/constants';
+import { formatPrice, setImmediateInterval } from '@/lib/utils';
 import { useBids } from '@/queries/use-bids';
+import { createStore } from '@jodd/snap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React from 'react';
+import { HistoryIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 dayjs.extend(relativeTime);
 
+type BidItemData = Bid & { timeAgo: string };
+const makeupBidsData = (bids: Bid[]): BidItemData[] => {
+  return bids.map((bid) => ({
+    ...bid,
+    timeAgo: dayjs(bid.createdAt).fromNow()
+  }));
+};
+
 export default function BidsHistory({ auctionId }: { auctionId: string }) {
-  const {
-    data: bids,
-    hasNextPage,
-    isFetching,
-    fetchNextPage
-  } = useBids({ auctionId, sort: 'desc' });
+  const { data, hasNextPage, isFetching, fetchNextPage } = useBids({ auctionId, sort: 'desc' });
+  const [bids, setBids] = useState<BidItemData[] | undefined>(undefined);
+
+  useEffect(() => {
+    const interval = setImmediateInterval(() => {
+      if (!data) setBids(undefined);
+      else setBids(makeupBidsData(data));
+    }, MILLIS.SECOND * 30);
+
+    return () => clearInterval(interval);
+  }, [data]);
+
   return (
-    <section className="flex size-full flex-col space-y-2 overflow-y-auto scrollbar-hide">
+    <section className="flex size-full flex-col space-y-2 overflow-y-auto pb-6 scrollbar-hide">
       {bids?.map((bid) => <BidItem key={bid.id} bid={bid} />)}
       <InfiniteScrollObserver
         showLoader
@@ -39,41 +56,44 @@ export default function BidsHistory({ auctionId }: { auctionId: string }) {
   );
 }
 
-function BidItem({ bid }: { bid: Bid }) {
+function BidItem({ bid }: { bid: BidItemData }) {
   return (
-    <section className="mx-2 flex flex-col rounded-lg bg-background/20 px-4 py-2 text-sm text-muted-foreground">
+    <section className="mx-2 flex flex-col rounded-lg bg-muted-foreground/[0.03] px-4 py-2 text-sm text-muted-foreground">
       <div className="flex items-center space-x-3">
         <Avatar src={bid.bidder.image} size="sm" />
         <div className="flex flex-col">
-          <span className="text-xs text-muted-foreground">{bid.bidder.name}</span>
-          <span className="font-medium">Rs {formatPrice(bid.amount)}</span>
+          <span className="text-muted-foreground">{bid.bidder.name}</span>
+          <span className="pt-0.5 font-medium">{formatPrice(bid.amount)}</span>
         </div>
       </div>
-      <span className="mt-2 text-xs italic text-muted-foreground">
-        {dayjs(bid.createdAt).fromNow()}
-      </span>
+      <span className="mt-2 text-xs italic text-muted-foreground">{bid.timeAgo}</span>
     </section>
   );
 }
 
-export function BidsHistoryDrawer({
-  children,
-  auctionId
-}: {
-  auctionId: string;
-  children: React.ReactNode;
-}) {
+const useDrawer = createStore<{ isOpen: boolean }>(() => ({
+  isOpen: false
+}));
+const onOpenChange = (isOpen: boolean) => useDrawer.setState({ isOpen });
+export const openBidsHistoryDrawer = () => onOpenChange(true);
+export const closeBidsHistoryDrawer = () => onOpenChange(false);
+
+export function BidsHistoryDrawer({ auctionId }: { auctionId: string }) {
+  const { isOpen } = useDrawer();
+
   return (
-    <Drawer>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+    <Drawer open={isOpen} onOpenChange={onOpenChange}>
       <DrawerContent className="flex h-screen max-h-[600px] flex-col bg-background/50 backdrop-blur-3xl">
         <DrawerHeader>
-          <DrawerTitle>Bids History</DrawerTitle>
+          <DrawerTitle className="flex items-center space-x-2">
+            <HistoryIcon className="size-5" />
+            <span>Bids History</span>
+          </DrawerTitle>
         </DrawerHeader>
         <DrawerDescription className="hidden" />
-        <section className="h-full overflow-y-auto">
-          <BidsHistory auctionId={auctionId} />
-        </section>
+        <ScrollArea className="h-full">
+          {auctionId && <BidsHistory auctionId={auctionId} />}
+        </ScrollArea>
 
         <DrawerFooter>
           <DrawerClose asChild>

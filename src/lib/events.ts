@@ -10,7 +10,7 @@ export type JoinedAuctionResponse = {
   user: User;
 };
 export type LeftAuctionResponse = JoinedAuctionResponse;
-export type SendMessageResponse = { text?: string; emoji?: string };
+export type SendMessageResponse = { user: User; data: { text?: string; emoji?: string } };
 export type BidResponse = { bid: Bid };
 export type ReceivedNotificationResponse = {
   notification: UserNotification;

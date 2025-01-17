@@ -1,8 +1,13 @@
+'use client';
+
+import { openAuthDialog } from '@/components/dialogs/auth-dialog';
 import { Button } from '@/components/ui/button';
 import { FadeDown } from '@/components/utils/animations';
+import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 
 export default function Hero() {
+  const { data: profile } = useProfile();
   return (
     <section className="relative grid min-h-screen place-items-center">
       {graphics}
@@ -20,9 +25,15 @@ export default function Hero() {
         </div>
 
         <div className="mt-3 flex flex-col items-center gap-4">
-          <ProgressLink href="/dashboard/register-auction">
-            <Button variant="moving-border">Drop your product to Auction </Button>
-          </ProgressLink>
+          {profile ? (
+            <ProgressLink href="/dashboard/register-auction">
+              <Button variant="moving-border">Drop your product to Auction</Button>
+            </ProgressLink>
+          ) : (
+            <Button onClick={openAuthDialog} variant="moving-border">
+              Drop your product to Auction
+            </Button>
+          )}
         </div>
       </FadeDown>
     </section>

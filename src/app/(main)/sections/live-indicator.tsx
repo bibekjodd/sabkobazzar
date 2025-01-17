@@ -5,11 +5,6 @@ import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Dot } from 'lucide-react';
 
-type LiveIndicator = {
-  show: boolean;
-  isShown: boolean;
-};
-
 export default function LiveIndicator() {
   const { data: auctions } = useAuctions({ status: 'pending' });
 

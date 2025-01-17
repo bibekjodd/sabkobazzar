@@ -2,14 +2,12 @@
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { extractErrorMessage } from '@/lib/utils';
-import { useLeaveLiveAuction } from '@/mutations/use-leave-live-auction';
 import { useAuction } from '@/queries/use-auction';
-import { useAuctionStore } from '@/stores/use-auction-store';
+import { loadAuction } from '@/stores/use-auction-store';
 import { CircleAlert } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 import AuctionOverview, { auctionOverviewSkeleton } from './sections/auction-overview';
-import Live from './sections/live';
 import MoreAuctions from './sections/more-auctions';
 
 export const dynamic = 'force-static';
@@ -17,31 +15,20 @@ export const dynamic = 'force-static';
 export default function Page() {
   const { id: auctionId } = useParams<{ id: string }>();
   const { data: auction, error, isLoading } = useAuction(auctionId);
-  const { mutate: leaveLiveAuction } = useLeaveLiveAuction(auctionId);
-  const isLive = useAuctionStore((state) => state.isLive);
-  const isLivePrevious = useAuctionStore((state) => state.isLivePrevious);
 
   useEffect(() => {
-    return () => {
-      if (isLive) leaveLiveAuction();
-    };
-  }, [leaveLiveAuction, isLive]);
-
-  const showLive = isLive || isLivePrevious;
-
-  useEffect(() => {
-    useAuctionStore.getState().onAuctionChange(auction || null);
+    loadAuction(auction || null);
   }, [auction]);
 
   useEffect(() => {
     return () => {
-      useAuctionStore.getState().onAuctionChange(null);
+      loadAuction(null);
     };
   }, []);
 
   return (
     <main className="min-h-screen pb-20 pt-28 md:pt-16">
-      {!showLive && graphics}
+      {graphics}
 
       {error && (
         <div className="p-4">
@@ -59,16 +46,14 @@ export default function Page() {
         </div>
       )}
 
-      {showLive && auction && <Live auction={auction} />}
-
       <div className="cont text-muted-foreground">
-        {auction && !showLive && (
+        {auction && (
           <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
             <AuctionOverview auction={auction} />
           </div>
         )}
 
-        {!isLive && auction && <MoreAuctions currentAuction={auction} />}
+        {auction && <MoreAuctions currentAuction={auction} />}
       </div>
     </main>
   );

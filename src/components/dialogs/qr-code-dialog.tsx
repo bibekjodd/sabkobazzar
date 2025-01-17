@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 import { ArrowDownToLineIcon } from 'lucide-react';
 import { useRef } from 'react';
 import QrCode from 'react-qr-code';
+import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
 
 const useQrCodeDialog = createStore<{
@@ -60,13 +61,14 @@ export default function QrCodeDialog() {
             <QrCode className="h-auto w-full max-w-full" value={value || 'nothing'} />
           </div>
           <div className="my-2 w-fit self-center">
-            <button
+            <Button
+              variant="ghost"
               onClick={downloadQrCodeImage}
-              className="group flex h-9 items-center space-x-2 px-4 text-sm"
+              Icon={ArrowDownToLineIcon}
+              className="flex h-9 items-center space-x-2 px-4 text-sm"
             >
-              <span>Save</span>
-              <ArrowDownToLineIcon className="size-3.5 group-hover:animate-bounce" />
-            </button>
+              Save
+            </Button>
           </div>
         </section>
       </DialogContent>

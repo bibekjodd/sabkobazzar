@@ -142,7 +142,7 @@ export default function Form() {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="mb-4">
+      <div className="mb-6">
         <h3 className="flex items-center space-x-3 text-xl">
           <AlignLeftIcon className="size-5" />
           <span>Fill auction details</span>

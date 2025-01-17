@@ -110,8 +110,8 @@ function BaseContent() {
   if (!profile) return null;
 
   return (
-    <section className="">
-      <div className="hidden items-center space-x-2 text-lg italic text-muted-foreground xl:flex">
+    <section>
+      <div className="mb-6 hidden items-center space-x-2 text-lg italic text-muted-foreground xl:flex">
         <LetterTextIcon className="size-5" />
         <span>Form Preview</span>
       </div>

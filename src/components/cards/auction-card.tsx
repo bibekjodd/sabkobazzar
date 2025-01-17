@@ -6,6 +6,7 @@ import {
   canLeaveAuction,
   formatDate,
   isAuctionCompleted,
+  isAuctionLive,
   isAuctionPending
 } from '@/lib/utils';
 import { useAuction } from '@/queries/use-auction';
@@ -40,6 +41,7 @@ export default function AuctionCard({ auction: auctionData }: Props) {
   const canUserLeaveAuction = canLeaveAuction({ auction });
   const isCompleted = isAuctionCompleted(auction);
   const isPending = isAuctionPending(auction);
+  const isLive = isAuctionLive(auction);
 
   return (
     <div className="relative flex h-full w-full flex-col rounded-lg filter backdrop-blur-3xl">
@@ -54,9 +56,16 @@ export default function AuctionCard({ auction: auctionData }: Props) {
         )}
 
         {isPending && (
-          <div className="absolute right-1.5 top-1.5 z-10 flex w-fit items-center space-x-2 rounded-full bg-brand px-2 py-0.5 text-sm text-white">
+          <div className="absolute right-1.5 top-1.5 z-10 flex w-fit items-center space-x-2 rounded-full bg-brand-darker px-2 py-0.5 text-sm text-white">
             <RadioIcon className="size-3" />
             <span>Coming live</span>
+          </div>
+        )}
+
+        {isLive && (
+          <div className="absolute right-1.5 top-1.5 z-10 flex w-fit items-center space-x-2 rounded-full bg-brand-darker px-2 py-0.5 text-sm text-white">
+            <RadioIcon className="size-3" />
+            <span>Live</span>
           </div>
         )}
 

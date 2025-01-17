@@ -1,7 +1,7 @@
 import { apiClient } from '@/lib/api-client';
 import { onPlaceBid } from '@/lib/events-actions';
 import { getQueryClient } from '@/lib/query-client';
-import { extractErrorMessage } from '@/lib/utils';
+import { extractErrorMessage, formatPrice } from '@/lib/utils';
 import { auctionKey } from '@/queries/use-auction';
 import { bidsKey } from '@/queries/use-bids';
 import { bidsSnapshotKey } from '@/queries/use-bids-snapshot';
@@ -18,6 +18,7 @@ export const usePlaceBid = (auctionId: string) => {
     mutationFn: ({ amount }: { amount: number }) => placeBid({ auctionId, amount }),
 
     onSuccess(bid) {
+      toast.success(`Placed bid of amount ${formatPrice(bid.amount)}`);
       onPlaceBid({ bid });
     },
 

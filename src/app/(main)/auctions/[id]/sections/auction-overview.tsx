@@ -18,6 +18,7 @@ import {
   formatDate,
   formatPrice,
   isAuctionCompleted,
+  isAuctionLive,
   isAuctionPending
 } from '@/lib/utils';
 import { useInterested } from '@/mutations/use-interested';
@@ -45,6 +46,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { openLiveScreen } from './live';
 
 type Props = {
   auction: Auction;
@@ -66,10 +68,11 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
   const canUserLeaveAuction = canLeaveAuction({ auction });
   const isCompleted = isAuctionCompleted(auction);
   const isPending = isAuctionPending(auction);
+  const isLive = isAuctionLive(auction);
 
   return (
     <div>
-      <div className="relative mx-auto w-fit border-b-2 border-brand/60 px-4 pb-3">
+      <div className="relative mx-auto w-fit border-b-2 border-brand/80 px-4 pb-3">
         <h3 className="text-center text-xl font-semibold text-brand xs:text-xl sm:text-4xl">
           {auction.title}
         </h3>
@@ -139,6 +142,13 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
             </div>
           )}
 
+          {isLive && (
+            <div className="mb-1 flex w-fit items-center space-x-2 rounded-full bg-brand/10 px-2 py-0.5 text-sm text-brand">
+              <RadioIcon className="size-3" />
+              <span>Live now</span>
+            </div>
+          )}
+
           <h3 className="text-2xl font-semibold">{auction.productTitle}</h3>
           <div className="mt-2 w-full space-y-2 [&_svg]:mr-1 [&_svg]:inline [&_svg]:size-3.5 [&_svg]:-translate-y-0.5">
             <div className="flex items-center space-x-2">
@@ -196,7 +206,7 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
 
           <button
             onClick={() => openReportAuctionDialog(auction.id)}
-            className="mt-2 flex items-center space-x-2 hover:underline"
+            className="mt-2 flex w-fit items-center space-x-2 hover:underline"
           >
             <FlagIcon className="size-3.5" />
             <span>Report</span>
@@ -232,7 +242,7 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
               </Button>
             )}
 
-            {auction.owner.id === profile?.id && (
+            {auction.owner.id === profile?.id && !isLive && auction.owner.id !== profile.id && (
               <Button variant="brand" disabled Icon={FlameIcon}>
                 Join Auction
               </Button>
@@ -247,7 +257,7 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
               </Button>
             )}
 
-            {!(isCompleted || auction.status === 'cancelled') && (
+            {!(isCompleted || auction.status === 'cancelled' || isLive) && (
               <Button
                 variant="outline"
                 Icon={auction.isInterested ? MinusCircleIcon : CheckCheckIcon}
@@ -256,6 +266,12 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
                 loading={isSettingInterested}
               >
                 {auction.isInterested ? 'Remove from interested' : 'Add to interested'}
+              </Button>
+            )}
+
+            {isLive && (
+              <Button onClick={() => openLiveScreen(auction.id)} Icon={RadioIcon}>
+                {auction.participationStatus === 'joined' ? 'Join live' : 'Spectate live'}
               </Button>
             )}
           </div>
