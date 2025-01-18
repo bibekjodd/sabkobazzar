@@ -3,7 +3,7 @@
 import { logo } from '@/components/utils/logo';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import { LogIn } from 'lucide-react';
+import { UserPlusIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { openAuthDialog } from '../dialogs/auth-dialog';
 import ProfileDropdown from '../dropdowns/profile-dropdown';
@@ -50,9 +50,12 @@ export default function Header() {
           {!isFetched && !profile && <Skeleton className="size-8 rounded-full" />}
 
           {isFetched && !profile && (
-            <button className="flex items-center space-x-1.5" onClick={openAuthDialog}>
-              <span>Login</span>
-              <LogIn className="size-4" />
+            <button
+              className="flex items-center space-x-2.5 hover:text-foreground"
+              onClick={() => openAuthDialog('register')}
+            >
+              <span className="whitespace-nowrap">Get Started</span>
+              <UserPlusIcon className="size-4" />
             </button>
           )}
         </div>

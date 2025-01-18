@@ -30,7 +30,7 @@ export default function Hero() {
               <Button variant="moving-border">Drop your product to Auction</Button>
             </ProgressLink>
           ) : (
-            <Button onClick={openAuthDialog} variant="moving-border">
+            <Button onClick={() => openAuthDialog()} variant="moving-border">
               Drop your product to Auction
             </Button>
           )}

@@ -7,6 +7,7 @@ declare global {
       NEXT_PUBLIC_BACKEND_URL: string;
       NEXT_PUBLIC_IMGBB_KEY: string;
       NEXT_PUBLIC_PUSHER_KEY: string;
+      NEXT_PUBLIC_STRIPE_PUBLIC_KEY: string;
     }
   }
 

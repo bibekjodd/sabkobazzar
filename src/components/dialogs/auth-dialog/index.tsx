@@ -11,34 +11,38 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { redirectToLogin } from '@/lib/utils';
 import { createStore } from '@jodd/snap';
-import { useState } from 'react';
 import { openLoginWithOtpDialog } from '../login-with-otp-dialog';
 import LoginForm from './login-form';
 import RegisterForm from './register-form';
 
-const useLoginDialog = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
-const onOpenChange = (isOpen: boolean) => useLoginDialog.setState({ isOpen });
-export const openAuthDialog = () => onOpenChange(true);
+type AuthMode = 'login' | 'register';
+const useAuthDialog = createStore<{ isOpen: boolean; mode: AuthMode }>(() => ({
+  isOpen: false,
+  mode: 'login'
+}));
+const onOpenChange = (isOpen: boolean, mode?: AuthMode) =>
+  useAuthDialog.setState({ isOpen, mode: mode || 'login' });
+
+export const openAuthDialog = (mode?: AuthMode) => onOpenChange(true, mode);
 export const closeAuthDialog = () => onOpenChange(false);
 
 export default function AuthDialog() {
-  const { isOpen } = useLoginDialog();
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const { isOpen, mode } = useAuthDialog();
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="flex max-h-screen flex-col text-sm">
         <DialogHeader>
           <DialogTitle className="text-center">
-            {authMode === 'login' ? 'Login to Sabkobazzar' : 'Register to Sabkobazzar'}
+            {mode === 'login' ? 'Login to Sabkobazzar' : 'Register to Sabkobazzar'}
           </DialogTitle>
         </DialogHeader>
         <DialogDescription className="hidden" />
 
         <ScrollArea className="-mx-3 h-full">
           <section className="flex max-h-[calc(100vh-96px)] flex-col space-y-3 px-3 pt-4">
-            {authMode === 'login' && <LoginForm />}
-            {authMode === 'register' && <RegisterForm />}
+            {mode === 'login' && <LoginForm />}
+            {mode === 'register' && <RegisterForm />}
 
             <div className="flex items-center space-x-4">
               <div className="h-0.5 flex-grow rounded-full bg-foreground/15" />
@@ -62,12 +66,16 @@ export default function AuthDialog() {
             </div>
 
             <p className="text-center">
-              {`${authMode === 'login' ? "Don't have an account?" : 'Already have an account?'} `}
+              {`${mode === 'login' ? "Don't have an account?" : 'Already have an account?'} `}
               <button
-                onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
+                onClick={() =>
+                  useAuthDialog.setState((state) => ({
+                    mode: state.mode === 'login' ? 'register' : 'login'
+                  }))
+                }
                 className="font-medium text-brand hover:underline"
               >
-                {authMode === 'login' ? 'Register' : 'Login'}
+                {mode === 'login' ? 'Register' : 'Login'}
               </button>
             </p>
           </section>

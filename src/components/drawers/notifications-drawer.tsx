@@ -71,7 +71,7 @@ function BaseContent() {
 
   useEffect(() => {
     readNotifications();
-  }, [readNotifications]);
+  }, [readNotifications, notifications]);
 
   return (
     <ScrollArea className="h-full overflow-y-auto pr-2 scrollbar-thin">

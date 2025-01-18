@@ -261,7 +261,9 @@ export default function AuctionOverview({ auction: auctionData }: Props) {
               <Button
                 variant="outline"
                 Icon={auction.isInterested ? MinusCircleIcon : CheckCheckIcon}
-                onClick={profile ? () => setInterested(!auction.isInterested) : openAuthDialog}
+                onClick={
+                  profile ? () => setInterested(!auction.isInterested) : () => openAuthDialog()
+                }
                 disabled={isSettingInterested || auction.owner.id === profile?.id}
                 loading={isSettingInterested}
               >
