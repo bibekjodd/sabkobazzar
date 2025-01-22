@@ -90,6 +90,7 @@ function Form() {
   const {
     reset,
     formState: { errors },
+    watch,
     register,
     handleSubmit
   } = useForm<ReportAuctionSchema>({ resolver: zodResolver(reportAuctionSchema) });
@@ -117,12 +118,30 @@ function Form() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col space-y-5">
-      <Input label="Title" id="title" {...register('title')} error={errors.title?.message} />
+      <Input
+        label="Title"
+        id="title"
+        placeholder="Title highlighting the issue..."
+        {...register('title')}
+        error={errors.title?.message}
+      />
 
       <AutoAnimate className="flex flex-col space-y-2">
         <Label htmlFor="remarks">Remarks</Label>
-        <Textarea {...register('text')} id="remarks" rows={6} />
-        {errors.text && <p className="text-sm text-error">{errors.text.message}</p>}
+        <Textarea
+          {...register('text')}
+          id="remarks"
+          rows={6}
+          placeholder="Write down your issue here..."
+        />
+        {
+          <div className="flex items-center">
+            {errors.text && <p className="text-sm text-error">{errors.text.message}</p>}
+            <p className="ml-auto text-xs italic text-muted-foreground">
+              {watch('text')?.length || 0}/1000
+            </p>
+          </div>
+        }
       </AutoAnimate>
 
       <section className="space-y-1.5">

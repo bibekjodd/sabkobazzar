@@ -62,7 +62,7 @@ export default function CancelAuctionDialog() {
 
         <form className="flex flex-col space-y-2" onSubmit={onSubmit}>
           <Label htmlFor="reason">Reason</Label>
-          <Textarea rows={6} id="reason" placeholder="Cancel reason..." {...register('reason')} />
+          <Textarea rows={4} id="reason" placeholder="Cancel reason..." {...register('reason')} />
           <div className="flex flex-wrap justify-between">
             {errors.reason && <p className="text-sm text-error">{errors.reason.message}</p>}
           </div>

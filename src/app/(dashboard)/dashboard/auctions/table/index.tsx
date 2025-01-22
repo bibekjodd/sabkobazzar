@@ -21,20 +21,20 @@ export default function ManageAuctionsTable() {
   const {
     data: auctions,
     isLoading,
-    isFetchingNextPage,
+    isFetching,
     fetchNextPage,
     hasNextPage
   } = useAuctions({
     ...filters,
     owner: filters.owner,
-    resource: profile?.role === 'user' ? 'self' : undefined
+    resource: profile?.role === 'user' ? 'host' : undefined
   });
   const { data: selectedAuctionHost, isLoading: isLoadingAuctionHost } = useUser(filters.owner!, {
     enabled: !!filters.owner
   });
 
   const showMore = () => {
-    if (isFetchingNextPage || !hasNextPage) return;
+    if (isFetching || !hasNextPage) return;
     fetchNextPage();
   };
 
@@ -95,9 +95,9 @@ export default function ManageAuctionsTable() {
           <Button
             size="sm"
             variant="outline"
-            loading={isFetchingNextPage}
+            loading={isFetching}
             onClick={showMore}
-            disabled={isFetchingNextPage || !hasNextPage}
+            disabled={isFetching || !hasNextPage}
           >
             Show More
           </Button>

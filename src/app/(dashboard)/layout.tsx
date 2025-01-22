@@ -1,10 +1,10 @@
 'use client';
 
 import DashboardBreadcrumbs from '@/components/dashboard-breadcrumbs';
+import DashboardSearch from '@/components/dashboard-search';
 import DashboardMenuDrawer from '@/components/drawers/dashboard-menu-drawer';
 import DashboardHeader from '@/components/layouts/dashboard-header';
 import DashboardSidebar from '@/components/layouts/dashboard-sidebar';
-import SearchDashboard from '@/components/search-dashboard';
 import { dashboardLinks } from '@/lib/dashboard-links';
 import { useProfile } from '@/queries/use-profile';
 import { redirect, usePathname } from 'next/navigation';
@@ -35,7 +35,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <SearchDashboard />
+      <DashboardSearch />
       <DashboardMenuDrawer />
 
       <div className="fixed left-20 top-40 -z-10 aspect-[2/3] h-40 bg-blue-600/10 blur-3xl filter md:h-60 lg:left-80 lg:h-80" />

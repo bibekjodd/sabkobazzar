@@ -201,9 +201,9 @@ function BaseContent() {
         <p className="italic">
           <ClockIcon className="inline size-3.5" /> <span>Scheduled for </span>
           {data.startsAt ? (
-            <span className="italic">Not specified</span>
-          ) : (
             dayjs(data.startsAt).format('MMMM DD, YYYY ha')
+          ) : (
+            <span className="italic">Not specified</span>
           )}
         </p>
       </section>

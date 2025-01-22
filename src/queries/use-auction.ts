@@ -12,10 +12,6 @@ export const useAuction = (
   const query = useQuery<Auction | null>({
     queryKey: auctionKey(auctionId),
     queryFn: ({ signal }) => fetchAuction({ auctionId, signal }),
-    throwOnError(_, query) {
-      query.setData(null);
-      return false;
-    },
     ...queryOptions
   });
 

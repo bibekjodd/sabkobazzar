@@ -102,7 +102,7 @@ function BidItem({ bid, startDate }: { bid: Bid; startDate: string }) {
     <div className="-mx-3 mb-1 rounded-md border-foreground/10 bg-indigo-900/10 py-1.5 last:border-b-0">
       <div className="px-4 py-2">
         <p className="text-xs">
-          At {minutes !== 0 && `${minutes} minutes`} {seconds && `${seconds} seconds`}
+          At {minutes !== 0 && `${minutes} minutes`} {seconds !== 0 && `${seconds} seconds`}
         </p>
 
         <div className="mt-2.5 flex items-center justify-between">

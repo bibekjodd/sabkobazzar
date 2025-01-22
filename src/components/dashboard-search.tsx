@@ -16,10 +16,12 @@ import {
   EggFriedIcon,
   FlagIcon,
   HistoryIcon,
+  HomeIcon,
   LucideIcon,
   MessageSquareTextIcon,
   PackageIcon,
   TrendingUpIcon,
+  UsersIcon,
   WebhookIcon
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -40,7 +42,14 @@ const commandItems: {
     icon: HistoryIcon,
     allowedRole: 'any'
   },
+  { title: 'Dashboard', href: '/dashboard', icon: HomeIcon, allowedRole: 'any' },
   { title: 'Manage Auctions', href: '/dashboard/auctions', icon: WebhookIcon, allowedRole: 'any' },
+  {
+    title: 'Manage Staffs',
+    href: '/dashboard/staffs',
+    icon: UsersIcon,
+    allowedRole: 'admin'
+  },
   {
     title: 'Recent Auctions',
     href: '/dashboard#recent-auctions',
@@ -67,14 +76,14 @@ const commandItems: {
   }
 ];
 
-const useSearchDashboard = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
-const onOpenChange = (isOpen: boolean) => useSearchDashboard.setState({ isOpen });
-export const openSearchDashboard = () => onOpenChange(true);
-export const closeSearchDashboard = () => onOpenChange(false);
+const useDialog = createStore<{ isOpen: boolean }>(() => ({ isOpen: false }));
+const onOpenChange = (isOpen: boolean) => useDialog.setState({ isOpen });
+export const openDashboardSearch = () => onOpenChange(true);
+export const closeDashboardSearch = () => onOpenChange(false);
 
-export default function SearchDashboard() {
+export default function DashboardSearch() {
   const { data: profile } = useProfile();
-  const { isOpen } = useSearchDashboard();
+  const { isOpen } = useDialog();
   const startRouteTransition = useLoadingBar((state) => state.start);
   const router = useRouter();
 
@@ -82,7 +91,7 @@ export default function SearchDashboard() {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        useSearchDashboard.setState((state) => ({ isOpen: !state.isOpen }));
+        useDialog.setState((state) => ({ isOpen: !state.isOpen }));
       }
     };
 
@@ -113,7 +122,7 @@ export default function SearchDashboard() {
                   onSelect={() => {
                     startRouteTransition(item.href);
                     router.push(item.href);
-                    closeSearchDashboard();
+                    closeDashboardSearch();
                   }}
                 >
                   <item.icon className="mr-1.5 size-5" />

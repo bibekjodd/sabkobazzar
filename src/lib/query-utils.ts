@@ -47,7 +47,7 @@ export const prefetchDashboardAuctions = () => {
   if (!profile) return;
 
   const accessorKey = auctionsKey({
-    resource: profile.role === 'user' ? 'self' : undefined
+    resource: profile.role === 'user' ? 'host' : undefined
   });
 
   if (queryClient.getQueryData(accessorKey) || queryClient.isFetching({ queryKey: accessorKey }))

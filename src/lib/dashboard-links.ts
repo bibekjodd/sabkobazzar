@@ -6,6 +6,7 @@ import {
   HomeIcon,
   LucideIcon,
   MessageSquareTextIcon,
+  UsersIcon,
   WebhookIcon
 } from 'lucide-react';
 import { getQueryClient } from './query-client';
@@ -37,6 +38,12 @@ export const dashboardLinks: {
     href: '/dashboard/register-auction',
     icon: EggFriedIcon,
     allowedRole: 'user'
+  },
+  {
+    title: 'Mange Staffs',
+    href: '/dashboard/staffs',
+    icon: UsersIcon,
+    allowedRole: 'admin'
   },
   {
     title: 'Feedbacks',

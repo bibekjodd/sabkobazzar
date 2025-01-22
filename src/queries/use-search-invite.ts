@@ -18,7 +18,8 @@ export const useSearchInvite = ({ auctionId, q }: KeyOptions) => {
       if (lastPage.length) return lastPageParam + 1;
       return undefined;
     },
-    gcTime: MILLIS.MINUTE / 2
+    gcTime: MILLIS.MINUTE / 2,
+    select: (data) => data.pages.flat(1).filter((user) => user.role !== 'admin')
   });
 };
 

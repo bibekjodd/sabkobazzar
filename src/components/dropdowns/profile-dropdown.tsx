@@ -2,10 +2,11 @@ import { prefetchDashboardData } from '@/lib/query-utils';
 import { cn } from '@/lib/utils';
 import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
-import { BellIcon, DotIcon, HomeIcon, LogOutIcon, UserIcon } from 'lucide-react';
+import { BellIcon, DotIcon, HistoryIcon, HomeIcon, LogOutIcon, UserIcon } from 'lucide-react';
 import React from 'react';
 import { openLogoutDialog } from '../dialogs/logout-dialog';
 import { openProfileDialog } from '../dialogs/profile-dialog';
+import { openAuctionsHistoryDrawer } from '../drawers/auctions-history-drawer';
 import { openNotificationsDrawer } from '../drawers/notifications-drawer';
 import {
   DropdownMenu,
@@ -50,6 +51,13 @@ export default function ProfileDropdown({ children }: { children: React.ReactNod
             <span>Notifications</span>
             {hasNotifications && <DotIcon className="size-4 scale-150 animate-pulse" />}
           </DropdownMenuItem>
+
+          {profile?.role !== 'admin' && (
+            <DropdownMenuItem onClick={openAuctionsHistoryDrawer}>
+              <HistoryIcon />
+              <span>Auction History</span>
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem asChild>
             <ProgressLink

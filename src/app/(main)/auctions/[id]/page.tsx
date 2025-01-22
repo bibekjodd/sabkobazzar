@@ -30,16 +30,6 @@ export default function Page() {
     <main className="min-h-screen pb-20 pt-28 md:pt-16">
       {graphics}
 
-      {error && (
-        <div className="p-4">
-          <Alert variant="destructive" className="bg-destructive/10">
-            <CircleAlert className="size-4" />
-            <AlertTitle>Could not get auctions details!</AlertTitle>
-            <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
-          </Alert>
-        </div>
-      )}
-
       {isLoading && (
         <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
           {auctionOverviewSkeleton}
@@ -47,13 +37,23 @@ export default function Page() {
       )}
 
       <div className="cont text-muted-foreground">
+        {error && (
+          <div className="p-4">
+            <Alert variant="destructive" className="bg-destructive/10">
+              <CircleAlert className="size-4" />
+              <AlertTitle>Could not get auctions details!</AlertTitle>
+              <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
+            </Alert>
+          </div>
+        )}
+
         {auction && (
           <div className="grid min-h-[calc(100vh-80px)] place-items-center py-7">
             <AuctionOverview auction={auction} />
           </div>
         )}
 
-        {auction && <MoreAuctions currentAuction={auction} />}
+        <MoreAuctions currentAuctionId={auction?.id} />
       </div>
     </main>
   );

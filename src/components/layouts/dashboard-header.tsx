@@ -5,8 +5,8 @@ import { useProfile } from '@/queries/use-profile';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { CommandIcon, MenuIcon, SearchIcon } from 'lucide-react';
 import DashboardBreadcrumbs from '../dashboard-breadcrumbs';
+import { openDashboardSearch } from '../dashboard-search';
 import ProfileDropdown from '../dropdowns/profile-dropdown';
-import { openSearchDashboard } from '../search-dashboard';
 import Avatar from '../utils/avatar';
 import { logo } from '../utils/logo';
 
@@ -29,7 +29,7 @@ export default function DashboardHeader() {
       <div className="ml-auto flex items-center space-x-2">
         <div className="hidden md:block">
           <button
-            onClick={openSearchDashboard}
+            onClick={openDashboardSearch}
             className="relative mr-2 hidden h-9 w-60 cursor-pointer items-center rounded-lg border border-foreground/10 bg-indigo-900/10 px-2 md:flex"
           >
             <SearchIcon className="size-4" />

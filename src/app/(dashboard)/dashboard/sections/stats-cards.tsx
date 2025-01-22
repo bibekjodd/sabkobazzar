@@ -16,7 +16,7 @@ export default function StatsCards() {
 
   return (
     <div>
-      <FadeUp className="grid gap-x-4 gap-y-2 md:grid-cols-2 xl:grid-cols-3">
+      <FadeUp className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2 xl:grid-cols-3">
         {isLoading && (
           <>
             <Skeleton className="h-32" />
@@ -147,7 +147,7 @@ function ProductInterestsCard({ stats }: FetchAuctionsStatsResult) {
   }, [stats]);
 
   return (
-    <section className="col-span-2 rounded-lg bg-indigo-900/10 p-6 xl:col-span-1">
+    <section className="rounded-lg bg-indigo-900/10 p-6 md:col-span-2 xl:col-span-1">
       <h3 className="text-sm">Visitors Interests</h3>
       <div className="mt-2">
         <p className="text-2xl font-semibold">

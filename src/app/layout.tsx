@@ -11,6 +11,7 @@ import UpdatePasswordDialog from '@/components/dialogs/update-password-dialog';
 import UpdateProfileDialog from '@/components/dialogs/update-profile-dialog';
 import VerifyAccountDialog from '@/components/dialogs/verify-account-dialog';
 import AuctionDetailsDrawer from '@/components/drawers/auction-details-drawer';
+import AuctionsHistoryDrawer from '@/components/drawers/auctions-history-drawer';
 import NotificationsDrawer from '@/components/drawers/notifications-drawer';
 import RealtimeListener from '@/components/utils/realtime-listener';
 import QueryProvider from '@/providers/query-provider';
@@ -60,6 +61,7 @@ export default function RootLayout({
 
           <ReportDetailsDialog />
 
+          <AuctionsHistoryDrawer />
           <NotificationsDrawer />
           <AuctionDetailsDrawer />
         </QueryProvider>

@@ -11,6 +11,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FadeUp } from '@/components/utils/animations';
 import Avatar from '@/components/utils/avatar';
@@ -47,46 +48,49 @@ export default function RecentAuctions() {
       className="scroll-m-20 self-stretch rounded-lg bg-indigo-900/10 p-6 2xl:min-w-[400px]"
       id="recent-auctions"
     >
-      <div className="flex items-center justify-between">
-        <h3>Recent Auctions</h3>
-        {recentAuctions?.length !== 0 && (
-          <ProgressLink
-            href="/dashboard/auctions"
-            onClick={prefetchDashboardAuctions}
-            className="flex items-center space-x-1 rounded-full border border-indigo-500/5 bg-foreground/5 px-2 py-1 text-xs hover:bg-foreground/10"
-          >
-            <span>See more</span>
-            <ChevronRightIcon className="size-3" />
-          </ProgressLink>
+      <ScrollArea>
+        <div className="flex items-center justify-between">
+          <h3>Recent Auctions</h3>
+          {recentAuctions?.length !== 0 && (
+            <ProgressLink
+              href="/dashboard/auctions"
+              onClick={prefetchDashboardAuctions}
+              className="flex items-center space-x-1 rounded-full border border-indigo-500/5 bg-foreground/5 px-2 py-1 text-xs hover:bg-foreground/10"
+            >
+              <span>See more</span>
+              <ChevronRightIcon className="size-3" />
+            </ProgressLink>
+          )}
+        </div>
+
+        {!isLoading && recentAuctions?.length === 0 && (
+          <p className="mt-1 text-sm text-muted-foreground">
+            <InfoIcon className="mr-0.5 inline size-3 -translate-y-0.5" />{' '}
+            <span>No data to show here</span>
+          </p>
         )}
-      </div>
 
-      {!isLoading && recentAuctions?.length === 0 && (
-        <p className="mt-1 text-sm text-muted-foreground">
-          <InfoIcon className="mr-0.5 inline size-3 -translate-y-0.5" />{' '}
-          <span>No data to show here</span>
-        </p>
-      )}
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            <CircleAlertIcon className="size-4" />
+            <AlertTitle>Could not recent auctions data</AlertTitle>
+            <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
+          </Alert>
+        )}
 
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <CircleAlertIcon className="size-4" />
-          <AlertTitle>Could not recent auctions data</AlertTitle>
-          <AlertDescription>{extractErrorMessage(error)}</AlertDescription>
-        </Alert>
-      )}
+        <div className="flex flex-col">
+          {isLoading &&
+            new Array(4).fill('nothing').map((_, i) => (
+              <div key={i} className="my-4 flex items-center gap-x-4">
+                <Skeleton className="size-8 rounded-full" />
+                <Skeleton className="h-9 flex-grow" />
+              </div>
+            ))}
 
-      <div className="flex flex-col">
-        {isLoading &&
-          new Array(4).fill('nothing').map((_, i) => (
-            <div key={i} className="my-4 flex items-center gap-x-4">
-              <Skeleton className="size-8 rounded-full" />
-              <Skeleton className="h-9 flex-grow" />
-            </div>
-          ))}
-
-        {recentAuctions?.map((auction) => <AuctionItem key={auction.id} auction={auction} />)}
-      </div>
+          {recentAuctions?.map((auction) => <AuctionItem key={auction.id} auction={auction} />)}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </FadeUp>
   );
 }

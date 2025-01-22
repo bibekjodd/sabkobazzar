@@ -1,5 +1,4 @@
 import { closeCancelAuctionDialog } from '@/components/dialogs/cancel-auction-dialog';
-import { closeManageAuctionDialog } from '@/components/dialogs/manage-auction-dialog';
 import { apiClient } from '@/lib/api-client';
 import { CancelAuctionSchema } from '@/lib/form-schemas';
 import { getQueryClient } from '@/lib/query-client';
@@ -32,7 +31,6 @@ export const useCancelAuction = (auctionId: string) => {
       };
       queryClient.setQueryData<Auction>(auctionKey(auctionId), updatedAuction);
       closeCancelAuctionDialog();
-      closeManageAuctionDialog();
     },
 
     onError(err) {

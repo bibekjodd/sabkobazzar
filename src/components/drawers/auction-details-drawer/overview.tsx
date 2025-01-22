@@ -47,7 +47,7 @@ export function Overview({ auction }: { auction: Auction }) {
       />
 
       <div className="-mx-3 mt-4 space-y-5 rounded-md bg-indigo-900/10 p-4">
-        <section className="grid grid-cols-2">
+        <section className="flex flex-wrap items-center gap-x-4 gap-y-4 sm:gap-x-6 md:gap-x-10">
           <div>
             <p className="mb-1 text-sm">Host</p>
 

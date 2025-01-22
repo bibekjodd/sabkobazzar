@@ -1,6 +1,6 @@
 import CancelAuctionDialog from '@/components/dialogs/cancel-auction-dialog';
-import ManageAuctionDialog from '@/components/dialogs/manage-auction-dialog';
 import ManageAuctionsTable from './table';
+import InviteUsers from './table/invite-users';
 
 export default function page() {
   return (
@@ -8,7 +8,7 @@ export default function page() {
       <main className="p-4">
         <ManageAuctionsTable />
       </main>
-      <ManageAuctionDialog />
+      <InviteUsers />
       <CancelAuctionDialog />
     </>
   );

@@ -5,10 +5,14 @@ import { useAuctions } from '@/queries/use-auctions';
 import { ProgressLink } from '@jodd/next-top-loading-bar';
 import { ActivityIcon, ChevronRightIcon } from 'lucide-react';
 
-export default function MoreAuctions({ currentAuction }: { currentAuction: Auction }) {
+export default function MoreAuctions({
+  currentAuctionId
+}: {
+  currentAuctionId: string | undefined;
+}) {
   const { data } = useAuctions({});
 
-  const auctions = data?.filter((auction) => auction.id !== currentAuction.id);
+  const auctions = data?.filter((auction) => auction.id !== currentAuctionId);
 
   return (
     <section className="relative z-10 scroll-m-20 pt-16" id="upcoming-auctions">

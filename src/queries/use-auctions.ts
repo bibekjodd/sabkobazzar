@@ -14,7 +14,8 @@ export type KeyOptions = Partial<{
   to: string;
   inviteOnly: boolean;
   unbidded: boolean;
-  resource: 'self';
+  resource: 'host' | 'participant';
+  participationType: 'joined' | 'invited' | 'kicked' | 'rejected';
 }>;
 export const auctionsKey = (options?: KeyOptions) => [
   'auctions',

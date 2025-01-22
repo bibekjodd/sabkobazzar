@@ -134,24 +134,24 @@ export default function Explore() {
                 </span>
               </div>
 
-              <ProgressLink href="/auctions" className="mb-1 mt-auto">
-                <Button variant="brand" className="w-full" Icon={FlameIcon}>
-                  Explore more Auctions
-                </Button>
-              </ProgressLink>
-
               {activeAuction && (
                 <ProgressLink
                   href={`/auctions/${activeAuction.id}`}
                   onClick={() => prefetchAuction(activeAuction)}
-                  className="w-full"
+                  className="mb-1 mt-auto w-full"
                 >
-                  <button className="flex h-9 w-full items-center justify-center space-x-2 rounded-md border border-brand/40 text-sm font-medium hover:bg-brand-darker hover:text-white">
-                    <span>See more about Auction</span>
-                    <ChartNoAxesGanttIcon className="size-4" />
-                  </button>
+                  <Button variant="brand" className="w-full" Icon={FlameIcon}>
+                    See more about Auction
+                  </Button>
                 </ProgressLink>
               )}
+
+              <ProgressLink href="/auctions">
+                <button className="flex h-9 w-full items-center justify-center space-x-2 rounded-md border border-brand/40 text-sm font-medium hover:bg-brand-darker hover:text-white">
+                  <span>Explore more auctions</span>
+                  <ChartNoAxesGanttIcon className="size-4" />
+                </button>
+              </ProgressLink>
             </section>
           </motion.div>
         </AnimatePresence>

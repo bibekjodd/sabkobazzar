@@ -29,9 +29,11 @@ export default function RecentActivities() {
 
       {!error && (
         <div className="mt-1 flex flex-col px-2">
-          {notifications?.map((notification) => (
-            <NotificationItem key={notification.id} notification={notification} />
-          ))}
+          {notifications
+            ?.slice(0, 6)
+            .map((notification) => (
+              <NotificationItem key={notification.id} notification={notification} />
+            ))}
         </div>
       )}
     </section>

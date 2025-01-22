@@ -1,5 +1,4 @@
 import { openCancelAuctionDialog } from '@/components/dialogs/cancel-auction-dialog';
-import { openManageAuctionDialog } from '@/components/dialogs/manage-auction-dialog';
 import { openQrCodeDialog } from '@/components/dialogs/qr-code-dialog';
 import { openAuctionDetailsDrawer } from '@/components/drawers/auction-details-drawer';
 import {
@@ -19,11 +18,12 @@ import {
   ChartNoAxesGanttIcon,
   CopyIcon,
   QrCodeIcon,
-  Settings2Icon,
-  SquareArrowOutUpRightIcon
+  SquareArrowOutUpRightIcon,
+  UsersIcon
 } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
+import { openInviteUsersDialog } from './invite-users';
 
 export default function MoreOptions({
   children,
@@ -79,17 +79,17 @@ export default function MoreOptions({
             </ProgressLink>
           </DropdownMenuItem>
 
+          {isPending && auction.isInviteOnly && profile?.role !== 'admin' && (
+            <DropdownMenuItem onClick={() => openInviteUsersDialog(auction.id)}>
+              <UsersIcon />
+              <span>Invite users</span>
+            </DropdownMenuItem>
+          )}
+
           {isPending && (
             <DropdownMenuItem onClick={() => openCancelAuctionDialog(auction.id)}>
               <BanIcon />
               <span>Cancel auction</span>
-            </DropdownMenuItem>
-          )}
-
-          {profile?.role !== 'admin' && isPending && (
-            <DropdownMenuItem onClick={() => openManageAuctionDialog(auction.id)}>
-              <Settings2Icon />
-              <span>Manage auction</span>
             </DropdownMenuItem>
           )}
         </DropdownMenuGroup>
