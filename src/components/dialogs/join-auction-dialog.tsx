@@ -42,7 +42,9 @@ export default function JoinAuctionDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you sure to join the auction?</DialogTitle>
-          <DialogDescription className="hidden" />
+          <DialogDescription>
+            You will need to pay 30% fees before joining the auction!
+          </DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
